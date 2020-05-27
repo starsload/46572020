@@ -17,16 +17,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     initialpage.cpp \
+    invoicepage.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    queryinvoiceinputdialog.cpp
 
 HEADERS += \
     initialpage.h \
-    mainwindow.h
+    invoicepage.h \
+    mainwindow.h \
+    queryinvoiceinputdialog.h
 
 FORMS += \
     initialpage.ui \
-    mainwindow.ui
+    invoicepage.ui \
+    mainwindow.ui \
+    queryinvoiceinputdialog.ui
 
 TRANSLATIONS += \
     System_zh_CN.ts

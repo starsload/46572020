@@ -16,6 +16,12 @@ public:
 	explicit InitialPage(QWidget *parent = nullptr);
 	~InitialPage();
 
+signals:
+	void finish();
+
+private slots:
+	void on_pushButton_clicked();
+
 private:
 	Ui::InitialPage *ui;
 };

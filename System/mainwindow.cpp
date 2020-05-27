@@ -6,7 +6,9 @@ MainWindow::MainWindow(QWidget *parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-
+	this->hide();
+	initialPage = new InitialPage(this);
+	initialPage->show();
 }
 
 MainWindow::~MainWindow()
@@ -15,9 +17,19 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+//生成账单
 void MainWindow::on_pushButton_clicked()
 {
-	this->hide();
-	initialPage = new InitialPage(this);
-	initialPage->show();
+	queryInvoiceInputDialg = new QueryInvoiceInputDialog(this);
+	connect(queryInvoiceInputDialg, SIGNAL(queryFinish(int)),
+			this, SLOT(queryInputFinish(int)));
+	queryInvoiceInputDialg->show();
+	queryInvoiceInputDialg->setModal(true);
+}
+
+//返回Room_Id之后
+void MainWindow::queryInputFinish(int Room_Id)
+{
+	invoicePage = new InvoicePage(this, Room_Id);
+	invoicePage->show();
 }

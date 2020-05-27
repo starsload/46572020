@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	initialPage = new InitialPage(this);
+	initialPage->show();
+	initialPage->setModal(true);
 }
 
 MainWindow::~MainWindow()
@@ -18,6 +21,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-	initialPage = new InitialPage(this);
-	initialPage->show();
+
 }

@@ -1,5 +1,5 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'initialpage.h'
+** Meta object code from reading C++ file 'invoicepage.h'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
 **
@@ -7,11 +7,11 @@
 *****************************************************************************/
 
 #include <memory>
-#include "../../GustClient/initialpage.h"
+#include "../../System/invoicepage.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'initialpage.h' doesn't include <QObject>."
+#error "The header file 'invoicepage.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.14.2. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -21,28 +21,29 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_InitialPage_t {
+struct qt_meta_stringdata_InvoicePage_t {
     QByteArrayData data[4];
-    char stringdata0[42];
+    char stringdata0[50];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_InitialPage_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_InvoicePage_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_InitialPage_t qt_meta_stringdata_InitialPage = {
+static const qt_meta_stringdata_InvoicePage_t qt_meta_stringdata_InvoicePage = {
     {
-QT_MOC_LITERAL(0, 0, 11), // "InitialPage"
-QT_MOC_LITERAL(1, 12, 6), // "finish"
-QT_MOC_LITERAL(2, 19, 0), // ""
-QT_MOC_LITERAL(3, 20, 21) // "on_pushButton_clicked"
+QT_MOC_LITERAL(0, 0, 11), // "InvoicePage"
+QT_MOC_LITERAL(1, 12, 16), // "on_Print_clicked"
+QT_MOC_LITERAL(2, 29, 0), // ""
+QT_MOC_LITERAL(3, 30, 19) // "on_CreateDR_clicked"
 
     },
-    "InitialPage\0finish\0\0on_pushButton_clicked"
+    "InvoicePage\0on_Print_clicked\0\0"
+    "on_CreateDR_clicked"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_InitialPage[] = {
+static const uint qt_meta_data_InvoicePage[] = {
 
  // content:
        8,       // revision
@@ -53,70 +54,57 @@ static const uint qt_meta_data_InitialPage[] = {
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
-
- // signals: name, argc, parameters, tag, flags
-       1,    0,   24,    2, 0x06 /* Public */,
+       0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
+       1,    0,   24,    2, 0x08 /* Private */,
        3,    0,   25,    2, 0x08 /* Private */,
 
- // signals: parameters
-    QMetaType::Void,
-
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
 };
 
-void InitialPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void InvoicePage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<InitialPage *>(_o);
+        auto *_t = static_cast<InvoicePage *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->finish(); break;
-        case 1: _t->on_pushButton_clicked(); break;
+        case 0: _t->on_Print_clicked(); break;
+        case 1: _t->on_CreateDR_clicked(); break;
         default: ;
-        }
-    } else if (_c == QMetaObject::IndexOfMethod) {
-        int *result = reinterpret_cast<int *>(_a[0]);
-        {
-            using _t = void (InitialPage::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&InitialPage::finish)) {
-                *result = 0;
-                return;
-            }
         }
     }
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject InitialPage::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject InvoicePage::staticMetaObject = { {
     QMetaObject::SuperData::link<QDialog::staticMetaObject>(),
-    qt_meta_stringdata_InitialPage.data,
-    qt_meta_data_InitialPage,
+    qt_meta_stringdata_InvoicePage.data,
+    qt_meta_data_InvoicePage,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *InitialPage::metaObject() const
+const QMetaObject *InvoicePage::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *InitialPage::qt_metacast(const char *_clname)
+void *InvoicePage::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_InitialPage.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_InvoicePage.stringdata0))
         return static_cast<void*>(this);
     return QDialog::qt_metacast(_clname);
 }
 
-int InitialPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int InvoicePage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -131,12 +119,6 @@ int InitialPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         _id -= 2;
     }
     return _id;
-}
-
-// SIGNAL 0
-void InitialPage::finish()
-{
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

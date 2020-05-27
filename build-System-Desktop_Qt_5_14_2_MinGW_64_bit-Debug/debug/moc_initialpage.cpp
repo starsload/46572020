@@ -7,7 +7,7 @@
 *****************************************************************************/
 
 #include <memory>
-#include "../../GustClient/initialpage.h"
+#include "../../System/initialpage.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_InitialPage_t {
-    QByteArrayData data[4];
-    char stringdata0[42];
+    QByteArrayData data[3];
+    char stringdata0[35];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,12 +33,11 @@ struct qt_meta_stringdata_InitialPage_t {
 static const qt_meta_stringdata_InitialPage_t qt_meta_stringdata_InitialPage = {
     {
 QT_MOC_LITERAL(0, 0, 11), // "InitialPage"
-QT_MOC_LITERAL(1, 12, 6), // "finish"
-QT_MOC_LITERAL(2, 19, 0), // ""
-QT_MOC_LITERAL(3, 20, 21) // "on_pushButton_clicked"
+QT_MOC_LITERAL(1, 12, 21), // "on_pushButton_clicked"
+QT_MOC_LITERAL(2, 34, 0) // ""
 
     },
-    "InitialPage\0finish\0\0on_pushButton_clicked"
+    "InitialPage\0on_pushButton_clicked\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -48,21 +47,15 @@ static const uint qt_meta_data_InitialPage[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
-
- // signals: name, argc, parameters, tag, flags
-       1,    0,   24,    2, 0x06 /* Public */,
+       0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       3,    0,   25,    2, 0x08 /* Private */,
-
- // signals: parameters
-    QMetaType::Void,
+       1,    0,   19,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -76,18 +69,8 @@ void InitialPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         auto *_t = static_cast<InitialPage *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->finish(); break;
-        case 1: _t->on_pushButton_clicked(); break;
+        case 0: _t->on_pushButton_clicked(); break;
         default: ;
-        }
-    } else if (_c == QMetaObject::IndexOfMethod) {
-        int *result = reinterpret_cast<int *>(_a[0]);
-        {
-            using _t = void (InitialPage::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&InitialPage::finish)) {
-                *result = 0;
-                return;
-            }
         }
     }
     Q_UNUSED(_a);
@@ -122,21 +105,15 @@ int InitialPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 1)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 1;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 1)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 2;
+        _id -= 1;
     }
     return _id;
-}
-
-// SIGNAL 0
-void InitialPage::finish()
-{
-    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

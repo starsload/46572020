@@ -23,7 +23,20 @@
     </rect>
    </property>
    <property name="text">
-    <string>hello!</string>
+    <string>初始化页面</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>370</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>确定</string>
    </property>
   </widget>
  </widget>

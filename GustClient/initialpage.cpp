@@ -12,3 +12,8 @@ InitialPage::~InitialPage()
 {
 	delete ui;
 }
+
+void InitialPage::on_pushButton_clicked()
+{
+	this->destroy();
+}
