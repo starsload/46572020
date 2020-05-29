@@ -108,7 +108,7 @@
           <children xmi:type="notation:SemanticListCompartment" xmi:id="_5cf5IKDJEeq44LED0sO5hQ" type="OperationCompartment"/>
           <children xmi:type="notation:SemanticListCompartment" xmi:id="_5cf5IaDJEeq44LED0sO5hQ" visible="false" type="SignalCompartment"/>
           <children xmi:type="umlnotation:UMLShapeCompartment" xmi:id="_5cf5IqDJEeq44LED0sO5hQ" visible="false" type="StructureCompartment"/>
-          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_5cerAaDJEeq44LED0sO5hQ" x="20828" y="4953"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_5cerAaDJEeq44LED0sO5hQ" x="24024" y="5808"/>
         </children>
         <children xmi:type="umlnotation:UMLShape" xmi:id="_6QrvIKDJEeq44LED0sO5hQ" element="_6QqhAKDJEeq44LED0sO5hQ" fontName="Microsoft YaHei UI" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Label">
           <children xmi:type="notation:DecorationNode" xmi:id="_6QsWMKDJEeq44LED0sO5hQ" type="ImageCompartment">
@@ -121,7 +121,7 @@
           <children xmi:type="notation:SemanticListCompartment" xmi:id="_6QsWNqDJEeq44LED0sO5hQ" type="OperationCompartment"/>
           <children xmi:type="notation:SemanticListCompartment" xmi:id="_6QsWN6DJEeq44LED0sO5hQ" visible="false" type="SignalCompartment"/>
           <children xmi:type="umlnotation:UMLShapeCompartment" xmi:id="_6Qs9QKDJEeq44LED0sO5hQ" visible="false" type="StructureCompartment"/>
-          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6QrvIaDJEeq44LED0sO5hQ" x="20320" y="2794"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_6QrvIaDJEeq44LED0sO5hQ" x="23892" y="-924"/>
         </children>
         <children xmi:type="umlnotation:UMLShape" xmi:id="_B3xcUKDKEeq44LED0sO5hQ" element="_B3wOMKDKEeq44LED0sO5hQ" fontName="Microsoft YaHei UI" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Label">
           <children xmi:type="notation:DecorationNode" xmi:id="_B3yDYKDKEeq44LED0sO5hQ" type="ImageCompartment">
@@ -893,7 +893,39 @@
       </ownedAttribute>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_xSo2EKDJEeq44LED0sO5hQ" name="ScheduleController"/>
-    <packagedElement xmi:type="uml:Class" xmi:id="_zxihcKDJEeq44LED0sO5hQ" name="ChartController"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_zxihcKDJEeq44LED0sO5hQ" name="ChartController">
+      <ownedAttribute xmi:id="_cGfaoKGIEeqMjMz9S_sbAQ" name="tcpClient" visibility="private">
+        <eAnnotations xmi:id="_ovgJkKGIEeqMjMz9S_sbAQ" source="http://www.eclipse.org/uml2/2.0.0/UML"/>
+      </ownedAttribute>
+      <ownedOperation xmi:id="_s255QKGHEeqMjMz9S_sbAQ" name="CreateInvoice">
+        <ownedParameter xmi:id="_uUB-kKGHEeqMjMz9S_sbAQ" name="int RoomId"/>
+        <ownedParameter xmi:id="_uUFB4KGHEeqMjMz9S_sbAQ" name="int date_in"/>
+        <ownedParameter xmi:id="_uUFB4aGHEeqMjMz9S_sbAQ" name="int date_out"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_LZvJcKGIEeqMjMz9S_sbAQ" name="PrintInvoice">
+        <ownedParameter xmi:id="_Lu8kcKGIEeqMjMz9S_sbAQ" name="Invoice* invoice"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_NNAd4KGIEeqMjMz9S_sbAQ" name="CreateRDR">
+        <ownedParameter xmi:id="_NeB8cKGIEeqMjMz9S_sbAQ" name="int RoomId"/>
+        <ownedParameter xmi:id="_NeB8caGIEeqMjMz9S_sbAQ" name="int date_in"/>
+        <ownedParameter xmi:id="_NeB8cqGIEeqMjMz9S_sbAQ" name="int date_out"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_OfLQYKGIEeqMjMz9S_sbAQ" name="PrintRDR">
+        <ownedParameter xmi:id="_Ovu04KGIEeqMjMz9S_sbAQ" name="int RoomId"/>
+        <ownedParameter xmi:id="_Ovvb8KGIEeqMjMz9S_sbAQ" name="DetailRecords* detailRecords"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_SiyPwKGIEeqMjMz9S_sbAQ" name="DeleteInoice">
+        <ownedParameter xmi:id="_S1ty0KGIEeqMjMz9S_sbAQ" name="Invoice* invoice"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_UGwj8KGIEeqMjMz9S_sbAQ" name="DeleteDR">
+        <ownedParameter xmi:id="_UYE9cKGIEeqMjMz9S_sbAQ" name="DetailRecords* detailRecords"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_XvsZgKGIEeqMjMz9S_sbAQ" name="ListenPort" visibility="private">
+        <ownedParameter xmi:id="_YGVX4KGIEeqMjMz9S_sbAQ" name="void"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_dKYEEKGJEeqMjMz9S_sbAQ" name="ChatController"/>
+      <ownedOperation xmi:id="_fbUL8KGJEeqMjMz9S_sbAQ" name="~ChatController" visibility="public"/>
+    </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_1vkUYKDJEeq44LED0sO5hQ" name="Monitor">
       <ownedAttribute xmi:id="_KIsh8KDQEeq44LED0sO5hQ" name="serviceList" visibility="private" type="_23EH8KDJEeq44LED0sO5hQ" association="_KIpeoKDQEeq44LED0sO5hQ">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KItJAaDQEeq44LED0sO5hQ" value="1"/>
@@ -929,8 +961,54 @@
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_N26VkaDPEeq44LED0sO5hQ" value="1"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_N26VkKDPEeq44LED0sO5hQ" value="1"/>
       </ownedAttribute>
+      <ownedAttribute xmi:id="_MNOmcKGJEeqMjMz9S_sbAQ" name="fileName" visibility="private"/>
+      <ownedAttribute xmi:id="_ScTX0KGJEeqMjMz9S_sbAQ" name="fout" visibility="private"/>
+      <ownedAttribute xmi:id="_T1BeQKGJEeqMjMz9S_sbAQ" name="RoomId" visibility="private"/>
+      <ownedAttribute xmi:id="_VAbhcKGJEeqMjMz9S_sbAQ" name="date_in" visibility="private"/>
+      <ownedAttribute xmi:id="_Wey84KGJEeqMjMz9S_sbAQ" name="date_out" visibility="private"/>
+      <ownedAttribute xmi:id="_YL1GcKGJEeqMjMz9S_sbAQ" name="tatol_fee" visibility="private"/>
+      <ownedOperation xmi:id="_33W5gKGIEeqMjMz9S_sbAQ" name="Initial">
+        <ownedParameter xmi:id="_4K3EUKGIEeqMjMz9S_sbAQ" name="RoomId"/>
+        <ownedParameter xmi:id="_4K3EUaGIEeqMjMz9S_sbAQ" name="date_in"/>
+        <ownedParameter xmi:id="_4K3EUqGIEeqMjMz9S_sbAQ" name="date_out"/>
+        <ownedParameter xmi:id="_4K3rYKGIEeqMjMz9S_sbAQ" name="total_fee"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_5XxjYKGIEeqMjMz9S_sbAQ" name="PrintAsFile">
+        <ownedParameter xmi:id="_5j9lQKGIEeqMjMz9S_sbAQ" name="void"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_6m0wcKGIEeqMjMz9S_sbAQ" name="OpenFile" visibility="private">
+        <ownedParameter xmi:id="_6zTtQKGIEeqMjMz9S_sbAQ" name="string fileName"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_-md10KGIEeqMjMz9S_sbAQ" name="CloseFile" visibility="private">
+        <ownedParameter xmi:id="_-4ZTUKGIEeqMjMz9S_sbAQ" name="void"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_CDTwIKGJEeqMjMz9S_sbAQ" name="Invoice"/>
+      <ownedOperation xmi:id="_DS6W0KGJEeqMjMz9S_sbAQ" name="~Invoice" visibility="public"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_6QqhAKDJEeq44LED0sO5hQ" name="DetailRecord"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_6QqhAKDJEeq44LED0sO5hQ" name="DetailRecords">
+      <ownedAttribute xmi:id="_36kJEKGJEeqMjMz9S_sbAQ" name="fileName" visibility="private"/>
+      <ownedAttribute xmi:id="_5hBwkKGJEeqMjMz9S_sbAQ" name="fout" visibility="private"/>
+      <ownedAttribute xmi:id="_9c-BsKGJEeqMjMz9S_sbAQ" name="RoomId" visibility="private"/>
+      <ownedAttribute xmi:id="_-e5_0KGJEeqMjMz9S_sbAQ" name="date_in" visibility="private"/>
+      <ownedAttribute xmi:id="_BG1EUKGKEeqMjMz9S_sbAQ" name="date_out" visibility="private"/>
+      <ownedAttribute xmi:id="_C1pWkKGKEeqMjMz9S_sbAQ" name="tatol_fee" visibility="private"/>
+      <ownedOperation xmi:id="_qIL-UKGJEeqMjMz9S_sbAQ" name="DetailRcords"/>
+      <ownedOperation xmi:id="_rXPycKGJEeqMjMz9S_sbAQ" name="~DetailRcords" visibility="public"/>
+      <ownedOperation xmi:id="_uj57sKGJEeqMjMz9S_sbAQ" name="Initial">
+        <ownedParameter xmi:id="_u1tdYKGJEeqMjMz9S_sbAQ" name="RoomId"/>
+        <ownedParameter xmi:id="_u1tdYaGJEeqMjMz9S_sbAQ" name="date_in"/>
+        <ownedParameter xmi:id="_u1uEcKGJEeqMjMz9S_sbAQ" name="date_out"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_wXs0kKGJEeqMjMz9S_sbAQ" name="PrintAsFile">
+        <ownedParameter xmi:id="_wm3R8KGJEeqMjMz9S_sbAQ" name="void"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_yBjuUKGJEeqMjMz9S_sbAQ" name="OpenFile" visibility="private">
+        <ownedParameter xmi:id="_yUji0KGJEeqMjMz9S_sbAQ" name="string fileName"/>
+      </ownedOperation>
+      <ownedOperation xmi:id="_z3PdkKGJEeqMjMz9S_sbAQ" name="CloseFile" visibility="private">
+        <ownedParameter xmi:id="_0DlQcKGJEeqMjMz9S_sbAQ" name="void"/>
+      </ownedOperation>
+    </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_B3wOMKDKEeq44LED0sO5hQ" name="Report">
       <ownedAttribute xmi:id="_OUBvYKDPEeq44LED0sO5hQ" name="airConditionHost" visibility="private" type="_rQefUKDJEeq44LED0sO5hQ" association="_OT-sEKDPEeq44LED0sO5hQ">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_OUCWcKDPEeq44LED0sO5hQ" value="1"/>
