@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>728</width>
-    <height>478</height>
+    <width>822</width>
+    <height>525</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>520</x>
       <y>80</y>
       <width>47</width>
       <height>19</height>
@@ -30,7 +30,7 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>540</x>
       <y>350</y>
       <width>75</width>
       <height>27</height>
@@ -43,7 +43,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>320</x>
       <y>80</y>
       <width>47</width>
       <height>19</height>
@@ -56,7 +56,7 @@
    <widget class="QTextEdit" name="textEdit_4">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>110</x>
       <y>280</y>
       <width>151</width>
       <height>121</height>
@@ -66,7 +66,7 @@
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>350</x>
       <y>50</y>
       <width>51</width>
       <height>19</height>
@@ -79,7 +79,7 @@
    <widget class="QTextEdit" name="textEdit_2">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>310</x>
       <y>110</y>
       <width>151</width>
       <height>121</height>
@@ -89,7 +89,7 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>320</x>
       <y>250</y>
       <width>47</width>
       <height>19</height>
@@ -102,7 +102,7 @@
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>110</x>
       <y>110</y>
       <width>151</width>
       <height>121</height>
@@ -112,7 +112,7 @@
    <widget class="QTextEdit" name="textEdit_5">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>310</x>
       <y>280</y>
       <width>151</width>
       <height>121</height>
@@ -122,7 +122,7 @@
    <widget class="QTextEdit" name="textEdit_3">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>510</x>
       <y>110</y>
       <width>151</width>
       <height>121</height>
@@ -132,7 +132,7 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>120</x>
       <y>250</y>
       <width>47</width>
       <height>19</height>
@@ -145,7 +145,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>120</x>
       <y>80</y>
       <width>47</width>
       <height>19</height>
@@ -158,7 +158,7 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>540</x>
       <y>300</y>
       <width>75</width>
       <height>27</height>
@@ -168,13 +168,39 @@
      <string>启动监控</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="ptn_makeInvoice">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>300</y>
+      <width>75</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>生成账单</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ptn_makeReport">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>350</y>
+      <width>75</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>生成报表</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>728</width>
+     <width>822</width>
      <height>23</height>
     </rect>
    </property>

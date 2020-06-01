@@ -12,3 +12,9 @@ InitialPage::~InitialPage()
 {
 	delete ui;
 }
+
+//点击“确认”
+void InitialPage::on_ptn_yes_clicked()
+{
+	this->destroy();
+}
