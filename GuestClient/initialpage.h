@@ -19,7 +19,7 @@ signals:
 	void initialFinish(QString address, QString port);
 
 private slots:
-	void on_ptn_yes_clicked();
+	void on_btn_yes_clicked();
 
 private:
 	Ui::InitialPage *ui;

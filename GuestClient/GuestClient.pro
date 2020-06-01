@@ -18,28 +18,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     initialpage.cpp \
-    invoicepage.cpp \
     main.cpp \
-    mainwindow.cpp \
-    queryinvoiceinputdialog.cpp \
-    reportpage.cpp
+    mainwindow.cpp
 
 HEADERS += \
     initialpage.h \
-    invoicepage.h \
-    mainwindow.h \
-    queryinvoiceinputdialog.h \
-    reportpage.h
+    mainwindow.h
 
 FORMS += \
     initialpage.ui \
-    invoicepage.ui \
-    mainwindow.ui \
-    queryinvoiceinputdialog.ui \
-    reportpage.ui
+    mainwindow.ui
 
 TRANSLATIONS += \
-    ManagerClient_zh_CN.ts
+    GuestClient_zh_CN.ts
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

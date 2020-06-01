@@ -13,8 +13,7 @@ InitialPage::~InitialPage()
 	delete ui;
 }
 
-//点击“确认”
-void InitialPage::on_ptn_yes_clicked()
+void InitialPage::on_btn_yes_clicked()
 {
 	QString addres;
 	QString port;

@@ -6,6 +6,7 @@
 #include <queryinvoiceinputdialog.h>
 #include <invoicepage.h>
 #include <reportpage.h>
+#include <QTcpSocket>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,11 +26,15 @@ private slots:
 
 	void on_ptn_makeReport_clicked();
 
+private slots:
+	void initialHandle(QString address, QString port);
+
 private:
-	Ui::MainWindow *ui;
-	InitialPage *initialPage;
-	QueryInvoiceInputDialog *queryInvoiceInputDialg;
-	InvoicePage *invoicePage;
-	ReportPage *reportPage;
+	Ui::MainWindow *ui; //监视主页面
+	InitialPage *initialPage; //初始化页面
+	QueryInvoiceInputDialog *queryInvoiceInputDialg; //账单查询页面
+	InvoicePage *invoicePage; //账单页面
+	ReportPage *reportPage; //报表页面
+	QTcpSocket *socket; //套接字
 };
 #endif // MAINWINDOW_H
