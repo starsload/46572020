@@ -27,7 +27,7 @@ private slots:
 	void on_ptn_makeReport_clicked();
 
 private slots:
-	void initialHandle(QString address, QString port);
+	void initialHandle(InitialParameters parameters);
 
 private:
 	Ui::MainWindow *ui; //监视主页面

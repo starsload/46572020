@@ -1,8 +1,11 @@
-﻿#include <AirConditionHost.h>
+﻿#include <QCoreApplication>
+#include "AirConditionHost.h"
 
 int main(int argc, char *argv[])
 {
-	AirConditionHost host(argc, argv);
+	QCoreApplication a(argc, argv);
+
+	AirConditionHost host;
 	host.PowerOn();
-	return 0;
+	return a.exec();
 }

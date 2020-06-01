@@ -38,6 +38,7 @@ void AirConditionHost::managerConnectHandle() {
 	QTcpSocket *managerSocket = server->nextPendingConnection();
 	chartConstroller->setSocket(managerSocket);
 	delete server;
+	
 	server = new QTcpServer();
 	connect(server, SIGNAL(newConnection()), this, SLOT(guestConnectHndle()));
 }

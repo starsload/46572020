@@ -11,7 +11,7 @@ public:
 	explicit MyServer(QObject *parent = nullptr);
 
 protected:
-	void incomingConnection(qintptr socketDescriptor) override;//重写这个函数
+	//void incomingConnection(qintptr socketDescriptor) override;//重写这个函数
 };
 
 #endif // MYSERVER_H

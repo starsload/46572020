@@ -7,8 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 	initialPage = new InitialPage(this);
-	connect(initialPage, SIGNAL(initialFinish(QString, QString))
-			, this, SLOT(initialHandle(QString, QString)));
+	connect(initialPage, SIGNAL(initialFinish(InitialParameters))
+			, this, SLOT(initialHandle(InitialParameters)));
 	initialPage->show();
 	initialPage->setModal(true);
 }
@@ -18,7 +18,9 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::initialHandle(QString address, QString port) {
+void MainWindow::initialHandle(InitialParameters parameters) {
+	QString address = parameters.address;
+	QString port = parameters.port;
 	socket = new QTcpSocket(this);
 	socket->connectToHost(address, port.toInt());
 }

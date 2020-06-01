@@ -17,6 +17,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         AirConditionHost.cpp \
+        ChartController.cpp \
+        Monitor.cpp \
+        ScheduleController.cpp \
+        ServiceList.cpp \
+        WaitList.cpp \
         main.cpp \
         myserver.cpp \
         mythread.cpp
@@ -31,5 +36,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     AirConditionHost.h \
+    ChartController.h \
+    Monitor.h \
+    ScheduleController.h \
+    ServiceList.h \
+    WaitList.h \
     myserver.h \
     mythread.h
