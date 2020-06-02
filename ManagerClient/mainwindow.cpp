@@ -23,6 +23,20 @@ void MainWindow::initialHandle(InitialParameters parameters) {
 	QString port = parameters.port;
 	socket = new QTcpSocket(this);
 	socket->connectToHost(address, port.toInt());
+	connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
+}
+
+void MainWindow::newServerMessage(){
+	buffer = socket->read(HEAD_LENGTH);
+	qDebug()<<"收到服务器的信息为："<<buffer;\
+	if (buffer == "powerON OK") {
+		QByteArray msg = "setPara";
+		socket->write(msg, msg.size());
+	}
+	else if(buffer == "setPara OK") {
+		QByteArray msg = "StartUp";
+		socket->write(msg, msg.size());
+	}
 }
 
 //点击“生成账单”

@@ -34,12 +34,34 @@ void AirConditionHost::PowerOn() {
 }
 
 void AirConditionHost::managerConnectHandle() {
-	qDebug()<<"管理员客户端已连接";
+	qDebug()<<"管理员已连接";
 	QTcpSocket *managerSocket = server->nextPendingConnection();
 	chartConstroller->setSocket(managerSocket);
-	delete server;
-	server = new QTcpServer();
-	connect(server, SIGNAL(newConnection()), this, SLOT(guestConnectHndle()));
+	disconnect(server, SIGNAL(newConnection()),
+			this, SLOT(managerConnectHandle()));
+	server->disconnect();
+	server->close();
+}
+
+void AirConditionHost::setPara(){
+
+}
+
+void AirConditionHost::startUp() {
+	qDebug()<<"请输入GuestClientClient的端口：";
+	QTextStream input(stdin);
+	quint16 port;
+	input >> port;
+	connect(server, SIGNAL(newConnection()),
+			this, SLOT(guestConnectHndle()));
+	if(!server->listen(QHostAddress::Any, port))
+	{
+		qDebug()<<"服务器监听失败";
+		return;
+	}
+	else{
+		qDebug()<<"开始等待顾客";
+	}
 }
 
 void AirConditionHost::guestConnectHndle(){
@@ -47,7 +69,8 @@ void AirConditionHost::guestConnectHndle(){
 }
 
 void AirConditionHost::CreatChartController() {
-	chartConstroller = new ChartController();
+	chartConstroller = new ChartController(this);
+	chartConstroller->setHost(this);
 }
 
 void AirConditionHost::CreateMonitor(){

@@ -28,6 +28,7 @@ private slots:
 
 private slots:
 	void initialHandle(InitialParameters parameters);
+	void newServerMessage();
 
 private:
 	Ui::MainWindow *ui; //监视主页面
@@ -36,5 +37,8 @@ private:
 	InvoicePage *invoicePage; //账单页面
 	ReportPage *reportPage; //报表页面
 	QTcpSocket *socket; //套接字
+
+	int HEAD_LENGTH = 20;
+	QByteArray buffer;
 };
 #endif // MAINWINDOW_H

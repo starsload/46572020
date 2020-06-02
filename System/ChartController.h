@@ -2,22 +2,27 @@
 #define CHARTCONTROLLER_H
 
 #include <QTcpSocket>
-#include <QThread>
+#include <QObject>
+#include <QHostAddress>
 
-class ChartController:public QThread
+class AirConditionHost;
+class ChartController:public QObject
 {
-public:
-	ChartController(QThread *parent = nullptr);
-	void setSocket(QTcpSocket*);
+	Q_OBJECT
 
-protected:
-	virtual void run();
+public:
+	explicit ChartController(QObject *parent = nullptr);
+	void setSocket(QTcpSocket*);
+	void setHost(AirConditionHost *host);
+
+private slots:
+	void listenToManagerClient();
 
 private:
-	const static int HEAD_LENGTH = 8;
-
+	const static int HEAD_LENGTH = 20;
 	QTcpSocket *socket;
-	char buffer[HEAD_LENGTH];
+	QByteArray buffer;
+	AirConditionHost *airConditionHost;
 };
 
 #endif // CHARTCONTROLLER_H
