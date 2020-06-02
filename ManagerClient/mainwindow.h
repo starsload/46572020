@@ -7,6 +7,7 @@
 #include <invoicepage.h>
 #include <reportpage.h>
 #include <QTcpSocket>
+#include <SocketConstants.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,7 +39,6 @@ private:
 	ReportPage *reportPage; //报表页面
 	QTcpSocket *socket; //套接字
 
-	int HEAD_LENGTH = 20;
-	QByteArray buffer;
+	void sendPacket(QByteArray body);
 };
 #endif // MAINWINDOW_H

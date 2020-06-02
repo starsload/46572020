@@ -7,6 +7,13 @@ namespace Ui {
 class InitialPage;
 }
 
+class InitialParameters {
+public:
+	QString address;
+	QString port;
+	int tempThreshold;
+};
+
 class InitialPage : public QDialog
 {
 	Q_OBJECT
@@ -16,7 +23,7 @@ public:
 	~InitialPage();
 
 signals:
-	void initialFinish(QString address, QString port);
+	void initialFinish(InitialParameters parameters);
 
 private slots:
 	void on_btn_yes_clicked();

@@ -1,0 +1,6 @@
+#ifndef GUSTSOCKTCONSTANTS_H
+#define GUSTSOCKTCONSTANTS_H
+
+static const int HEAD_LEANGTH = 4;
+
+#endif // GUSTSOCKTCONSTANTS_H

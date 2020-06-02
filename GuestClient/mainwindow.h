@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <initialpage.h>
 #include <QTcpSocket>
+#include <SocketConstants.h>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,11 +22,16 @@ public:
 	~MainWindow();
 
 private slots:
-	void initialHandle(QString address, QString port);
+	void initialHandle(InitialParameters parameters);
+	void newServerMessage();
 
 private:
 	Ui::MainWindow *ui;
 	InitialPage *initialPage;
 	QTcpSocket * socket;
+
+	void sendPacket(QByteArray body);
+
+	void sendTest();
 };
 #endif // MAINWINDOW_H

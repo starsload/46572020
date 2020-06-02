@@ -48,6 +48,7 @@ void AirConditionHost::setPara(){
 }
 
 void AirConditionHost::startUp() {
+	//system("cls");
 	qDebug()<<"请输入GuestClientClient的端口：";
 	QTextStream input(stdin);
 	quint16 port;
@@ -66,11 +67,13 @@ void AirConditionHost::startUp() {
 
 void AirConditionHost::guestConnectHndle(){
 	qDebug()<<"有顾客客户端连接";
+	QTcpSocket *socket = server->nextPendingConnection();
+	scheduleController->addGuestSocket(socket);
 }
 
 void AirConditionHost::CreatChartController() {
 	chartConstroller = new ChartController(this);
-	chartConstroller->setHost(this);
+	chartConstroller->setAirConditionHost(this);
 }
 
 void AirConditionHost::CreateMonitor(){
@@ -78,7 +81,8 @@ void AirConditionHost::CreateMonitor(){
 }
 
 void AirConditionHost::CreateSchduleController(){
-	scheduleController = new ScheduleController();
+	scheduleController = new ScheduleController(this);
+	scheduleController->setAirConditionHost(this);
 }
 
 void AirConditionHost::CreateWaitList(){

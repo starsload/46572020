@@ -22,6 +22,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    SocketConstants.h \
     initialpage.h \
     mainwindow.h
 

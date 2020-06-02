@@ -15,10 +15,12 @@ InitialPage::~InitialPage()
 
 void InitialPage::on_btn_yes_clicked()
 {
+	InitialParameters parameters;
 	QString addres;
 	QString port;
-	addres=this->ui->le_ip_address->text();
-	port = this->ui->le_port->text();
-	emit initialFinish(addres, port);
+	parameters.address = this->ui->le_ip_address->text();
+	parameters.port = this->ui->le_port->text();
+	parameters.tempThreshold = this->ui->temp_threshold->value();
+	emit initialFinish(parameters);
 	this->destroy();
 }
