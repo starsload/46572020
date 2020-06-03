@@ -4,6 +4,7 @@
 #include <QTcpSocket>
 #include <QObject>
 #include <QHostAddress>
+#include <SocketConstants.h>
 
 class AirConditionHost;
 class ChartController:public QObject
@@ -13,16 +14,16 @@ class ChartController:public QObject
 public:
 	explicit ChartController(QObject *parent = nullptr);
 	void setSocket(QTcpSocket*);
-	void setHost(AirConditionHost *host);
+	void setAirConditionHost(AirConditionHost *host);
 
 private slots:
 	void listenToManagerClient();
 
 private:
-	const static int HEAD_LENGTH = 20;
 	QTcpSocket *socket;
-	QByteArray buffer;
 	AirConditionHost *airConditionHost;
+
+	void sendPacket(QByteArray body);
 };
 
 #endif // CHARTCONTROLLER_H

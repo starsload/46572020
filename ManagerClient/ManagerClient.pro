@@ -25,6 +25,7 @@ SOURCES += \
     reportpage.cpp
 
 HEADERS += \
+    SocketConstants.h \
     initialpage.h \
     invoicepage.h \
     mainwindow.h \
