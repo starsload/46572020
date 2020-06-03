@@ -23,18 +23,14 @@ void ScheduleController::addGuestSocket(QTcpSocket *s){
 			this, SLOT(listenToGuestClient(QTcpSocket*)));
 }
 
-//QJsonObject ojson;
-//ojson.insert("type", "hello guest client");
-//ojson.insert("num", 34);
-//QJsonArray tmpArray;
-//tmpArray.push_back(true);
-//tmpArray.push_back(78);
-//QJsonObject tmp;
-//tmp.insert("msg", "hellp world");
-//tmpArray.push_back(tmp);
-//ojson.insert("array", tmpArray);
-
 void ScheduleController::listenToGuestClient(QTcpSocket *socket){
+	GuestClientSocket *mysocket;
+	for(auto sock : allSockets){
+		if(sock->socket == socket){
+			mysocket = sock;
+		}
+	}
+	using namespace SocketConstants;
 	while(socket->bytesAvailable() > 0) {
 		QByteArray head;
 		QByteArray body;
@@ -49,25 +45,41 @@ void ScheduleController::listenToGuestClient(QTcpSocket *socket){
 		QString out = body;
 		qDebug()<<"收到的数据包信息为：\n"<<out;
 		//对body进行处理
-
-		QJsonParseError e;
-		QJsonDocument doc = QJsonDocument::fromJson(body, &e);
-		if(e.error != QJsonParseError::NoError) {
-			qDebug() << "JSON格式错误";
-			continue;
-		}
-		else {
-			qDebug() << "JSON格式正确";
-			QJsonObject ojson = doc.object();
-			QString type = ojson.value("type").toString();
-			int num = ojson.value("num").toInt();
-			QJsonArray array = ojson.value("array").toArray();
-			qDebug()<<type<<num<<array;
-		}
+		processPacket(mysocket, body);
 	}
 }
 
-void ScheduleController::sendPacket(QTcpSocket *socket, QByteArray body){
+void ScheduleController::processPacket(GuestClientSocket *socket, QByteArray body){
+	using namespace SocketConstants;
+	QJsonParseError e;
+	QJsonDocument doc = QJsonDocument::fromJson(body, &e);
+	if(e.error != QJsonParseError::NoError) {
+		qDebug() << "JSON格式错误";
+		return;
+	}
+
+	QJsonObject ojson = doc.object();
+	int type = ojson.value(TYPE).toInt();
+	switch (type) {
+	case GUEST_ON:
+	{
+		int room_id = ojson.value(ROOM_ID).toInt();
+		double realTemp = ojson.value(ROOM_REAL_TEMP).toDouble();
+
+		break;
+	}
+
+	}
+}
+
+void ScheduleController::sendJSON(GuestClientSocket *socket, QJsonObject ojson){
+	QJsonDocument doc;
+	doc.setObject(ojson);
+	QByteArray msg = doc.toJson(QJsonDocument::Compact);
+	sendPacket(socket, msg);
+}
+
+void ScheduleController::sendPacket(GuestClientSocket *s, QByteArray body){
 	QByteArray head;
 	// 构造头部
 	int  length = body.size();
@@ -76,5 +88,5 @@ void ScheduleController::sendPacket(QTcpSocket *socket, QByteArray body){
 	memcpy(head.data(), &length, len_int);
 	QByteArray packet;
 	packet = head + body;
-	socket->write(packet, packet.size());
+	s->socket->write(packet, packet.size());
 }

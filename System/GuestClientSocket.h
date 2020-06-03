@@ -8,7 +8,9 @@ class GuestClientSocket: public QObject
 	Q_OBJECT
 
 public:
-	GuestClientSocket(QTcpSocket *s);
+	QTcpSocket *socket;
+	int Room_id = -1;
+	GuestClientSocket(QTcpSocket *s = nullptr);
 
 signals:
 	void newPacketArrive(QTcpSocket *socket);
@@ -16,8 +18,6 @@ signals:
 private slots:
 	void readData();
 
-private:
-	QTcpSocket *socket;
 };
 
 #endif // GUESTCLIENTSOCKET_H

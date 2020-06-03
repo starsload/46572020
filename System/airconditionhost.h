@@ -18,7 +18,13 @@ public:
 	~AirConditionHost();
 
 	void PowerOn();
-	void setPara();
+	void setPara(double defaultTargetTemp,
+				double maxTargetTemp,
+				double minTargetTemp,
+				double highFeeRate,
+				double middleFeeRate,
+				double lowFeeRate,
+				int mode);
 	void startUp();
 	void CreatChartController();
 	void CreateMonitor();
@@ -37,6 +43,14 @@ private:
 	Monitor *monitor;
 	WaitList *waitList;
 	ServiceList *serviceList;
+
+	double defaultTargetTemp; //默认目标温度
+	double maxTargetTemp; //最高目标温度
+	double minTargetTemp; //最低目标温度
+	double highFeeRate; //高风速费率
+	double middleFeeRate; //中风速费率
+	double lowFeeRate; //低风速费率
+	int mode; //工作模式：0是制冷，1是制热
 };
 
 #endif // AIRCONDITIONHOST_H

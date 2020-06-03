@@ -8,6 +8,9 @@
 #include <reportpage.h>
 #include <QTcpSocket>
 #include <SocketConstants.h>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,5 +43,7 @@ private:
 	QTcpSocket *socket; //套接字
 
 	void sendPacket(QByteArray body);
+	void sendJSON(QJsonObject ojson);
+	void processPacket(QByteArray body);
 };
 #endif // MAINWINDOW_H

@@ -30,8 +30,14 @@ private:
 	InitialPage *initialPage;
 	QTcpSocket * socket;
 
-	void sendPacket(QByteArray body);
+	int RoomId; //房间号
+	int tempThreshold; //阈值：目标温度与实际温度的差值
+	double realTemp; //房间实际温度
+	double targetTemp; //目标温度
 
+	void sendPacket(QByteArray body);
+	void sendJSON(QJsonObject ojson);
+	void processPacket(QByteArray body);
 	void sendTest();
 };
 #endif // MAINWINDOW_H

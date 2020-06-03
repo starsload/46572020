@@ -29,7 +29,9 @@ private:
 	QVector<GuestClientSocket*> allSockets; //socket数组
 	AirConditionHost *airConditionHost;
 
-	void sendPacket(QTcpSocket *socket, QByteArray body);
+	void sendPacket(GuestClientSocket *socket, QByteArray body);
+	void sendJSON(GuestClientSocket *socket, QJsonObject ojson);
+	void processPacket(GuestClientSocket *socket, QByteArray body);
 };
 
 #endif // SCHEDULECONTROLLER_H

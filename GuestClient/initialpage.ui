@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>417</height>
+    <width>545</width>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>80</y>
+     <x>230</x>
+     <y>60</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="btn_yes">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>320</y>
+     <x>220</x>
+     <y>310</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -42,9 +42,9 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>200</y>
-     <width>101</width>
+     <x>120</x>
+     <y>230</y>
+     <width>121</width>
      <height>31</height>
     </rect>
    </property>
@@ -57,15 +57,29 @@
      </widget>
     </item>
     <item>
-     <widget class="QSpinBox" name="temp_threshold"/>
+     <widget class="QSpinBox" name="temp_threshold">
+      <property name="maximum">
+       <number>10</number>
+      </property>
+      <property name="value">
+       <number>3</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>℃</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>150</y>
+     <x>340</x>
+     <y>130</y>
      <width>91</width>
      <height>22</height>
     </rect>
@@ -79,15 +93,22 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="le_port"/>
+     <widget class="QLineEdit" name="le_port">
+      <property name="text">
+       <string>6666</string>
+      </property>
+      <property name="maxLength">
+       <number>5</number>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>150</y>
+     <x>120</x>
+     <y>130</y>
      <width>221</width>
      <height>22</height>
     </rect>
@@ -101,7 +122,85 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="le_ip_address"/>
+     <widget class="QLineEdit" name="le_ip_address">
+      <property name="text">
+       <string>127.0.0.1</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>230</y>
+     <width>140</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>房间当前温度</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSpinBox" name="temp_real">
+      <property name="minimum">
+       <number>-20</number>
+      </property>
+      <property name="maximum">
+       <number>50</number>
+      </property>
+      <property name="value">
+       <number>32</number>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>℃</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>180</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <item>
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>Room_Id</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="le_room_id">
+      <property name="inputMask">
+       <string/>
+      </property>
+      <property name="text">
+       <string>539</string>
+      </property>
+      <property name="maxLength">
+       <number>3</number>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

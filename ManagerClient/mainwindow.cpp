@@ -23,12 +23,23 @@ void MainWindow::initialHandle(InitialParameters parameters) {
 	QString port = parameters.port;
 	socket = new QTcpSocket(this);
 	socket->connectToHost(address, port.toInt());
-	//传到后台
 	connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
+	//传到服务器
+	QJsonObject ojson;
+	using namespace SocketConstants;
+	ojson.insert(TYPE, SET_PARA);
+	ojson.insert(DEFAULT_TARGET_TEMP, parameters.defaultTargetTemp);
+	ojson.insert(MAX_TARGET_TEMP, parameters.maxTargetTemp);
+	ojson.insert(MIN_TARGET_TEMP, parameters.minTargetTemp);
+	ojson.insert(HIGH_FEE_RATE, parameters.highFeeRate);
+	ojson.insert(MID_FEE_RATE, parameters.middleFeeRate);
+	ojson.insert(LOW_FEE_RATE, parameters.lowFeeRate);
+	sendJSON(ojson);
 }
 
 //接收服务器消息
 void MainWindow::newServerMessage(){
+	using namespace SocketConstants;
 	while(socket->bytesAvailable() > 0) {
 		QByteArray head;
 		QByteArray body;
@@ -42,14 +53,33 @@ void MainWindow::newServerMessage(){
 			body.append(socket->read(1));
 		qDebug()<<"收到服务器的信息为："<<body;
 		//对body进行处理
-		if (body == "powerON OK") {
-			QByteArray msg = "setPara";
-			sendPacket(msg);
-		}
-		else if(body == "setPara OK") {
-			QByteArray msg = "StartUp";
-			sendPacket(msg);
-		}
+		processPacket(body);
+	}
+}
+
+//处理收到的数据包
+void MainWindow::processPacket(QByteArray body){
+	using namespace SocketConstants;
+	QJsonParseError e;
+	QJsonDocument doc = QJsonDocument::fromJson(body, &e);
+	if(e.error != QJsonParseError::NoError) {
+		qDebug() << "JSON格式错误";
+		return;
+	}
+
+	QJsonObject ojson = doc.object();
+	int type = ojson.value(TYPE).toInt();
+	switch (type) {
+	case SET_PARA_OK:
+	{
+		QJsonObject ojson;
+		ojson.insert(TYPE, START_UP);
+		sendJSON(ojson);
+		break;
+	}
+	case START_UP_OK:
+		qDebug()<<"start up ok!";
+		break;
 	}
 }
 
@@ -75,6 +105,13 @@ void MainWindow::on_ptn_makeReport_clicked()
 {
 	reportPage = new ReportPage(this);
 	reportPage->show();
+}
+
+void MainWindow::sendJSON(QJsonObject ojson){
+	QJsonDocument doc;
+	doc.setObject(ojson);
+	QByteArray msg = doc.toJson(QJsonDocument::Compact);
+	sendPacket(msg);
 }
 
 void MainWindow::sendPacket(QByteArray body){

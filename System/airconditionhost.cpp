@@ -43,8 +43,15 @@ void AirConditionHost::managerConnectHandle() {
 	server->close();
 }
 
-void AirConditionHost::setPara(){
-
+void AirConditionHost::setPara(double defaultTargetTemp, double maxTargetTemp, double minTargetTemp,
+double highFeeRate, double middleFeeRate, double lowFeeRate, int mode){
+	this->defaultTargetTemp = defaultTargetTemp;
+	this->maxTargetTemp = maxTargetTemp;
+	this->minTargetTemp = minTargetTemp;
+	this->highFeeRate = highFeeRate;
+	this->middleFeeRate = middleFeeRate;
+	this->lowFeeRate = lowFeeRate;
+	this->mode = mode;
 }
 
 void AirConditionHost::startUp() {

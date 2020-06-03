@@ -5,6 +5,9 @@
 #include <QObject>
 #include <QHostAddress>
 #include <SocketConstants.h>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 class AirConditionHost;
 class ChartController:public QObject
@@ -24,6 +27,8 @@ private:
 	AirConditionHost *airConditionHost;
 
 	void sendPacket(QByteArray body);
+	void sendJSON(QJsonObject ojson);
+	void processPacket(QByteArray body);
 };
 
 #endif // CHARTCONTROLLER_H

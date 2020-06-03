@@ -2,6 +2,7 @@
 #define INITIALPAGE_H
 
 #include <QDialog>
+#include <QDebug>
 
 namespace Ui {
 class InitialPage;
@@ -11,7 +12,9 @@ class InitialParameters {
 public:
 	QString address;
 	QString port;
-	int tempThreshold;
+	int tempThreshold; //阈值：目标温度与实际温度的差值
+	double realTemp; //房间实际温度
+	int RoomId; //房间号
 };
 
 class InitialPage : public QDialog
@@ -30,6 +33,8 @@ private slots:
 
 private:
 	Ui::InitialPage *ui;
+
+	bool isNum(QString s);
 };
 
 #endif // INITIALPAGE_H
