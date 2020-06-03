@@ -11,12 +11,13 @@ class InitialParameters {
 public:
 	QString address;
 	QString port;
-	int defaultTargetTemp; //默认目标温度
-	int maxTargetTemp; //最高目标温度
-	int minTargetTemp; //最低目标温度
+	double defaultTargetTemp; //默认目标温度
+	double maxTargetTemp; //最高目标温度
+	double minTargetTemp; //最低目标温度
 	double highFeeRate; //高风速费率
 	double middleFeeRate; //中风速费率
 	double lowFeeRate; //低风速费率
+	int defaultFanSpeed; //默认风速：0为低，1为中，2为高
 	int mode; //工作模式：0是制冷，1是制热
 };
 

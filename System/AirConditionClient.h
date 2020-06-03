@@ -1,24 +1,23 @@
 #ifndef AIRCONDITIONCLIENT_H
 #define AIRCONDITIONCLIENT_H
 
-#include <QMainWindow>
-#include<vector>
-#include<QSqlDatabase>
-#include <QMessageBox>
+#include <vector>
+#include <QSqlDatabase>
+//#include <QMessageBox>
 #include <QDebug>
-#include <QApplication>
-#include <QPushButton>
+//#include <QPushButton>
 #include <QtCore/qmath.h>
-#include <QFileDialog>
+//#include <QFileDialog>
 #include <QFileInfo>
 #include <QVector>
+#include <QSqlQuery>
 using namespace std;
 
 class AirConditionClient{
 private:
         int RoomId;//房间号
         int work_state;//工作状态,0休眠，1等待，2运行
-        QString mode;//工作模式
+		int mode;//工作模式：0是制冷，1是制热
         int TargetTemp;//目标温度
         int PreTemp;//当前温度
         float FeeRate;//费率
@@ -34,7 +33,7 @@ private:
 public:
         AirConditionClient();
         ~AirConditionClient();
-        void Initialize(int RoomId,QString mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
+		void Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
         void SetSpeed(int FanSpeed);//调节风速
         void SetTargetTemp(int TargetTemp);//调节温度
         int GetState();//获取分控机运行状态 run运行 sleep休眠 ready准备运行

@@ -14,8 +14,6 @@ void ChartController::setSocket(QTcpSocket *s) {
 	socket = s;
 	connect(socket, SIGNAL(readyRead()),
 			this, SLOT(listenToManagerClient()));
-	QByteArray msg = "powerON OK";
-	sendPacket(msg);
 }
 
 void ChartController::listenToManagerClient(){
@@ -41,22 +39,12 @@ void ChartController::listenToManagerClient(){
 //对收到的数据包进行处理
 void ChartController::processPacket(QByteArray body){
 	using namespace SocketConstants;
-	if (body == "setPara") {
-		QByteArray msg = "setPara OK";
-		sendPacket(msg);
-	}
-	else if (body == "StartUp") {
-		airConditionHost->startUp();
-		QByteArray msg = "StartUp OK";
-		sendPacket(msg);
-	}
 	QJsonParseError e;
 	QJsonDocument doc = QJsonDocument::fromJson(body, &e);
 	if(e.error != QJsonParseError::NoError) {
 		qDebug() << "JSON格式错误";
 		return;
 	}
-
 	QJsonObject ojson = doc.object();
 	int type = ojson.value(TYPE).toInt();
 	switch (type) {
@@ -69,8 +57,9 @@ void ChartController::processPacket(QByteArray body){
 		double middleFeeRate = ojson.value(MID_FEE_RATE).toDouble();
 		double lowFeeRate = ojson.value(LOW_FEE_RATE).toDouble();
 		int mode = ojson.value(WORK_MODE).toInt();
+		int speed = ojson.value(DEFAULT_SPEED).toInt();
 		airConditionHost->setPara(defaultTargetTemp, maxTargetTemp, minTargetTemp,
-								  highFeeRate, middleFeeRate, lowFeeRate, mode);
+								  highFeeRate, middleFeeRate, lowFeeRate, mode, speed);
 		QJsonObject ojson;
 		ojson.insert(TYPE, SET_PARA_OK);
 		sendJSON(ojson);

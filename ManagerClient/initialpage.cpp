@@ -27,6 +27,7 @@ void InitialPage::on_ptn_yes_clicked()
 	parameters.highFeeRate = this->ui->high_fee_rate->value();
 	parameters.middleFeeRate = this->ui->middle_fee_rate->value();
 	parameters.lowFeeRate = this->ui->low_fee_rate->value();
+	parameters.defaultFanSpeed = this->ui->default_speed->currentIndex();
 	parameters.mode = this->ui->mode->currentIndex(); //0是制冷，1是制热
 	emit initialFinish(parameters);
 	this->destroy();

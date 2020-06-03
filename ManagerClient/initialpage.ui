@@ -301,6 +301,44 @@
     </item>
    </layout>
   </widget>
+  <widget class="QWidget" name="layoutWidget_6">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>270</y>
+     <width>106</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_10">
+    <item>
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>默认风速</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="default_speed">
+      <item>
+       <property name="text">
+        <string>低</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>中</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>高</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>

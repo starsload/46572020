@@ -42,16 +42,16 @@ void MainWindow::initialHandle(InitialParameters parameters) {
 	this->RoomId = parameters.RoomId;
 	QString address = parameters.address;
 	QString port = parameters.port;
-	this->realTemp = parameters.realTemp;
+	this->curTemp = parameters.realTemp;
 	this->tempThreshold = parameters.tempThreshold;
 	socket->connectToHost(address, port.toInt());
 	if(socket->isValid()){
 		connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
 		using namespace SocketConstants;
 		QJsonObject ojson;
-		ojson.insert(TYPE, GUEST_ON);
+		ojson.insert(TYPE, REQUEST_ON);
 		ojson.insert(ROOM_ID, parameters.RoomId);
-		ojson.insert(ROOM_REAL_TEMP, parameters.realTemp);
+		ojson.insert(CUR_TEMP, parameters.realTemp);
 		sendJSON(ojson);
 	}
 	else{
@@ -92,7 +92,37 @@ void MainWindow::processPacket(QByteArray body){
 	QJsonObject ojson = doc.object();
 	int type = ojson.value(TYPE).toInt();
 	switch (type) {
-
+	case REQUEST_ON_OK:
+	{
+		RoomId = ojson.value(ROOM_ID).toInt();
+		mode = ojson.value(WORK_MODE).toInt();
+		curTemp = ojson.value(CUR_TEMP).toDouble();
+		targetTemp = ojson.value(TARGET_TEMP).toDouble();
+		curFanSpeed = ojson.value(CUR_SPEED).toInt();
+		totalFee = ojson.value(TOTAL_FEE).toDouble();
+		curFee = totalFee;
+		this->ui->DisplayPreTemp->display(curTemp);
+		this->ui->DisplayTargetTemp->display(targetTemp);
+		this->ui->TotalFee_2->setText(QString::number(totalFee, 'f', 2));
+		this->ui->PreFee_2->setText(QString::number(curFee, 'f', 2));
+		this->ui->RoomId->setText(QString("%1房间").arg(RoomId));
+		if(mode)
+			this->ui->DisplayModel->setText("制热");
+		else
+			this->ui->DisplayModel->setText("制冷");
+		switch(curFanSpeed) {
+		case 0:
+			this->ui->DisplayFanSpeed->setText("低");
+			break;
+		case 1:
+			this->ui->DisplayFanSpeed->setText("中");
+			break;
+		case 2:
+			this->ui->DisplayFanSpeed->setText("高");
+			break;
+		}
+		break;
+	}
 	}
 }
 
@@ -113,4 +143,41 @@ void MainWindow::sendPacket(QByteArray body){
 	QByteArray packet;
 	packet = head + body;
 	socket->write(packet, packet.size());
+}
+
+//发送调温信息
+void MainWindow::changeTemp(){
+	qDebug()<<"发送调温信息"<<targetTemp;
+}
+
+//上调温度
+void MainWindow::on_TargetTempUp_clicked()
+{
+	if(tempChangeTimer != nullptr){
+		tempChangeTimer->stop();
+	}
+	else {
+		tempChangeTimer = new QTimer();
+		tempChangeTimer->setSingleShot(true);
+		connect(tempChangeTimer, SIGNAL(timeout()), this, SLOT(changeTemp()));
+	}
+	targetTemp++;
+	this->ui->DisplayTargetTemp->display(targetTemp);
+	tempChangeTimer->start(changeInterval);
+}
+
+//下调温度
+void MainWindow::on_TargetTempDown_clicked()
+{
+	if(tempChangeTimer != nullptr){
+		tempChangeTimer->stop();
+	}
+	else {
+		tempChangeTimer = new QTimer();
+		tempChangeTimer->setSingleShot(true);
+		connect(tempChangeTimer, SIGNAL(timeout()), this, SLOT(changeTemp()));
+	}
+	targetTemp--;
+	this->ui->DisplayTargetTemp->display(targetTemp);
+	tempChangeTimer->start(changeInterval);
 }

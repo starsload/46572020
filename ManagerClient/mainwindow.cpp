@@ -21,19 +21,24 @@ MainWindow::~MainWindow()
 void MainWindow::initialHandle(InitialParameters parameters) {
 	QString address = parameters.address;
 	QString port = parameters.port;
+	qDebug()<<address<<"========"<<port;
 	socket = new QTcpSocket(this);
 	socket->connectToHost(address, port.toInt());
+	if(!socket->isValid())
+		qDebug()<<"socket连接无效";
 	connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
 	//传到服务器
 	QJsonObject ojson;
 	using namespace SocketConstants;
 	ojson.insert(TYPE, SET_PARA);
 	ojson.insert(DEFAULT_TARGET_TEMP, parameters.defaultTargetTemp);
+	ojson.insert(DEFAULT_SPEED, parameters.defaultFanSpeed);
 	ojson.insert(MAX_TARGET_TEMP, parameters.maxTargetTemp);
 	ojson.insert(MIN_TARGET_TEMP, parameters.minTargetTemp);
 	ojson.insert(HIGH_FEE_RATE, parameters.highFeeRate);
 	ojson.insert(MID_FEE_RATE, parameters.middleFeeRate);
 	ojson.insert(LOW_FEE_RATE, parameters.lowFeeRate);
+	ojson.insert(WORK_MODE, parameters.mode);
 	sendJSON(ojson);
 }
 
@@ -47,6 +52,7 @@ void MainWindow::newServerMessage(){
 		if(head.size() == 0){
 			continue;
 		}
+//		qDebug()<<"收到服务器的信息为："<<head;
 		int length;
 		memcpy(&length, head.data(), sizeof (length));
 		for(int i = 0; i < length; i++)

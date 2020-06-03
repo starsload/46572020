@@ -16,7 +16,7 @@ class ChartController:public QObject
 
 public:
 	explicit ChartController(QObject *parent = nullptr);
-	void setSocket(QTcpSocket*);
+	void setSocket(QTcpSocket* s);
 	void setAirConditionHost(AirConditionHost *host);
 
 private slots:
