@@ -1,30 +1,26 @@
 #include "AirConditionClient.h"
-//#include <QPainter>
-//#include <QDialog>
-//#include <QMessageBox>
+#include <QPainter>
+#include <QDialog>
+#include <QMessageBox>
 #include <QDebug>
-//#include <QApplication>
-//#include <QPushButton>
+#include <QApplication>
+#include <QPushButton>
 #include <QtCore/qmath.h>
-//#include <QFileDialog>
+#include <QFileDialog>
 #include <QFileInfo>
 #include <QVector>
-//#include "UseDatabase.h"
+#include "UseDatabase.h"
 
-AirConditionClient::AirConditionClient(){
-
-}
-
-void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
+void AirConditionClient::Initialize(int RoomId,QString mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
 {
     //向服务器发送初始化请求
 
 
     //向数据库查询总花费参数
-//    QString str = QString("select TOTAL_FEE from ACC_chart where ROOM_ID = %1").arg(RoomId);
-//    QSqlQuery query(db);
-//    query.exec(str);
-//    query.first();
+    QString str = QString("select TOTAL_FEE from ACC_chart where ROOM_ID = %1").arg(RoomId);
+    QSqlQuery query(db);
+    query.exec(str);
+    query.first();
 
     //初始化参数
     this->RoomId = RoomId;
@@ -33,7 +29,7 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
     this->TargetTemp = TargetTemp;
     this->FeeRate = FeeRate;
     this->Fee = 0;
-//   this->TotalFee = query.value(0).toFloat();
+    this->TotalFee = query.value(0).toFloat();
     this->FanSpeed = FanSpeed;
     this->priority = 0;
     this->Duration = 0;
@@ -55,7 +51,10 @@ int AirConditionClient::GetPriority()//获得分控机优先级
 {
     return this->priority;
 }
-
+int AirConditionClient::GetRoomId()//获得分控机优先级
+{
+	return this->RoomId;
+}
 QVector<float> AirConditionClient::GetFinalState()//获得关机时分控机状态
 {
     QVector<float> List;//暂存参数
