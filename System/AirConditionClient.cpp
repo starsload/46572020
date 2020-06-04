@@ -47,10 +47,20 @@ void AirConditionClient::SetTargetTemp(int TargetTemp)//设置分控机目标温
     this->TargetTemp = TargetTemp;
 }
 
-int AirConditionClient::GetPriority()//获得分控机优先级
-{
-    return this->priority;
-}
+int AirConditionClient::GetPriority(){return this->priority;}//获得分控机优先级
+int AirConditionClient::GetRoomId() {return this->RoomId;} 
+int AirConditionClient::Getwork_state() {	return this->work_state;} 
+QString AirConditionClient::Getmode() { return this->mode; }
+int AirConditionClient::GetTargetTemp() { return this->TargetTemp; }
+int AirConditionClient::GetPreTemp() { return this->PreTemp; }
+float AirConditionClient::GetFeeRate() { return this->FeeRate; }
+int AirConditionClient::GetFee() { return this->Fee; }
+int AirConditionClient::GetTotalFee() { return this->TotalFee; }
+int AirConditionClient::GetFanSpeed() { return this->FanSpeed; }
+int AirConditionClient::Getpriority() { return this->priority; }
+int AirConditionClient::GetDuration() { return this->GetDuration; }
+string AirConditionClient::Getget_server_time() { return this->get_server_time };
+string AirConditionClient::Getstop_server_time() { return this->stop_server_time };
 int AirConditionClient::GetRoomId()//获得分控机优先级
 {
 	return this->RoomId;

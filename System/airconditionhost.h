@@ -2,6 +2,7 @@
 #define AIRCONDITIONHOST_H
 
 #include <QTcpServer>
+#include <QTime>
 #include <ChartController.h>
 #include <ScheduleController.h>
 #include <Monitor.h>
@@ -9,7 +10,9 @@
 
 #include <AirConditionClient.h>
 #include <QObject>
+#include <QVector>
 #include <ServiceList.h>
+
 class returnRequestOn{
 public:
     int RoomId;
@@ -67,10 +70,10 @@ private:
     void ReachTargetTemperature(int RoomID);
     void TimeOff(int RoomId,float FeeRate);
 
-    /*DetailRecords* CreateRDR(int RoomID, data_in, data_out);//请求数据库 返回详单指针
-    Report*  CreateReport(vector<int> listRoomId,int typeReport, date);//请求数据库 返回报表指针
-    Invoice*  CreateInvoice(int RoomID, data_in, data_out);//请求数据库 返回账单指针
-    */
+    void CreateRDR(int RoomID, QString data_in, QString data_out);//请求数据库 返回详单指针
+    void  CreateReport(vector<int> listRoomId,int typeReport,QString  date);//请求数据库 返回报表指针
+    void  CreateInvoice(int RoomID, QString data_in, QString data_out);//请求数据库 返回账单指针
+
     double defaultTargetTemp; //默认目标温度
     double maxTargetTemp; //最高目标温度
     double minTargetTemp; //最低目标温度
@@ -80,6 +83,8 @@ private:
     double defaultFeeRate; //默认费率
     int defaultFanSpeed; //默认风速：0为低，1为中，2为高
     int mode; //工作模式：0是制冷，1是制热
+    QString Date;//日期
+    QTime current_time;
 };
 
 #endif // AIRCONDITIONHOST_H

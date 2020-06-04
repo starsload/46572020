@@ -34,8 +34,10 @@ private:
 public:
         AirConditionClient();
         ~AirConditionClient();
-		int GetRoomId();
-        void Initialize(int RoomId,QString mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
+		int GetRoomId(); int Getwork_state(); QString Getmode(); int GetTargetTemp(); int GetPreTemp();
+		float GetFeeRate(); int GetFee(); int GetTotalFee(); int GetFanSpeed(); int Getpriority(); int GetDuration();
+		string Getget_server_time(); string Getstop_server_time();
+		void Initialize(int RoomId,QString mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
         void SetSpeed(int FanSpeed);//调节风速
         void SetTargetTemp(int TargetTemp);//调节温度
         int GetState();//获取分控机运行状态 run运行 sleep休眠 ready准备运行
