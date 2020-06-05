@@ -24,10 +24,13 @@ SOURCES += \
         Monitor.cpp \
         ScheduleController.cpp \
         ServiceList.cpp \
+        UseDatabase.cpp \
         WaitList.cpp \
+        inovice.cpp \
         main.cpp \
         myserver.cpp \
-        mythread.cpp
+        mythread.cpp \
+        report.cpp
 
 TRANSLATIONS += \
     System_zh_CN.ts
@@ -46,6 +49,9 @@ HEADERS += \
     ScheduleController.h \
     ServiceList.h \
     SocketConstants.h \
+    UseDatabase.h \
     WaitList.h \
+    inovice.h \
     myserver.h \
-    mythread.h
+    mythread.h \
+    report.h

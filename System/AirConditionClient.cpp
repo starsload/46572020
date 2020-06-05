@@ -1,19 +1,32 @@
 #include "AirConditionClient.h"
-//#include <QPainter>
-//#include <QDialog>
-//#include <QMessageBox>
+
 #include <QDebug>
-//#include <QApplication>
-//#include <QPushButton>
 #include <QtCore/qmath.h>
-//#include <QFileDialog>
 #include <QFileInfo>
 #include <QVector>
-//#include "UseDatabase.h"
+#include <QSqlDatabase>
+#include "UseDatabase.h"
+
+
+//AirConditionClient::AirConditionClient(QObject *parent):
+//	QObject(parent)
+//{
+//	timer = new QTimer();
+//	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+//	timer->start(1000);
+//}
 
 AirConditionClient::AirConditionClient(){
 
 }
+
+AirConditionClient::AirConditionClient(const AirConditionClient& host){
+	this->timer = host.timer;
+}
+
+AirConditionClient::~AirConditionClient(){}
+
+void AirConditionClient::DestributeRunTime(){}
 
 void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
 {
@@ -21,10 +34,10 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
 
 
     //向数据库查询总花费参数
-//    QString str = QString("select TOTAL_FEE from ACC_chart where ROOM_ID = %1").arg(RoomId);
-//    QSqlQuery query(db);
-//    query.exec(str);
-//    query.first();
+    QString str = QString("select TOTAL_FEE from ACC_chart where ROOM_ID = %1").arg(RoomId);
+    QSqlQuery query(db);
+    query.exec(str);
+    query.first();
 
     //初始化参数
     this->RoomId = RoomId;
@@ -33,7 +46,7 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
     this->TargetTemp = TargetTemp;
     this->FeeRate = FeeRate;
     this->Fee = 0;
-//   this->TotalFee = query.value(0).toFloat();
+    this->TotalFee = query.value(0).toFloat();
     this->FanSpeed = FanSpeed;
     this->priority = 0;
     this->Duration = 0;
@@ -51,10 +64,20 @@ void AirConditionClient::SetTargetTemp(int TargetTemp)//设置分控机目标温
     this->TargetTemp = TargetTemp;
 }
 
-int AirConditionClient::GetPriority()//获得分控机优先级
-{
-    return this->priority;
-}
+int AirConditionClient::GetPriority(){return this->priority;}//获得分控机优先级
+int AirConditionClient::GetRoomId() {return this->RoomId;} 
+int AirConditionClient::Getwork_state() {	return this->work_state;} 
+int AirConditionClient::Getmode() { return this->mode; }
+int AirConditionClient::GetTargetTemp() { return this->TargetTemp; }
+int AirConditionClient::GetPreTemp() { return this->PreTemp; }
+float AirConditionClient::GetFeeRate() { return this->FeeRate; }
+int AirConditionClient::GetFee() { return this->Fee; }
+int AirConditionClient::GetTotalFee() { return this->TotalFee; }
+int AirConditionClient::GetFanSpeed() { return this->FanSpeed; }
+int AirConditionClient::Getpriority() { return this->priority; }
+int AirConditionClient::GetDuration() { return this->Duration; }
+QString AirConditionClient::Getget_server_time() { return this->get_server_time ;};
+QString AirConditionClient::Getstop_server_time() { return this->stop_server_time; };
 
 QVector<float> AirConditionClient::GetFinalState()//获得关机时分控机状态
 {
