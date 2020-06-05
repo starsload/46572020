@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--xtools2_universal_type_manager-->
-<?com.ibm.xtools.emf.core.signature <signature id="com.ibm.xtools.uml.msl.model" version="7.0.0"><feature description="" name="com.ibm.xtools.ruml.feature" url="" version="7.0.0"/></signature>?>
 <?com.ibm.xtools.emf.core.signature <signature id="com.ibm.xtools.mmi.ui.signatures.diagram" version="7.0.0"><feature description="" name="Rational 建模平台（com.ibm.xtools.rmp）" url="" version="7.0.0"/></signature>?>
+<?com.ibm.xtools.emf.core.signature <signature id="com.ibm.xtools.uml.msl.model" version="7.0.0"><feature description="" name="com.ibm.xtools.ruml.feature" url="" version="7.0.0"/></signature>?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Standard="http://www.eclipse.org/uml2/schemas/Standard/1" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:uml="http://www.eclipse.org/uml2/3.0.0/UML" xmlns:umlnotation="http://www.ibm.com/xtools/1.5.3/Umlnotation" xsi:schemaLocation="http://www.eclipse.org/uml2/schemas/Standard/1 pathmap://UML_PROFILES/Standard.profile.uml#_yzU58YinEdqtvbnfB2L_5w">
   <uml:Package xmi:id="_q3gb4HL5EeqXj66JPKSaYw" name="空包">
     <eAnnotations xmi:id="_q3gb4XL5EeqXj66JPKSaYw" source="uml2.diagrams" references="_q3gb4nL5EeqXj66JPKSaYw">
@@ -60,7 +60,7 @@
           <children xmi:type="notation:SemanticListCompartment" xmi:id="_zxk9s6DJEeq44LED0sO5hQ" type="OperationCompartment"/>
           <children xmi:type="notation:SemanticListCompartment" xmi:id="_zxlkwKDJEeq44LED0sO5hQ" visible="false" type="SignalCompartment"/>
           <children xmi:type="umlnotation:UMLShapeCompartment" xmi:id="_zxlkwaDJEeq44LED0sO5hQ" visible="false" type="StructureCompartment"/>
-          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_zxjvkaDJEeq44LED0sO5hQ" x="11811" y="17018"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_zxjvkaDJEeq44LED0sO5hQ" x="11748" y="16632"/>
         </children>
         <children xmi:type="umlnotation:UMLShape" xmi:id="_1vligKDJEeq44LED0sO5hQ" element="_1vkUYKDJEeq44LED0sO5hQ" fontName="Microsoft YaHei UI" fontHeight="8" transparency="0" lineColor="14263149" lineWidth="1" showStereotype="Label">
           <children xmi:type="notation:DecorationNode" xmi:id="_1vligqDJEeq44LED0sO5hQ" type="ImageCompartment">
@@ -944,7 +944,18 @@
       <ownedAttribute xmi:id="_cGfaoKGIEeqMjMz9S_sbAQ" name="tcpClient" visibility="private">
         <eAnnotations xmi:id="_ovgJkKGIEeqMjMz9S_sbAQ" source="http://www.eclipse.org/uml2/2.0.0/UML"/>
       </ownedAttribute>
-      <ownedOperation xmi:id="_s255QKGHEeqMjMz9S_sbAQ" name="CreateInvoice">
+      <ownedAttribute xmi:id="_oHrSEKLcEeqGj-yez1S8hA" name="roomId" visibility="private"/>
+      <ownedAttribute xmi:id="_pN4FIKLcEeqGj-yez1S8hA" name="reportId" visibility="private"/>
+      <ownedAttribute xmi:id="_qTlwAKLcEeqGj-yez1S8hA" name="typeReport" visibility="private"/>
+      <ownedAttribute xmi:id="_sh8d8KLcEeqGj-yez1S8hA" name="date" visibility="private"/>
+      <ownedAttribute xmi:id="_tp6yoKLcEeqGj-yez1S8hA" name="timesOfOnoff" visibility="private"/>
+      <ownedAttribute xmi:id="_upAREKLcEeqGj-yez1S8hA" name="duration" visibility="private"/>
+      <ownedAttribute xmi:id="_vdu5oKLcEeqGj-yez1S8hA" name="totalFee" visibility="private"/>
+      <ownedAttribute xmi:id="_wSEgoKLcEeqGj-yez1S8hA" name="timesOfDispatch" visibility="private"/>
+      <ownedAttribute xmi:id="_z3KYAKLcEeqGj-yez1S8hA" name="numberOfRDR" visibility="private"/>
+      <ownedAttribute xmi:id="_039tsKLcEeqGj-yez1S8hA" name="timesOfChangeTemp" visibility="private"/>
+      <ownedAttribute xmi:id="_1_UXUKLcEeqGj-yez1S8hA" name="timesOfChangeFanSpeed" visibility="private"/>
+      <ownedOperation xmi:id="_s255QKGHEeqMjMz9S_sbAQ" name="QueryReport">
         <ownedParameter xmi:id="_uUB-kKGHEeqMjMz9S_sbAQ" name="int RoomId"/>
         <ownedParameter xmi:id="_uUFB4KGHEeqMjMz9S_sbAQ" name="int date_in"/>
         <ownedParameter xmi:id="_uUFB4aGHEeqMjMz9S_sbAQ" name="int date_out"/>
@@ -972,6 +983,7 @@
       </ownedOperation>
       <ownedOperation xmi:id="_dKYEEKGJEeqMjMz9S_sbAQ" name="ChatController"/>
       <ownedOperation xmi:id="_fbUL8KGJEeqMjMz9S_sbAQ" name="~ChatController" visibility="public"/>
+      <ownedOperation xmi:id="_4RM6YKLcEeqGj-yez1S8hA" name="PrintReport"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_1vkUYKDJEeq44LED0sO5hQ" name="Monitor">
       <ownedAttribute xmi:id="_KIsh8KDQEeq44LED0sO5hQ" name="serviceList" visibility="private" type="_23EH8KDJEeq44LED0sO5hQ" association="_KIpeoKDQEeq44LED0sO5hQ">
@@ -1085,6 +1097,16 @@
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_OUCWcKDPEeq44LED0sO5hQ" value="1"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_OUBvYaDPEeq44LED0sO5hQ" value="1"/>
       </ownedAttribute>
+      <ownedAttribute xmi:id="__N9qcKLXEeqGj-yez1S8hA" name="roomId" visibility="private"/>
+      <ownedAttribute xmi:id="_r-gWgKLYEeqGj-yez1S8hA" name="timesOfOnoff" visibility="private"/>
+      <ownedAttribute xmi:id="_vtM10KLYEeqGj-yez1S8hA" name="duration" visibility="private"/>
+      <ownedAttribute xmi:id="_yBB5oKLYEeqGj-yez1S8hA" name="totalFee" visibility="private"/>
+      <ownedAttribute xmi:id="_yzKhMKLYEeqGj-yez1S8hA" name="timesOfDispatch" visibility="private"/>
+      <ownedAttribute xmi:id="_2TXRgKLYEeqGj-yez1S8hA" name="numberOfRDR" visibility="private"/>
+      <ownedAttribute xmi:id="_D5AAwKLZEeqGj-yez1S8hA" name="timesOfChangeTemp" visibility="private"/>
+      <ownedAttribute xmi:id="_FGZoAKLZEeqGj-yez1S8hA" name="timesOfChangeFanSpeed" visibility="private"/>
+      <ownedOperation xmi:id="_NJBaoKLZEeqGj-yez1S8hA" name="CreateReport"/>
+      <ownedOperation xmi:id="_Woe-sKLZEeqGj-yez1S8hA" name="CreateReportFile"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_4Z5P0KDNEeq44LED0sO5hQ" memberEnd="_4aH5UKDNEeq44LED0sO5hQ _4aWi0KDNEeq44LED0sO5hQ">
       <ownedEnd xmi:id="_4aWi0KDNEeq44LED0sO5hQ" name="" visibility="private" type="_rQefUKDJEeq44LED0sO5hQ" association="_4Z5P0KDNEeq44LED0sO5hQ">
