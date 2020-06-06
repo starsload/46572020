@@ -270,40 +270,39 @@ void AirConditionHost::TimeOff(int RoomId,float FeeRate) {
 
 }
 void AirConditionHost::RequestService(int RoomId) {
-    AirConditionClient* mclient = waitList->FindACC(RoomId);
-    AirConditionClient* mVictimclient;
-    if (!serviceList->isFull())
+    AirConditionClient* mclient = waitList->FindACC(RoomId);    //查找房间号对应的client
+    AirConditionClient* mVictimclient;  //被牺牲的client
+    if (!serviceList->isFull()) //服务队列未满
     {
-        mclient = waitList->PopACC(RoomId);
-        serviceList->PushACC(mclient);
-        mclient->StartRunning();
-        mclient->DestributeRunTime();
+        mclient = waitList->PopACC(RoomId);     //从等待队列弹出client
+        serviceList->PushACC(mclient);  //服务队列加入mclient
+        mclient->StartRunning();    //mclient开始运行
+        mclient->DestributeRunTime();   //给mclient分配时间片
         UpdateSwitchOnOffTime(mclient->GetRoomId(),this->Date,*db);//db操作 开机
         UpdateChangeScheduleTime(mclient->GetRoomId(),this->Date,*db);//db操作 发生调度
     }
-    else if(mclient->GetPriority()> serviceList->GetMinPriority()) {
-        mVictimclient = serviceList->GetAndPopVictim();//返回一个拷贝对象
-        waitList->PushACC(mVictimclient);
-        mVictimclient->StopRunning();
-        mclient = waitList->PopACC(mclient->GetRoomId());//返回一个拷贝对象
-        serviceList->PushACC(mclient);
-        mclient->StartRunning();
-        mclient->DestributeRunTime();
+    else if(mclient->GetPriority()> serviceList->GetMinPriority()) {    //mclient的优先级大于服务队列中的最小优先级
+        mVictimclient = serviceList->GetAndPopVictim();//找到牺牲者
+        waitList->PushACC(mVictimclient);   //将牺牲者加入等待队列
+        mVictimclient->StopRunning();   //牺牲者停止服务
+        mclient = waitList->PopACC(mclient->GetRoomId());   //从等待队列移出mclient
+        serviceList->PushACC(mclient);  //mclient加入服务队列
+        mclient->StartRunning();    //mclient开始服务
+        mclient->DestributeRunTime();   //mclient分配时间片
 
         UpdateSwitchOnOffTime(mclient->GetRoomId(),this->Date,*db);//db操作 开机
 
         InsertUseData(mclient->GetRoomId(),mclient->Getget_server_time(),mclient->Getstop_server_time(),mclient->GetTargetTemp(),mclient->GetFanSpeed(),mclient->GetFeeRate(),mclient->GetDuration(),mclient->GetFee(),*db);
         UpdateServiceTime(mclient->GetRoomId(),mclient->GetDuration(),this->Date,*db);
         UpdateTotalFee(mclient->GetRoomId(),mclient->GetFee(),this->Date,*db);
-        UpdateDetailRecordNum(mclient->GetRoomId(),this->Date,*db);//一次详单 四件套
-
+        UpdateDetailRecordNum(mclient->GetRoomId(),this->Date,*db);//记录详单
 
         UpdateChangeScheduleTime(mclient->GetRoomId(),this->Date,*db);//db操作 发生调度
         UpdateChangeScheduleTime(mVictimclient->GetRoomId(),this->Date,*db);//db操作 发生调度
 
     }
-    else {//动态设计是不是有点问题，此时已经在waitlist里 不需要再push也不需要set state
-
+    else {
+        waitList->PushACC(mclient);  //将请求客户端加入等待队列
     }
 }
 void AirConditionHost::CreateRDR(int RoomID, QString data_in, QString data_out)//请求数据库 返回详单指针

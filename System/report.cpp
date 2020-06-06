@@ -31,5 +31,5 @@ int Report::CreateReportFile(QString Date, QSqlDatabase db)
            << report[i].ScheduleTime << "," << report[i].DetailRecordNum << ","
            << report[i].ChangeTempTime << "," <<report[i].ChangeFanSpeedTime << endl;
   }
-	return 0;
+    return 0;
 }
