@@ -10,6 +10,13 @@
 #include <QTime>
 #include <QDateTime>
 
+AirConditionClient::AirConditionClient(){
+
+}
+
+AirConditionClient::~AirConditionClient(){
+
+}
 
 void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
 {
@@ -127,8 +134,8 @@ void AirConditionClient::SetSleep()//设置状态为休眠
 
 void AirConditionClient::DestributeRunTime()//分配运行时间片
 {
-    QObject::connect(this->timer,SIGNAL(timeout()),this,SLOT(WhenTimeOff()));
-    this->timer->start(120000);//两分钟触发一次
+//    QObject::connect(this->timer,SIGNAL(timeout()),this,SLOT(WhenTimeOff()));
+//    this->timer->start(120000);//两分钟触发一次
 }
 
 void AirConditionClient::WhenTimeOff()//当时间片到

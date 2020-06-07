@@ -123,6 +123,16 @@ void MainWindow::processPacket(QByteArray body){
 		}
 		break;
 	}
+	case CHANGE_FAN_SPEED_OK:
+	{
+		qDebug()<<"风速改变成功";
+		break;
+	}
+	case CHANGE_TARGET_TEMP_OK:
+	{
+		qDebug()<<"温度改变成功";
+		break;
+	}
 	}
 }
 
@@ -148,6 +158,12 @@ void MainWindow::sendPacket(QByteArray body){
 //发送调温信息
 void MainWindow::changeTemp(){
 	qDebug()<<"发送调温信息"<<targetTemp;
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CHANGE_TARGET_TEMP);
+	ojson.insert(ROOM_ID, RoomId);
+	ojson.insert(TARGET_TEMP, targetTemp);
+	sendJSON(ojson);
 }
 
 //上调温度

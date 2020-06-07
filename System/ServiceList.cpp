@@ -91,21 +91,23 @@ void ServiceList::PushACC(AirConditionClient* airConditionClient)
 {
     mClientList.push_back(*airConditionClient);
 }
-void ServiceList::StartRunning(int RoomId)
-{
-        vector<AirConditionClient>::iterator it = mClientList.begin();
-        for (; it != mClientList.end(); )
-        {
-				AirConditionClient &air = *it;
-                if (air.GetRoomId() == RoomId)
-                {
-						//这是干啥？
-						//it = &air;
-                        break;
-                }
-                else it++;
-        }
-}
+
+//void ServiceList::StartRunning(int RoomId)
+//{
+//        vector<AirConditionClient>::iterator it = mClientList.begin();
+//        for (; it != mClientList.end(); )
+//        {
+//				AirConditionClient &air = *it;
+//                if (air.GetRoomId() == RoomId)
+//                {
+//						//这是干啥？
+//						//it = &air;
+//                        break;
+//                }
+//                else it++;
+//        }
+//}
+
 AirConditionClient* ServiceList::FindACC(int RoomId)
 {
         vector<AirConditionClient>::iterator it = mClientList.begin();

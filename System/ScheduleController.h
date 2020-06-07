@@ -11,7 +11,6 @@
 #include <QJsonDocument>
 
 class AirConditionHost;
-class returnRequestOn;
 class ScheduleController: public QObject
 {
 	Q_OBJECT
@@ -23,7 +22,12 @@ public:
 	void RequestOn(int RoomId,double CurrentRoomTemp);
 
 	void setAirConditionHost(AirConditionHost*);
+
 	void addGuestSocket(QTcpSocket *s);
+
+	void ChangeFanSpeed(int RoomId, int Speed);
+
+	void ChangeTargetTemp(int RoomId, float targetTemp);
 
 private slots:
 	void listenToGuestClient(QTcpSocket*);

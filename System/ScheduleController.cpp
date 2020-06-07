@@ -83,8 +83,29 @@ void ScheduleController::processPacket(QByteArray body){
 		RequestOn(room_id, CurrentRoomTemp);
 		break;
 	}
-
+	case CHANGE_FAN_SPEED:
+	{
+		int id = ojson.value(ROOM_ID).toInt();
+		int speed = ojson.value(FAN_SPEED).toInt();
+		ChangeFanSpeed(id, speed);
+		break;
 	}
+	case CHANGE_TARGET_TEMP:
+	{
+		int roomId = ojson.value(ROOM_ID).toInt();
+		double targetTemp = ojson.value(TARGET_TEMP).toDouble();
+		ChangeTargetTemp(roomId, targetTemp);
+		break;
+	}
+	}
+}
+
+void ScheduleController::ChangeFanSpeed(int RoomId, int Speed){
+	airConditionHost->ChangeFanSpeed(RoomId, Speed);
+}
+
+void ScheduleController::ChangeTargetTemp(int RoomId, float targetTemp){
+	airConditionHost->ChangeTargetTemp(RoomId, targetTemp);
 }
 
 void ScheduleController::sendJSON(QJsonObject ojson){

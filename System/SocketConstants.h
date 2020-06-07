@@ -24,9 +24,9 @@ static const QString DEFAULT_SPEED = "default fan speed"; //int 0为低，1为�
 static const QString ROOM_ID = "room id"; //int
 static const QString CUR_TEMP = "cur temp"; //double
 static const QString TARGET_TEMP = "target temp"; //double
-static const QString CUR_SPEED = "cur speed"; //int
+static const QString CUR_SPEED = "cur speed"; //int 0为低，1为中，2为高
 static const QString TOTAL_FEE = "total fee"; //double
-
+static const QString FAN_SPEED = "fan speed"; //int 0为低，1为中，2为高
 
 //操作TYPE的种类
 //ChartController
@@ -38,6 +38,10 @@ static const int START_UP_OK = 3; //主机开机
 //ScheduleController
 static const int REQUEST_ON = 4; //GuestClient开机
 static const int REQUEST_ON_OK = 5; //GuestClient开机返回
+static const int CHANGE_FAN_SPEED = 6; //GuestClient改变风速
+static const int CHANGE_FAN_SPEED_OK = 7; //GuestClient改变风速返回
+static const int CHANGE_TARGET_TEMP = 8; //GuestClient改变温度
+static const int CHANGE_TARGET_TEMP_OK = 9; //GuestClient改变风速
 };
 
 

@@ -13,7 +13,7 @@
 #include <QDateTime>
 using namespace std;
 
-class AirConditionClient : QObject{
+class AirConditionClient{
 private:
         int RoomId;//房间号
         int work_state;//工作状态,0休眠，1等待，2运行

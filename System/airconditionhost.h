@@ -22,6 +22,12 @@ public:
     double totalFee;
 };
 
+class returnChangeFanSpeed{
+public:
+	int FeeRate;
+	bool isRunning;
+};
+
 class AirConditionHost: public QObject
 {
     Q_OBJECT
@@ -48,6 +54,10 @@ public:
 
     returnRequestOn CtreatClient(int Room_Id, double realTemp);
 
+	int ChangeTargetTemp(int RoomID,float Temp);//设置温度 先在队列里面找 再去设置
+
+	int ChangeFanSpeed(int RoomID,float Speed);//改变风速
+
 private slots:
     void managerConnectHandle();
     void guestConnectHndle();
@@ -63,8 +73,7 @@ private:
 
     int CtreatClient(int RoomID);//创建并初始化到mClientList里,num++ 并与host建立关联
 
-    int ChangeTargetTemp(int RoomID,float Temp);//设置温度 先在队列里面找 再去设置
-    int ChangeFanSpeed(int RoomID,float Speed);//改变风速
+
     void RequestService(int RoomId);
     void ReachTargetTemperature(int RoomID);
     void TimeOff(int RoomId,float FeeRate);
