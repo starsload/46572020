@@ -18,7 +18,7 @@ public:
 	explicit ChartController(QObject *parent = nullptr);
 	void setSocket(QTcpSocket* s);
 	void setAirConditionHost(AirConditionHost *host);
-
+	void RequestOff(int RoomId);
 private slots:
 	void listenToManagerClient();
 
