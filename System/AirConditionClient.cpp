@@ -40,6 +40,11 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
 void AirConditionClient::SetSpeed(int FanSpeed)//设置分控机风速
 {
     this->FanSpeed = FanSpeed;
+    this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
+    qint64 temp = this->get_server_time.secsTo(this->stop_server_time);
+    this->Duration = this->Duration + float(temp)/60;
+    this->Fee=this->Fee+this->Duration*(this->FeeRate-1/FanSpeed);//这样可以保证计算Fee时算的是变更后的结果
+    this->FeeRate = 1/FanSpeed;//计费相关
 }
 
 void AirConditionClient::SetTargetTemp(int TargetTemp)//设置分控机目标温度
@@ -54,8 +59,8 @@ int AirConditionClient::Getmode() { return this->mode; }
 int AirConditionClient::GetTargetTemp() { return this->TargetTemp; }
 int AirConditionClient::GetPreTemp() { return this->PreTemp; }
 float AirConditionClient::GetFeeRate() { return this->FeeRate; }
-float AirConditionClient::GetFee() { return this->Fee; }
-float AirConditionClient::GetTotalFee() { return this->TotalFee; }
+float AirConditionClient::GetFee() { return this->Fee+this->Duration*this->FeeRate; }//更新费用
+float AirConditionClient::GetTotalFee() { return this->TotalFee+this->Fee+this->Duration*this->FeeRate; }
 int AirConditionClient::GetFanSpeed() { return this->FanSpeed; }
 int AirConditionClient::Getpriority() { return this->priority; }
 int AirConditionClient::GetDuration() { return this->Duration; }
