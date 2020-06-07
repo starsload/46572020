@@ -8,10 +8,12 @@
 #include <QFileInfo>
 #include <QVector>
 #include <QTimer>
+#include <time.h>
+#include <QTime>
+#include <QDateTime>
 using namespace std;
 
-class AirConditionClient
-{
+class AirConditionClient : QObject{
 private:
         int RoomId;//房间号
         int work_state;//工作状态,0休眠，1等待，2运行
@@ -19,29 +21,24 @@ private:
         int TargetTemp;//目标温度
         int PreTemp;//当前温度
         float FeeRate;//费率
-        int Fee;//当前费用
-        int TotalFee;//总费用
+        float Fee;//当前费用
+        float TotalFee;//总费用
         int FanSpeed;//风速
         int priority;//优先级
         int Duration;//使用时长
-        QString get_server_time;//获得服务时间戳
-        QString stop_server_time;//停止服务时间戳
-		QTimer *timer;
+        QDateTime get_server_time;//获得服务时间戳
+        QDateTime stop_server_time;//停止服务时间戳
+        QTimer *timer;//用于计算服务时间
 
 private slots:
-		void update();
-
+        void WhenTimeOff();
 
 public:
-//		AirConditionClient(QObject *parent = nullptr);
-		AirConditionClient();
+        AirConditionClient();
         ~AirConditionClient();
-
-		AirConditionClient(const AirConditionClient& host);
-
-		int GetRoomId(); int Getwork_state(); int Getmode(); int GetTargetTemp(); int GetPreTemp();
-		float GetFeeRate(); int GetFee(); int GetTotalFee(); int GetFanSpeed(); int Getpriority(); int GetDuration();
-        QString Getget_server_time(); QString Getstop_server_time();
+        int GetRoomId(); int Getwork_state(); int Getmode(); int GetTargetTemp(); int GetPreTemp();
+        float GetFeeRate(); float GetFee(); float GetTotalFee(); int GetFanSpeed(); int Getpriority(); int GetDuration();
+        QDateTime Getget_server_time(); QDateTime Getstop_server_time();
         void Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
         void SetSpeed(int FanSpeed);//调节风速
         void SetTargetTemp(int TargetTemp);//调节温度
@@ -53,8 +50,8 @@ public:
         bool isRunning();//是否运行
         void StopRunning();//停止运行
         void StartRunning();//开始运行
-        void Delete();//删除分控机
-		void DestributeRunTime();
+        void DestributeRunTime();//分配时间片
+        void SetSleep();//设置状态为休眠
 };
 
 

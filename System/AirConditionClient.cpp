@@ -6,27 +6,10 @@
 #include <QVector>
 #include <QSqlDatabase>
 #include "UseDatabase.h"
+#include <QTimer>
+#include <QTime>
+#include <QDateTime>
 
-
-//AirConditionClient::AirConditionClient(QObject *parent):
-//	QObject(parent)
-//{
-//	timer = new QTimer();
-//	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-//	timer->start(1000);
-//}
-
-AirConditionClient::AirConditionClient(){
-
-}
-
-AirConditionClient::AirConditionClient(const AirConditionClient& host){
-	this->timer = host.timer;
-}
-
-AirConditionClient::~AirConditionClient(){}
-
-void AirConditionClient::DestributeRunTime(){}
 
 void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
 {
@@ -50,8 +33,8 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
     this->FanSpeed = FanSpeed;
     this->priority = 0;
     this->Duration = 0;
-    this->get_server_time = "";
-    this->stop_server_time = "";
+    this->get_server_time = QDateTime::currentDateTime();
+    this->stop_server_time = QDateTime::currentDateTime();
 }
 
 void AirConditionClient::SetSpeed(int FanSpeed)//设置分控机风速
@@ -71,13 +54,13 @@ int AirConditionClient::Getmode() { return this->mode; }
 int AirConditionClient::GetTargetTemp() { return this->TargetTemp; }
 int AirConditionClient::GetPreTemp() { return this->PreTemp; }
 float AirConditionClient::GetFeeRate() { return this->FeeRate; }
-int AirConditionClient::GetFee() { return this->Fee; }
-int AirConditionClient::GetTotalFee() { return this->TotalFee; }
+float AirConditionClient::GetFee() { return this->Fee; }
+float AirConditionClient::GetTotalFee() { return this->TotalFee; }
 int AirConditionClient::GetFanSpeed() { return this->FanSpeed; }
 int AirConditionClient::Getpriority() { return this->priority; }
 int AirConditionClient::GetDuration() { return this->Duration; }
-QString AirConditionClient::Getget_server_time() { return this->get_server_time ;};
-QString AirConditionClient::Getstop_server_time() { return this->stop_server_time; };
+QDateTime AirConditionClient::Getget_server_time() { return this->get_server_time ;};
+QDateTime AirConditionClient::Getstop_server_time() { return this->stop_server_time; };
 
 QVector<float> AirConditionClient::GetFinalState()//获得关机时分控机状态
 {
@@ -98,7 +81,7 @@ void AirConditionClient::ReachTargetTemperature()//到达目标温度
     this->work_state=0;//进入休眠状态
 }
 
-QVector<int> AirConditionClient::TimeOff()//时间片到
+QVector<int> AirConditionClient::TimeOff()//时间片到，发送费率和房间号
 {
     //向服务器提供自身房间号和费率
     QVector<int> List;
@@ -117,15 +100,38 @@ bool AirConditionClient::isRunning()//判断分控机对象是否运行
 void AirConditionClient::StopRunning()//分控机停止运行
 {
     this->work_state=1;
+    this->timer->stop();
+    this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
+
+    //计算时间差
+    qint64 temp = this->get_server_time.secsTo(this->stop_server_time);
+    //添加到运行时间，以分钟计算
+    this->Duration = this->Duration + float(temp)/60;
 }
 
 void AirConditionClient::StartRunning()//开始运行
 {
     this->work_state=2;
+    this->get_server_time = QDateTime::currentDateTime();//获取当前时间
 }
 
-void AirConditionClient::Delete()//删除分控机
+void AirConditionClient::SetSleep()//设置状态为休眠
 {
+    this->work_state = 0;
 }
 
+void AirConditionClient::DestributeRunTime()//分配运行时间片
+{
+    QObject::connect(this->timer,SIGNAL(timeout()),this,SLOT(WhenTimeOff()));
+    this->timer->start(120000);//两分钟触发一次
+}
+
+void AirConditionClient::WhenTimeOff()//当时间片到
+{
+    //报告费率
+    QVector<int> temp;
+    temp = this->TimeOff();//有两位，第一位存房间号，第二位存费率
+
+    this->timer->stop();//停止计时器
+}
 
