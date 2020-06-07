@@ -1,17 +1,35 @@
 #include "AirConditionClient.h"
-#include <QPainter>
-#include <QDialog>
-#include <QMessageBox>
+
 #include <QDebug>
-#include <QApplication>
-#include <QPushButton>
 #include <QtCore/qmath.h>
-#include <QFileDialog>
 #include <QFileInfo>
 #include <QVector>
+#include <QSqlDatabase>
 #include "UseDatabase.h"
+#include <synchapi.h>
 
-void AirConditionClient::Initialize(int RoomId,QString mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
+
+//AirConditionClient::AirConditionClient(QObject *parent):
+//	QObject(parent)
+//{
+//	timer = new QTimer();
+//	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+//	timer->start(1000);
+//}
+
+AirConditionClient::AirConditionClient(){
+
+}
+
+AirConditionClient::AirConditionClient(const AirConditionClient& host){
+	this->timer = host.timer;
+}
+
+AirConditionClient::~AirConditionClient(){}
+
+void AirConditionClient::DestributeRunTime(){}
+
+void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
 {
     //向服务器发送初始化请求
 
@@ -50,21 +68,18 @@ void AirConditionClient::SetTargetTemp(int TargetTemp)//设置分控机目标温
 int AirConditionClient::GetPriority(){return this->priority;}//获得分控机优先级
 int AirConditionClient::GetRoomId() {return this->RoomId;} 
 int AirConditionClient::Getwork_state() {	return this->work_state;} 
-QString AirConditionClient::Getmode() { return this->mode; }
-int AirConditionClient::GetTargetTemp() { return this->TargetTemp; }
-int AirConditionClient::GetPreTemp() { return this->PreTemp; }
+int AirConditionClient::Getmode() { return this->mode; }
+float AirConditionClient::GetTargetTemp() { return this->TargetTemp; }
+float AirConditionClient::GetPreTemp() { return this->PreTemp; }
 float AirConditionClient::GetFeeRate() { return this->FeeRate; }
-int AirConditionClient::GetFee() { return this->Fee; }
-int AirConditionClient::GetTotalFee() { return this->TotalFee; }
+float AirConditionClient::GetFee() { return this->Fee; }
+float AirConditionClient::GetTotalFee() { return this->TotalFee; }
 int AirConditionClient::GetFanSpeed() { return this->FanSpeed; }
 int AirConditionClient::Getpriority() { return this->priority; }
-int AirConditionClient::GetDuration() { return this->GetDuration; }
-string AirConditionClient::Getget_server_time() { return this->get_server_time };
-string AirConditionClient::Getstop_server_time() { return this->stop_server_time };
-int AirConditionClient::GetRoomId()//获得分控机优先级
-{
-	return this->RoomId;
-}
+float AirConditionClient::GetDuration() { return this->Duration; }
+QString AirConditionClient::Getget_server_time() { return this->get_server_time ;};
+QString AirConditionClient::Getstop_server_time() { return this->stop_server_time; };
+
 QVector<float> AirConditionClient::GetFinalState()//获得关机时分控机状态
 {
     QVector<float> List;//暂存参数
@@ -114,4 +129,26 @@ void AirConditionClient::Delete()//删除分控机
 {
 }
 
-
+void AirConditionClient::Recovery_temp()//回温算法,每分钟变化0.5度
+{
+    if(this->TargetTemp > This->PreTemp)
+    {
+        float s = this->TargetTemp;
+        for(; s >= this->PreTemp; )
+        {
+            s = s - 0.5;
+            this->TargetTemp = s;
+            msleep(60000);//休眠1分钟
+        }
+    }
+    if(this->TargetTemp < This->PreTemp)
+    {
+        int s = this->TargetTemp;
+        for(; s >= this->PreTemp; )
+        {
+            s = s + 0.5;
+            this->TargetTemp = s;
+            msleep(60000);//休眠1分钟
+        }
+    }
+}
