@@ -95,3 +95,8 @@ void ChartController::sendPacket(QByteArray body){
 	packet = head + body;
 	socket->write(packet, packet.size());
 }
+void ChartController::RequestOff(int RoomId){
+
+
+    airConditionHost->TurnOff(RoomId);
+}
