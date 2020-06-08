@@ -17,15 +17,14 @@ void WaitList::Initial(){}
 
 int WaitList::GetMaxPriority()
 {
-        vector<AirConditionClient>::iterator it = mClientList.begin();
+        vector<AirConditionClient*>::iterator it = mClientList.begin();
         int max = 0;
         int flag;
         for (; it != mClientList.end(); it++)
         {
-				AirConditionClient &air = *it;
-                if (air.GetPriority() > max)
+                if ((*it)->GetPriority() > max)
                 {
-                        max = air.GetPriority();
+                        max = (*it)->GetPriority();
                 }
         }
         return max;
@@ -42,7 +41,7 @@ bool WaitList::isEmpty()
 
 AirConditionClient* WaitList::GetAndPopFrontACC()//假定优先级越高数字越大
 {
-        vector<AirConditionClient>::iterator it = mClientList.begin();
+        vector<AirConditionClient*>::iterator it = mClientList.begin();
         int max = GetMaxPriority();
         int flag;
         int time = 0;
@@ -60,16 +59,15 @@ AirConditionClient* WaitList::GetAndPopFrontACC()//假定优先级越高数字�
 //        }
         for (; it != mClientList.end(); )
         {
-            AirConditionClient air = *it;
-                if (air.GetPriority() == max)
+
+            if ((*it)->GetPriority() == max)
                 {
                         //if (air.WaitServiceTime == time)
                        // {
-                                flag = air.GetRoomId();
-                                it->~AirConditionClient();
-                                it = mClientList.erase(it);
-                                AirConditionClient *re = new  AirConditionClient(air);
-                                return re;
+                AirConditionClient *re =*it;
+                mClientList.erase(it);
+
+                return re;
                       //  }
                 }
                 else it++;
@@ -77,14 +75,13 @@ AirConditionClient* WaitList::GetAndPopFrontACC()//假定优先级越高数字�
 }
 AirConditionClient* WaitList::PopACC(int RoomId)
 {
-        vector<AirConditionClient>::iterator it = mClientList.begin();
+        vector<AirConditionClient*>::iterator it = mClientList.begin();
         for (; it != mClientList.end(); )
         {
-            AirConditionClient air = *it;
-                if (air.GetRoomId() == RoomId)
+             if ((*it)->GetRoomId() == RoomId)
                 {
+                        AirConditionClient *re =*it;
                         it = mClientList.erase(it);
-                        AirConditionClient *re = new  AirConditionClient(air);
                         return re;
 
                 }
@@ -94,18 +91,17 @@ AirConditionClient* WaitList::PopACC(int RoomId)
 
 void WaitList::PushACC(AirConditionClient* airConditionClient)
 {
-    mClientList.push_back(*airConditionClient);
+    mClientList.push_back(airConditionClient);
 }
 
 AirConditionClient* WaitList::FindACC(int RoomId)
 {
-    vector<AirConditionClient>::iterator it = mClientList.begin();
+    vector<AirConditionClient*>::iterator it = mClientList.begin();
     for (; it != mClientList.end(); )
     {
-        AirConditionClient air = *it;
-        if (air.GetRoomId() == RoomId)
+       if ((*it)->GetRoomId() == RoomId)
         {
-            return &(*it);
+            return *it;
         }
         else it++;
     }

@@ -8,7 +8,7 @@ using namespace std;
 class WaitList
 {
 private:
-        vector<AirConditionClient> mClientList;
+        vector<AirConditionClient*> mClientList;
 public:
         WaitList();
         ~WaitList();

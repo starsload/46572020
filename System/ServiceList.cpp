@@ -16,14 +16,14 @@ void ServiceList::Initial(){}
 
 int ServiceList::GetMinPriority()
 {
-        vector<AirConditionClient>::iterator it = mClientList.begin();
+        vector<AirConditionClient*>::iterator it = mClientList.begin();
         int min = 9999;
         for (; it != mClientList.end(); it++)
         {
-                AirConditionClient air = *it;
-                if (air.GetPriority() < min)
+
+                if ((*it)->GetPriority() < min)
                 {
-                        min = air.GetPriority();
+                        min = (*it)->GetPriority();
                 }
         }
         return min;
@@ -31,33 +31,28 @@ int ServiceList::GetMinPriority()
 
 AirConditionClient* ServiceList::GetAndPopVictim()//排除优先级最低的
 {
-        vector<AirConditionClient>::iterator it = mClientList.begin();
-        int min = mClientList[0].GetPriority();
-        int flag;
+        vector<AirConditionClient*>::iterator it = mClientList.begin();
+        int min = mClientList[0]->GetPriority();
         int time = 0;
         for (; it != mClientList.end(); it++)
         {
-                AirConditionClient air = *it;
-                if (air.GetPriority() < min)
+                if ((*it)->GetPriority() < min)
                 {
-                        min = air.GetPriority();
-                        if (air.GetDuration() > time)
+                        min = (*it)->GetPriority();
+                        if ((*it)->GetDuration() > time)
                         {
-                                time = air.GetDuration();
+                                time =(*it)->GetDuration();
                         }
                 }
         }
         for (; it != mClientList.end(); it++)
         {
-            AirConditionClient air = *it;
-                if (air.GetPriority() == min)
+              if ((*it)->GetPriority() == min)
                 {
-                        if (air.GetDuration() == time)
+                        if ((*it)->GetDuration() == time)
                         {
-                                flag = air.GetRoomId();
-                                it->~AirConditionClient();
-                                it = mClientList.erase(it);
-                                AirConditionClient* re = new  AirConditionClient(air);
+                                AirConditionClient* re = *it;
+                                mClientList.erase(it);
                                 return re;
                         }
                 }
@@ -71,14 +66,14 @@ bool ServiceList::isEmpty()
 
 AirConditionClient* ServiceList::PopACC(int RoomId)
 {
-        vector<AirConditionClient>::iterator it = mClientList.begin();
+        vector<AirConditionClient*>::iterator it = mClientList.begin();
         for (; it != mClientList.end(); )
         {
-            AirConditionClient air = *it;
-                if (air.GetRoomId() == RoomId)
+
+                if ((*it)->GetRoomId() == RoomId)
                 {
-                    it = mClientList.erase(it);
-                    AirConditionClient *re = new  AirConditionClient(air);
+                    AirConditionClient* re = *it;
+                    mClientList.erase(it);
                     return re;
                 }
                 else it++;
@@ -89,34 +84,17 @@ AirConditionClient* ServiceList::PopACC(int RoomId)
 
 void ServiceList::PushACC(AirConditionClient* airConditionClient)
 {
-    mClientList.push_back(*airConditionClient);
+    mClientList.push_back(airConditionClient);
 }
-
-//void ServiceList::StartRunning(int RoomId)
-//{
-//        vector<AirConditionClient>::iterator it = mClientList.begin();
-//        for (; it != mClientList.end(); )
-//        {
-//				AirConditionClient &air = *it;
-//                if (air.GetRoomId() == RoomId)
-//                {
-//						//这是干啥？
-//						//it = &air;
-//                        break;
-//                }
-//                else it++;
-//        }
-//}
 
 AirConditionClient* ServiceList::FindACC(int RoomId)
 {
-        vector<AirConditionClient>::iterator it = mClientList.begin();
+        vector<AirConditionClient*>::iterator it = mClientList.begin();
         for (; it != mClientList.end(); )
         {
-                AirConditionClient air = *it;
-                if (air.GetRoomId() == RoomId)
+                if ((*it)->GetRoomId() == RoomId)
                 {
-                        return &(*it);
+                        return *it;
                 }
                 else it++;
         }

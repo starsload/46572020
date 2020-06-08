@@ -8,7 +8,7 @@ using namespace std;
 class ServiceList
 {
 private:
-        vector<AirConditionClient> mClientList;
+        vector<AirConditionClient*> mClientList;
 public:
         ServiceList();
         ~ServiceList();
