@@ -18,41 +18,20 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::sendTest(){
-	QJsonObject ojson;
-	ojson.insert("type", "hello guest client");
-	ojson.insert("num", 34);
-	QJsonArray tmpArray;
-	tmpArray.push_back(true);
-	tmpArray.push_back(78);
-	QJsonObject tmp;
-	tmp.insert("msg", "hellp world");
-	tmpArray.push_back(tmp);
-	ojson.insert("array", tmpArray);
-
-	QJsonDocument doc;
-	doc.setObject(ojson);
-	QByteArray msg = doc.toJson(QJsonDocument::Compact);
-	//QByteArray msg = doc.toJson(QJsonDocument::Indented);
-	sendPacket(msg);
-}
-
 void MainWindow::initialHandle(InitialParameters parameters) {
 	socket = new QTcpSocket(this);
-	this->RoomId = parameters.RoomId;
 	QString address = parameters.address;
 	QString port = parameters.port;
+	this->RoomId = parameters.RoomId;
 	this->curTemp = parameters.realTemp;
 	this->tempThreshold = parameters.tempThreshold;
 	socket->connectToHost(address, port.toInt());
 	if(socket->isValid()){
 		connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
-		using namespace SocketConstants;
-		QJsonObject ojson;
-		ojson.insert(TYPE, REQUEST_ON);
-		ojson.insert(ROOM_ID, parameters.RoomId);
-		ojson.insert(CUR_TEMP, parameters.realTemp);
-		sendJSON(ojson);
+		qDebug()<<"套接字连接成功";
+		this->ui->DisplayPreTemp->display(curTemp);
+		this->ui->RoomId->setText(QString("%1房间").arg(RoomId));
+		this->ui->State->setText("关");
 	}
 	else{
 		qDebug()<<"套接字连接失败";
@@ -101,26 +80,7 @@ void MainWindow::processPacket(QByteArray body){
 		curFanSpeed = ojson.value(CUR_SPEED).toInt();
 		totalFee = ojson.value(TOTAL_FEE).toDouble();
 		curFee = totalFee;
-		this->ui->DisplayPreTemp->display(curTemp);
-		this->ui->DisplayTargetTemp->display(targetTemp);
-		this->ui->TotalFee_2->setText(QString::number(totalFee, 'f', 2));
-		this->ui->PreFee_2->setText(QString::number(curFee, 'f', 2));
-		this->ui->RoomId->setText(QString("%1房间").arg(RoomId));
-		if(mode)
-			this->ui->DisplayModel->setText("制热");
-		else
-			this->ui->DisplayModel->setText("制冷");
-		switch(curFanSpeed) {
-		case 0:
-			this->ui->DisplayFanSpeed->setText("低");
-			break;
-		case 1:
-			this->ui->DisplayFanSpeed->setText("中");
-			break;
-		case 2:
-			this->ui->DisplayFanSpeed->setText("高");
-			break;
-		}
+		updateWindow();
 		break;
 	}
 	case CHANGE_FAN_SPEED_OK:
@@ -196,4 +156,84 @@ void MainWindow::on_TargetTempDown_clicked()
 	targetTemp--;
 	this->ui->DisplayTargetTemp->display(targetTemp);
 	tempChangeTimer->start(changeInterval);
+}
+
+//调整风速发包
+void MainWindow::changeFanSpeed(){
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CHANGE_FAN_SPEED);
+	ojson.insert(ROOM_ID, RoomId);
+	ojson.insert(FAN_SPEED, curFanSpeed);
+	sendJSON(ojson);
+}
+
+//调整风速按钮
+void MainWindow::on_ChangeFanSpeed_clicked()
+{
+	if(speedChangeTimer != nullptr){
+		speedChangeTimer->stop();
+	}
+	else {
+		speedChangeTimer = new QTimer();
+		speedChangeTimer->setSingleShot(true);
+		connect(speedChangeTimer, SIGNAL(timeout()), this, SLOT(changeFanSpeed()));
+	}
+	curFanSpeed = (curFanSpeed + 1) % 3;
+	updateWindow();
+	speedChangeTimer->start(changeInterval);
+}
+
+//刷新窗口
+void MainWindow::updateWindow(){
+	this->ui->DisplayPreTemp->display(curTemp);
+	this->ui->RoomId->setText(QString("%1房间").arg(RoomId));
+	this->ui->DisplayTargetTemp->display(targetTemp);
+	this->ui->TotalFee->setText(QString::number(totalFee, 'f', 2));
+	this->ui->Fee->setText(QString::number(curFee, 'f', 2));
+	if(mode)
+		this->ui->Model->setText("制热");
+	else
+		this->ui->Model->setText("制冷");
+	switch(curFanSpeed) {
+	case 0:
+		this->ui->FanSpeed->setText("低");
+		break;
+	case 1:
+		this->ui->FanSpeed->setText("中");
+		break;
+	case 2:
+		this->ui->FanSpeed->setText("高");
+		break;
+	}
+	switch (state) {
+	case 0:
+		this->ui->State->setText("关");
+		break;
+	case 1:
+		this->ui->State->setText("待机");
+		break;
+	case 2:
+		this->ui->State->setText("送风");
+		break;
+	}
+}
+
+//开机键点击
+void MainWindow::on_SwitchONOff_clicked()
+{
+	if(state == CLOSE){
+		state = IDLE;
+		using namespace SocketConstants;
+		QJsonObject ojson;
+		ojson.insert(TYPE, REQUEST_ON);
+		ojson.insert(ROOM_ID, RoomId);
+		ojson.insert(CUR_TEMP, curTemp);
+		sendJSON(ojson);
+	}
+	else{
+		state = CLOSE;
+		//发request off
+	}
+	updateWindow();
 }
