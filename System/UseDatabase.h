@@ -23,17 +23,15 @@ struct DetailRecord{//记录详单的结构体
 };
 
 struct report{//记录报表的结构体
-    int RoomId;
-    int SwitchOnoffTime;
-    float ServiceTime;
-    float TotalFee;
-    int ScheduleTime;
-    int DetailRecordNum;
-    int ChangeTempTime;
-    int ChangeFanSpeedTime;
+	int RoomId;
+	int SwitchOnoffTime;
+	float ServiceTime;
+	float TotalFee;
+	int ScheduleTime;
+	int DetailRecordNum;
+	int ChangeTempTime;
+	int ChangeFanSpeedTime;
 };
-
-#include "UseDatabase.h"
 
 void InsertUseData(int RoomId,QString StartTime,QString EndTime,float TargetTemp,int FanSpeed,float FeeRate,
 				   float Duration,float Fee,QSqlDatabase db);//UseData表插入语句，参数依次为房间号、服务开始时间、服务结束时间、目标温度、风速、费率、服务时长、费用、数据库
@@ -59,7 +57,6 @@ void UpdateDetailRecordNum(int RoomId,QString Date,QSqlDatabase db);//更新详�
 
 
 float QueryServiceTime(int RoomId,QSqlDatabase db);//查询服务时间
-
 
 QVector<struct report> QueryDataInACCchart(QString Date,QSqlDatabase db);//查询报表内容,参数为日期和数据库
 

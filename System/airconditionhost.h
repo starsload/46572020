@@ -69,7 +69,9 @@ private:
     Monitor *monitor;
     WaitList *waitList;
     ServiceList *serviceList;
-    QSqlDatabase *db;
+
+	QSqlDatabase tmpDB;
+	QSqlDatabase *db;
 
     int CtreatClient(int RoomID);//创建并初始化到mClientList里,num++ 并与host建立关联
 
@@ -91,7 +93,9 @@ private:
     double defaultFeeRate; //默认费率
     int defaultFanSpeed; //默认风速：0为低，1为中，2为高
     int mode; //工作模式：0是制冷，1是制热
-    QString Date;//日期
+
+	QString Date = "2020-6-8";//日期
+
     QTime current_time;
 };
 

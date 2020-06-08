@@ -14,12 +14,25 @@ AirConditionHost::~AirConditionHost() {
 
 void AirConditionHost::PowerOn() {
     server = new QTcpServer();
-    db = new QSqlDatabase();
-//	QString dsn = QString::fromLocal8Bit("ACCMS");      //数据源名称
-//	db->setHostName("localhost");                       //选择本地主机，127.0.1.1
-//	db->setDatabaseName(dsn);                           //设置数据源名称
-//	db->setUserName("acc_manager");                     //登录用户
-//	db->setPassword("123456");                          //密码
+
+	tmpDB = QSqlDatabase::addDatabase("QODBC");
+	db = &tmpDB;
+	qDebug()<<"ODBC driver is valid? "<<db->isValid();
+	QString dsn = QString::fromLocal8Bit("ACCMS_R");     //数据源名称
+	db->setHostName("112.74.57.177");
+	db->setDatabaseName(dsn);                            //设置数据源名称
+	db->setUserName("sa");                               //登录用户
+	db->setPassword("308eWORK");                         //密码
+	if (!db->open()){
+		qDebug()<<"数据库打开失败";
+		qDebug()<<db->lastError().text();
+	}
+
+	QDateTime dateTime(QDateTime::currentDateTime());
+	Date = dateTime.toString("yyyy-MM-dd");
+	qDebug()<<Date;
+	InsertACCchart(Date,*db);
+
     CreatChartController();
     CreateMonitor();
     CreateSchduleController();
@@ -59,7 +72,7 @@ returnRequestOn AirConditionHost::CtreatClient(int Room_Id, double realTemp){
     AirConditionClient *client;
     client = new AirConditionClient();
     client->Initialize(Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
-    waitList->PushACC(client);
+	waitList->PushACC(client);
     returnRequestOn r;
     r.RoomId = Room_Id;
     r.mode = mode;
