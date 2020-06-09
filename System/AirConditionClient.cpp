@@ -11,11 +11,15 @@
 #include <QDateTime>
 
 AirConditionClient::AirConditionClient(){
-	timer = new QTimer();
+	TimeSliceTimer = new QTimer();
+	updateTimer = new QTimer();
+	QObject::connect(this->TimeSliceTimer,SIGNAL(timeout()),this,SLOT(WhenTimeOff()));
+	connect(updateTimer, SIGNAL(timeout), this, SLOT(updateAttribute()));
 }
 
 AirConditionClient::~AirConditionClient(){
-	delete timer;
+	delete TimeSliceTimer;
+	delete updateTimer;
 }
 
 void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
@@ -89,7 +93,7 @@ float AirConditionClient::GetFeeRate() {
 
 float AirConditionClient::GetFee() {
 	return this->Fee+this->Duration*this->FeeRate;
-}//更新费用
+}
 
 float AirConditionClient::GetTotalFee() {
 	return this->TotalFee+this->Fee+this->Duration*this->FeeRate;
@@ -147,7 +151,8 @@ bool AirConditionClient::isRunning()//判断分控机对象是否运行
 void AirConditionClient::StopRunning()//分控机停止运行
 {
     this->work_state=1;
-    this->timer->stop();
+	this->TimeSliceTimer->stop();
+	updateTimer->stop();
     this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
 
     //计算时间差
@@ -169,17 +174,46 @@ void AirConditionClient::SetSleep()//设置状态为休眠
 
 void AirConditionClient::DestributeRunTime()//分配运行时间片
 {
-	QObject::connect(this->timer,SIGNAL(timeout()),this,SLOT(WhenTimeOff()));
-	this->timer->start(120000);//两分钟触发一次
+
+	this->TimeSliceTimer->start(120000);//两分钟触发一次
+	updateTimer->start(10 * SECOND);
 }
 
 void AirConditionClient::WhenTimeOff()//当时间片到
 {
-	//TODO:
     //报告费率
     QVector<int> temp;
     temp = this->TimeOff();//有两位，第一位存房间号，第二位存费率
 
-    this->timer->stop();//停止计时器
+	this->TimeSliceTimer->stop();//停止计时器
+	updateTimer->stop();
 }
 
+//更新温度和费用
+void AirConditionClient::updateAttribute(){
+	//高风速1分钟变化1℃，中风速2分钟变化1℃，低风速3分钟变化1℃
+	float deltaTemp = 0;
+	switch(FanSpeed){
+	case 0:
+	{
+		deltaTemp = UPDATE_PERIOD / (3 * MINUTE);
+		break;
+	}
+	case 1:
+	{
+		deltaTemp = UPDATE_PERIOD / (2 * MINUTE);
+		break;
+	}
+	case 2:
+	{
+		deltaTemp = UPDATE_PERIOD / (1 * MINUTE);
+		break;
+	}
+	}
+	if(mode)//制热
+		PreTemp += deltaTemp;
+	else//制冷
+		PreTemp -= deltaTemp;
+	//1元/摄氏度
+	Fee += deltaTemp * 1;
+}

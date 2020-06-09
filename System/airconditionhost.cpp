@@ -30,7 +30,7 @@ void AirConditionHost::PowerOn() {
 
 	QDateTime dateTime(QDateTime::currentDateTime());
 	Date = dateTime.toString("yyyy-MM-dd");
-	qDebug()<<Date;
+	qDebug() << Date;
 	InsertACCchart(Date,*db);
 
     CreatChartController();
@@ -164,7 +164,6 @@ int AirConditionHost::ChangeTargetTemp(int RoomID,float Temp)//设置温度 先�
         mclient->SetTargetTemp(Temp);
     }
     UpdateChangeTempTime(RoomID,this->Date,*db);//db操作
-
 }
 
 int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
@@ -348,4 +347,33 @@ Report AirConditionHost::CreateReport(vector<int> listRoomId,int typeReport,QStr
 float AirConditionHost::CreateInvoice(int RoomID, QString data_in, QString data_out)//请求数据库 返回总花费
 {
     return QueryTotalFee(data_in,data_out,RoomID,*db);
+}
+
+void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
+{
+	AirConditionClient* client = NULL;
+	float tempFee,tempDuration;
+	client = waitList->FindACC(RoomId);
+	if(client!=NULL){//在等待队列
+		client->StopRunning();
+		tempFee = client->GetFee();
+		tempDuration = client->GetDuration();
+		waitList->PopACC(RoomId);
+	}
+	else {//在服务队列
+		client = serviceList->FindACC(RoomId);
+		client->StopRunning();
+		tempFee = client->GetFee();
+		tempDuration = client->GetDuration();
+		serviceList->PopACC(RoomId);
+	}
+
+
+
+	//将状态插入到数据库
+	InsertUseData(RoomId,client->Getget_server_time(),client->Getstop_server_time(),
+				  client->GetTargetTemp(),client->GetFanSpeed(),client->GetFeeRate(),tempDuration,tempFee,*db);
+	UpdateChangeScheduleTime(RoomId,this->Date,*db);
+
+	delete(client);//删掉分控机
 }

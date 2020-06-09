@@ -11,20 +11,6 @@ ScheduleController::~ScheduleController()
 {
 }
 
-void ScheduleController::RequestOn(int RoomId,double CurrentRoomTemp){
-	returnRequestOn r = airConditionHost->CtreatClient(RoomId, CurrentRoomTemp);
-	QJsonObject ojson;
-	using namespace SocketConstants;
-	ojson.insert(TYPE, REQUEST_ON_OK);
-	ojson.insert(ROOM_ID, r.RoomId);
-	ojson.insert(CUR_TEMP, r.curTemp);
-	ojson.insert(TARGET_TEMP, r.targetTemp);
-	ojson.insert(CUR_SPEED, r.curFanSpeed);
-	ojson.insert(TOTAL_FEE, r.totalFee);
-	ojson.insert(WORK_MODE, r.mode);
-	sendJSON(ojson);
-}
-
 void ScheduleController::setAirConditionHost(AirConditionHost* s){
 	airConditionHost = s;
 }
@@ -110,6 +96,20 @@ void ScheduleController::processPacket(QByteArray body){
 		break;
 	}
 	}
+}
+
+void ScheduleController::RequestOn(int RoomId,double CurrentRoomTemp){
+	returnRequestOn r = airConditionHost->CtreatClient(RoomId, CurrentRoomTemp);
+	QJsonObject ojson;
+	using namespace SocketConstants;
+	ojson.insert(TYPE, REQUEST_ON_OK);
+	ojson.insert(ROOM_ID, r.RoomId);
+	ojson.insert(CUR_TEMP, r.curTemp);
+	ojson.insert(TARGET_TEMP, r.targetTemp);
+	ojson.insert(CUR_SPEED, r.curFanSpeed);
+	ojson.insert(TOTAL_FEE, r.totalFee);
+	ojson.insert(WORK_MODE, r.mode);
+	sendJSON(ojson);
 }
 
 void ScheduleController::RequestOff(int RoomId){

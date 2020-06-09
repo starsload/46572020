@@ -30,10 +30,17 @@ private:
         int Duration;//使用时长
         QDateTime get_server_time;//获得服务时间戳
         QDateTime stop_server_time;//停止服务时间戳
-        QTimer *timer;//用于计算服务时间
+		QTimer *TimeSliceTimer;//用于时间片的计时器
+
+		QTimer *updateTimer; //被服务时，更新温度、费用的计时器
+		const int SECOND = 1000;
+		const int UPDATE_PERIOD = 10 * SECOND; //更新周期
+		const int MINUTE = 60 * SECOND;
 
 private slots:
         void WhenTimeOff();
+
+		void updateAttribute();
 
 public:
         AirConditionClient();

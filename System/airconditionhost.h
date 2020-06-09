@@ -69,6 +69,8 @@ public:
 
 	void RequestService(int RoomId);//请求服务
 
+	void TurnOff(int RoomId);
+
 private slots:
     void managerConnectHandle();
 
