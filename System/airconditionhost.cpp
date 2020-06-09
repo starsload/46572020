@@ -1,4 +1,4 @@
-#include "AirConditionHost.h"
+﻿#include "AirConditionHost.h"
 #include "UseDatabase.h"
 #include "inovice.h"
 #include "report.h"
@@ -330,41 +330,22 @@ void AirConditionHost::RequestService(int RoomId) {
     }
 }
 
-void AirConditionHost::CreateRDR(int RoomID, QString data_in, QString data_out)//请求数据库 返回详单指针
+Inovice AirConditionHost::CreateRDR(int RoomID, QString data_in, QString data_out)//请求数据库 返回详单对象
 {
     Inovice detail(RoomID,*db);
-   // mDetailRecords.PrintAsFile();//在屏幕上显示
+    detail.detail = QueryDataInUseData(RoomID,*db);
+    return detail;
 }
 
-void AirConditionHost::CreateReport(vector<int> listRoomId,int typeReport,QString  date)//请求数据库 返回报表指针
+Report AirConditionHost::CreateReport(vector<int> listRoomId,int typeReport,QString date)//请求数据库 返回报表对象
+    {
+    Report mReport=Report(date,*db);
+    mReport.report = QueryDataInACCchart(date,*db);
+
+    return mReport;
+    }
+
+float AirConditionHost::CreateInvoice(int RoomID, QString data_in, QString data_out)//请求数据库 返回总花费
 {
-//	Report mReport = Report(date,*db);
-//	QVector<int> roomid;
-//	QVector<int> onOff;
-//	QVector<int>  dura;
-//	QVector<int> fee;
-//	QVector<int> dispatch;
-//	QVector<int> rdr;
-//	QVector<int> temp;
-//	QVector<int> speed;
-//	for(auto &id : listRoomId)
-//	{
-//		QVector<struct report> temp=QueryDataInACCchart(date,*db);
-//		roomid.push_back(Report.RoomId);
-//		onOff.push_back(Report.SwitchOnoffTime);
-//		fee.push_back(Report.TotalFee);
-//		dispatch.push_back(Report.ScheduleTime);
-//		rdr.push_back(Report.DetailRecordNum);
-//		temp.push_back(Report.ChangeTempTime);
-//		speed.push_back(Report.ChangeFanSpeedTime);
-//	}
-//	mReport.creat(roomid,  onOff , dura, fee,  dispatch, rdr, temp, speed);
-//	mReport.PrintAsFile();//在屏幕上显示
-}
-
-void AirConditionHost::CreateInvoice(int RoomID, QString data_in, QString data_out)//请求数据库 返回账单指针
-{
-    Inovice Invoices(data_in, data_out,  RoomID,*db);
-
-
+    return QueryTotalFee(data_in,data_out,RoomID,*db);
 }

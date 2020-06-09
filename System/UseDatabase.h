@@ -1,4 +1,4 @@
-#ifndef USEDATABASE_H
+﻿#ifndef USEDATABASE_H
 #define USEDATABASE_H
 
 
@@ -36,7 +36,7 @@ struct report{//记录报表的结构体
 void InsertUseData(int RoomId,QString StartTime,QString EndTime,float TargetTemp,int FanSpeed,float FeeRate,
 				   float Duration,float Fee,QSqlDatabase db);//UseData表插入语句，参数依次为房间号、服务开始时间、服务结束时间、目标温度、风速、费率、服务时长、费用、数据库
 
-QVector<struct DetailRecord> QueryDataInUseData(int RoomId,QSqlDatabase db);//从UseData表中查数据，参数为房间号和数据库
+QVector<struct DetailRecord> QueryDataInUseData(int RoomId,QSqlDatabase db);//从UseData表中查详单数据，参数为房间号和数据库
 
 void InsertACCchart(QString Date,QSqlDatabase db);//ACCchart表插入语句，参数依次为日期和数据库
 

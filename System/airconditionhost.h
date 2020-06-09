@@ -11,6 +11,8 @@
 #include <QObject>
 #include <QVector>
 #include <ServiceList.h>
+#include <report.h>
+#include <inovice.h>
 
 class returnRequestOn{
 public:
@@ -87,9 +89,9 @@ private:
     void ReachTargetTemperature(int RoomID);
     void TimeOff(int RoomId,float FeeRate);
 
-    void CreateRDR(int RoomID, QString data_in, QString data_out);//请求数据库 返回详单指针
-    void  CreateReport(vector<int> listRoomId,int typeReport,QString  date);//请求数据库 返回报表指针
-    void  CreateInvoice(int RoomID, QString data_in, QString data_out);//请求数据库 返回账单指针
+    Inovice CreateRDR(int RoomID, QString data_in, QString data_out);//请求数据库 返回详单指针
+    Report CreateReport(vector<int> listRoomId,int typeReport,QString  date);//请求数据库 返回报表指针
+    float CreateInvoice(int RoomID, QString data_in, QString data_out);//请求数据库 返回总花费
 
     double defaultTargetTemp; //默认目标温度
     double maxTargetTemp; //最高目标温度
