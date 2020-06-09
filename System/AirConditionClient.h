@@ -13,7 +13,9 @@
 #include <QDateTime>
 using namespace std;
 
-class AirConditionClient{
+class AirConditionClient: public QObject{
+		Q_OBJECT
+
 private:
         int RoomId;//房间号
         int work_state;//工作状态,0休眠，1等待，2运行
@@ -36,12 +38,25 @@ private slots:
 public:
         AirConditionClient();
         ~AirConditionClient();
-        int GetRoomId(); int Getwork_state(); int Getmode(); int GetTargetTemp(); int GetPreTemp();
-        float GetFeeRate(); float GetFee(); float GetTotalFee(); int GetFanSpeed(); int Getpriority(); int GetDuration();
-        QDateTime Getget_server_time(); QDateTime Getstop_server_time();
-        void Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
+		int GetRoomId();
+		int Getwork_state();
+		int Getmode();
+		int GetTargetTemp();
+		int GetPreTemp();
+		float GetFeeRate();
+		float GetFee();
+		float GetTotalFee();
+		int GetFanSpeed();
+		int Getpriority();
+		int GetDuration();
+		QString Getget_server_time();
+		QString Getstop_server_time();
+		void Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,
+						float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
         void SetSpeed(int FanSpeed);//调节风速
         void SetTargetTemp(int TargetTemp);//调节温度
+
+
         int GetState();//获取分控机运行状态 run运行 sleep休眠 ready准备运行
         QVector<float> GetFinalState();//获取分控机关机时费用和运行时间
         void ReachTargetTemperature();//到达目标温度

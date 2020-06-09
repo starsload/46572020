@@ -37,6 +37,7 @@ public:
     ~AirConditionHost();
 
     void PowerOn();
+
     void setPara(double defaultTargetTemp,
                  double maxTargetTemp,
                  double minTargetTemp,
@@ -45,11 +46,17 @@ public:
                  double lowFeeRate,
                  int mode,
                  int speed);
+
     void startUp();
+
     void CreatChartController();
+
     void CreateMonitor();
+
     void CreateSchduleController();
+
     void CreateWaitList();
+
     void CreateServiceList();
 
     returnRequestOn CtreatClient(int Room_Id, double realTemp);
@@ -60,6 +67,7 @@ public:
 
 private slots:
     void managerConnectHandle();
+
     void guestConnectHndle();
 
 private:
@@ -74,7 +82,6 @@ private:
 	QSqlDatabase *db;
 
     int CtreatClient(int RoomID);//创建并初始化到mClientList里,num++ 并与host建立关联
-
 
     void RequestService(int RoomId);
     void ReachTargetTemperature(int RoomID);
