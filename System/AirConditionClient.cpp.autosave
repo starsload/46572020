@@ -175,7 +175,6 @@ void AirConditionClient::DestributeRunTime()//分配运行时间片
 
 void AirConditionClient::WhenTimeOff()//当时间片到
 {
-	//TODO:
     //报告费率
     QVector<int> temp;
     temp = this->TimeOff();//有两位，第一位存房间号，第二位存费率

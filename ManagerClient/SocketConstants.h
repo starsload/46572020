@@ -42,6 +42,10 @@ static const int CHANGE_FAN_SPEED = 6; //GuestClient改变风速
 static const int CHANGE_FAN_SPEED_OK = 7; //GuestClient改变风速返回
 static const int CHANGE_TARGET_TEMP = 8; //GuestClient改变温度
 static const int CHANGE_TARGET_TEMP_OK = 9; //GuestClient改变风速
+static const int REQUEST_SERVICE = 10; //提出服务请求
+static const int REQUEST_SERVICE_OK = 11; //提出服务请求返回
+static const int REQUEST_OFF = 12; //关机请求
+static const int REQUEST_OFF_OK = 13; //关机请求返回
 };
 
 

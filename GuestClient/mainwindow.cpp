@@ -81,6 +81,8 @@ void MainWindow::processPacket(QByteArray body){
 		totalFee = ojson.value(TOTAL_FEE).toDouble();
 		curFee = totalFee;
 		updateWindow();
+
+		requestService();
 		break;
 	}
 	case CHANGE_FAN_SPEED_OK:
@@ -91,6 +93,14 @@ void MainWindow::processPacket(QByteArray body){
 	case CHANGE_TARGET_TEMP_OK:
 	{
 		qDebug()<<"温度改变成功";
+		break;
+	}
+	case REQUEST_SERVICE_OK:
+	{
+		qDebug()<<"请求服务成功";
+		stopTemperatureSimulation();
+		state = RUN;
+		updateWindow();
 		break;
 	}
 	}
@@ -219,6 +229,64 @@ void MainWindow::updateWindow(){
 	}
 }
 
+//回温程序
+void MainWindow::simulTempChange(){
+	if(mode){// 制热
+		curTemp -= deltaTemp;
+	}
+	else{// 制冷
+		curTemp += deltaTemp;
+	}
+	updateWindow();
+	requestService();
+}
+
+//提服务请求
+void MainWindow::requestService(){
+	bool flag = false;
+	if(mode){// 制热
+		if(targetTemp - curTemp > (double) tempThreshold){
+			flag = true;
+		}
+	}
+	else{// 制冷
+		if(curTemp - targetTemp > (double) tempThreshold){
+			flag = true;
+		}
+	}
+
+	if(flag){
+		using namespace SocketConstants;
+		QJsonObject ojson;
+		ojson.insert(TYPE, REQUEST_SERVICE);
+		ojson.insert(ROOM_ID, RoomId);
+		sendJSON(ojson);
+	}
+	else
+		startTemperatureSimulation();
+}
+
+void MainWindow::startTemperatureSimulation(){
+	if(!isTempSimulRun){
+		qDebug()<<"回温程序启动";
+		if(simulTempTimer == nullptr){
+			simulTempTimer = new QTimer();
+		}
+		connect(simulTempTimer, SIGNAL(timeout()), this, SLOT(simulTempChange()));
+		simulTempTimer->start(simulTempInterval);
+		isTempSimulRun = true;
+	}
+}
+
+void MainWindow::stopTemperatureSimulation(){
+	if(isTempSimulRun){
+		qDebug()<<"回温程序关闭";
+		disconnect(simulTempTimer, SIGNAL(timeout()), this, SLOT(simulTempChange()));
+		simulTempTimer->stop();
+		isTempSimulRun = false;
+	}
+}
+
 //开机键点击
 void MainWindow::on_SwitchONOff_clicked()
 {
@@ -233,7 +301,11 @@ void MainWindow::on_SwitchONOff_clicked()
 	}
 	else{
 		state = CLOSE;
-		//发request off
+		using namespace SocketConstants;
+		QJsonObject ojson;
+		ojson.insert(TYPE, REQUEST_OFF);
+		ojson.insert(ROOM_ID, RoomId);
+		startTemperatureSimulation();
 	}
 	updateWindow();
 }

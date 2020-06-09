@@ -21,6 +21,10 @@ public:
 
 	void RequestOn(int RoomId,double CurrentRoomTemp);
 
+	void RequestOff(int RoomId);
+
+	void RequestService(int RoomId);
+
 	void setAirConditionHost(AirConditionHost*);
 
 	void addGuestSocket(QTcpSocket *s);

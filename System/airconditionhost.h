@@ -67,6 +67,8 @@ public:
 
 	int ChangeFanSpeed(int RoomID,float Speed);//改变风速
 
+	void RequestService(int RoomId);//请求服务
+
 private slots:
     void managerConnectHandle();
 
@@ -85,12 +87,14 @@ private:
 
     int CtreatClient(int RoomID);//创建并初始化到mClientList里,num++ 并与host建立关联
 
-    void RequestService(int RoomId);
     void ReachTargetTemperature(int RoomID);
+
     void TimeOff(int RoomId,float FeeRate);
 
     Inovice CreateRDR(int RoomID, QString data_in, QString data_out);//请求数据库 返回详单指针
+
     Report CreateReport(vector<int> listRoomId,int typeReport,QString  date);//请求数据库 返回报表指针
+
     float CreateInvoice(int RoomID, QString data_in, QString data_out);//请求数据库 返回总花费
 
     double defaultTargetTemp; //默认目标温度

@@ -83,6 +83,12 @@ void ScheduleController::processPacket(QByteArray body){
 		RequestOn(room_id, CurrentRoomTemp);
 		break;
 	}
+	case REQUEST_OFF:
+	{
+		int id = ojson.value(ROOM_ID).toInt();
+		RequestOff(id);
+		break;
+	}
 	case CHANGE_FAN_SPEED:
 	{
 		int id = ojson.value(ROOM_ID).toInt();
@@ -97,15 +103,45 @@ void ScheduleController::processPacket(QByteArray body){
 		ChangeTargetTemp(roomId, targetTemp);
 		break;
 	}
+	case REQUEST_SERVICE:
+	{
+		int id = ojson.value(ROOM_ID).toInt();
+		RequestService(id);
+		break;
 	}
+	}
+}
+
+void ScheduleController::RequestOff(int RoomId){
+	//TODO:
+}
+
+void ScheduleController::RequestService(int RoomId){
+	airConditionHost->RequestService(RoomId);
+
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, REQUEST_SERVICE_OK);
+	sendJSON(ojson);
+	qDebug()<<QString("%0号房间请求服务成功").arg(RoomId);
 }
 
 void ScheduleController::ChangeFanSpeed(int RoomId, int Speed){
 	airConditionHost->ChangeFanSpeed(RoomId, Speed);
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CHANGE_FAN_SPEED_OK);
+	sendJSON(ojson);
+	qDebug()<<QString("%0号房间修改风速成功,风速等级为%1").arg(RoomId).arg(Speed);
 }
 
 void ScheduleController::ChangeTargetTemp(int RoomId, float targetTemp){
 	airConditionHost->ChangeTargetTemp(RoomId, targetTemp);
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CHANGE_TARGET_TEMP_OK);
+	sendJSON(ojson);
+	qDebug()<<QString("%0号房间修改目标温度成功,目标温度为%1").arg(RoomId).arg(targetTemp);
 }
 
 void ScheduleController::sendJSON(QJsonObject ojson){

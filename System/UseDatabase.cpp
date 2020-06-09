@@ -1,4 +1,4 @@
-#include "UseDatabase.h"
+﻿#include "UseDatabase.h"
 
 void InsertUseData(int RoomId,QString StartTime,QString EndTime,float TargetTemp,int FanSpeed,float FeeRate,
 				   float Duration,float Fee,QSqlDatabase db)//UseData表插入语句，参数依次为房间号、服务开始时间、服务结束时间、目标温度、风速、费率、服务时长、费用、数据库
@@ -43,17 +43,30 @@ QVector<struct DetailRecord> QueryDataInUseData(int RoomId,QSqlDatabase db)//从
 
 void InsertACCchart(QString Date,QSqlDatabase db)//ACCchart表插入语句，参数依次为日期和数据库
 {
-	for(int i=0;i<5;i++){
-		//定义SQL语句
-		QString str=QString("use ACCMS "
-							"insert into ACC_chart(ROOM_ID,SWITCH_ONOFF_TIME,SERVICE_TIME,"
-							"TOTAL_FEE,SCHEDULE_TIME,DETAILRECORD_NUM,CHANGE_TEMP_TIME,CHANGE_FANSPEED_TIME,Date)"
-							"values(%1,%2,%3,%4,%5,%6,%7,%8,'%9') ").arg(i).arg(0).arg(0.0).arg(0.0).arg(0).arg(0).arg(0).arg(0).arg(Date);
-		//定义查询并关联数据库
-		QSqlQuery query(db);
-		//执行插入语句
-		query.exec(str);
-	}
+    QSqlQuery query(db);
+    QString str;
+    str=QString("use ACCMS "
+                "select count(*) from ACC_chart where Date = '%0' ").arg(Date);
+
+
+    query.exec(str);
+    query.first();
+
+    int count = query.value(0).toInt();
+    if(count==0){
+        for(int i=0;i<5;i++){
+            //定义SQL语句
+           QString str1=QString("use ACCMS "
+                                "insert into ACC_chart(ROOM_ID,SWITCH_ONOFF_TIME,SERVICE_TIME,"
+                                "TOTAL_FEE,SCHEDULE_TIME,DETAILRECORD_NUM,CHANGE_TEMP_TIME,CHANGE_FANSPEED_TIME,Date)"
+                                "values(%1,%2,%3,%4,%5,%6,%7,%8,'%9') ").arg(i).arg(0).arg(0.0).arg(0.0).arg(0).arg(0).arg(0).arg(0).arg(Date);
+            //定义查询并关联数据库
+           QSqlQuery query1(db);
+            //执行插入语句
+           query1.exec(str1);
+        }
+
+    }
 }
 
 void UpdateSwitchOnOffTime(int RoomId,QString Date,QSqlDatabase db)//更新开机次数，开机时直接调用即可
