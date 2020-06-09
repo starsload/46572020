@@ -9,31 +9,41 @@ Monitor::~Monitor()
 
 }
 
-//TODO: DEBUG
-//int *Monitor::SetupMonitor(vector<int> RoomIdList)
-//{
-//	vector<AirConditionClient> mWaitList_new,mServiceList_new
-//	mWaitList_new=mWaitList.getWaitList();
-//	mServiceList_new=mServiceList.getServiceList();
-//	int w=(int)RoomIdList.size();
-//	int *workstate=new int[w];
-//	for(int i=0;i<w;i++)
-//	{
-//		for(int j=0;j<(int)mServiceList_new.size();j++)
-//		{
-//			if(mServiceList_new[j].RoomId==RoomIdList[i])
-//			{
-//				workstate[i]=mServiceList_new[j].WorkState;
-//			}
+void Monitor::setServiceListRelation(ServiceList *list){
+	this->mServiceList = list;
+}
 
-//		}
-//		for(int j=0;j<(int)mWaitList_new.size();j++)
-//		{
-//			if(mWaitList_new[j].RoomId==RoomIdList[i])
-//			{
-//				workstate[i]=mWaitList_new[j].WorkState;
-//			}
-//		}
-//	}
-//	return workstate;
-//}
+void Monitor::setWaitListRelation(WaitList *list){
+	this->mWaitList = list;
+}
+
+AirConditionClient* Monitor::SetupMonitor(int RoomId)//管理员监视用，传入房间号，返回分控机指针
+{
+	AirConditionClient* client = NULL;
+	client = mWaitList->FindACC(RoomId);
+	if(client == NULL){//在等待队列
+		return client;
+	}
+	else{//在服务队列
+		client = mServiceList->FindACC(RoomId);
+		return client;
+	}
+
+}
+
+ReturnCheckFeeAndTemp Monitor::CheckRoomFee(int RoomId) //住户监视用，传入房间号，返回费用和当前温度
+{
+	AirConditionClient* client = NULL;
+	struct ReturnCheckFeeAndTemp temp;
+	client = mWaitList->FindACC(RoomId);
+	if(client != NULL){//在等待队列
+		temp.Fee = client->GetFee();
+		temp.PreTemp = client->GetPreTemp();
+	}
+	else{//在服务队列
+		client = mServiceList->FindACC(RoomId);
+		temp.Fee = client->GetFee();
+		temp.PreTemp = client->GetPreTemp();
+	}
+	return temp;
+}

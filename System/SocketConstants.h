@@ -20,9 +20,10 @@ static const QString HIGH_FEE_RATE = "high_rate"; //double
 static const QString MID_FEE_RATE = "mid_rate"; //double
 static const QString LOW_FEE_RATE = "low_rate"; //double
 static const QString DEFAULT_SPEED = "default fan speed"; //int 0为低，1为中，2为高
-//RequestOn TAG
+
 static const QString ROOM_ID = "room id"; //int
 static const QString CUR_TEMP = "cur temp"; //double
+static const QString CUR_FEE = "cur fee"; //double
 static const QString TARGET_TEMP = "target temp"; //double
 static const QString CUR_SPEED = "cur speed"; //int 0为低，1为中，2为高
 static const QString TOTAL_FEE = "total fee"; //double
@@ -46,6 +47,8 @@ static const int REQUEST_SERVICE = 10; //提出服务请求
 static const int REQUEST_SERVICE_OK = 11; //提出服务请求返回
 static const int REQUEST_OFF = 12; //关机请求
 static const int REQUEST_OFF_OK = 13; //关机请求返回
+static const int REQUEST_FEE = 14; //查询费用
+static const int REQUEST_FEE_OK = 15; //查询费用
 };
 
 

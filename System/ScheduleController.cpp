@@ -15,6 +15,10 @@ void ScheduleController::setAirConditionHost(AirConditionHost* s){
 	airConditionHost = s;
 }
 
+void ScheduleController::setMonitorRelation(Monitor *m){
+	monitor = m;
+}
+
 void ScheduleController::addGuestSocket(QTcpSocket *s){
 	GuestClientSocket *mySocket;
 	mySocket = new GuestClientSocket(s);
@@ -95,6 +99,12 @@ void ScheduleController::processPacket(QByteArray body){
 		RequestService(id);
 		break;
 	}
+	case REQUEST_FEE:
+	{
+		int id = ojson.value(ROOM_ID).toInt();
+		RequestFee(id);
+		break;
+	}
 	}
 }
 
@@ -114,6 +124,19 @@ void ScheduleController::RequestOn(int RoomId,double CurrentRoomTemp){
 
 void ScheduleController::RequestOff(int RoomId){
 	//TODO:
+}
+
+void ScheduleController::RequestFee(int RoomId){
+	ReturnCheckFeeAndTemp result;
+	result = monitor->CheckRoomFee(RoomId);
+	qDebug()<<QString("%0号房间RequestFee成功").arg(RoomId);
+
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, REQUEST_FEE_OK);
+	ojson.insert(CUR_TEMP, result.PreTemp);
+	ojson.insert(CUR_FEE, result.Fee);
+	sendJSON(ojson);
 }
 
 void ScheduleController::RequestService(int RoomId){

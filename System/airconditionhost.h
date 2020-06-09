@@ -71,6 +71,8 @@ public:
 
 	void TurnOff(int RoomId);
 
+	void setMonitorRelation();
+
 private slots:
     void managerConnectHandle();
 

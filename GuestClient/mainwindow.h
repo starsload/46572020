@@ -41,6 +41,8 @@ private slots:
 
 	void on_SwitchONOff_clicked();
 
+	void requestFee();
+
 private:
 	Ui::MainWindow *ui;
 	InitialPage *initialPage;
@@ -48,6 +50,7 @@ private:
 	QTimer *tempChangeTimer = nullptr;
 	QTimer *speedChangeTimer = nullptr;
 	QTimer *simulTempTimer = nullptr;
+	QTimer requestFeeTimer;
 
 	int RoomId = -1; //房间号
 	int tempThreshold = -1; //阈值：目标温度与实际温度的差值
@@ -62,8 +65,9 @@ private:
 
 	bool isTempSimulRun = false;//回温程序是否启动
 
-	const int changeInterval = 2000; //修改参数的时间间隔
-	const int simulTempInterval = 60000; //回温系统，每隔60s变化0.5度
+	const int changeInterval = 2000; // 修改参数的时间间隔
+	const int simulTempInterval = 60000; // 回温系统，每隔60s变化0.5度
+	const int requestInterval = 10000; // 每10秒查询一次
 	const double deltaTemp = 0.5;
 	const int CLOSE = 0;
 	const int IDLE = 1;
@@ -80,5 +84,6 @@ private:
 	void startTemperatureSimulation();
 
 	void stopTemperatureSimulation();
+
 };
 #endif // MAINWINDOW_H

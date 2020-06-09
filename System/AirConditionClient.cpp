@@ -14,7 +14,7 @@ AirConditionClient::AirConditionClient(){
 	TimeSliceTimer = new QTimer();
 	updateTimer = new QTimer();
 	QObject::connect(this->TimeSliceTimer,SIGNAL(timeout()),this,SLOT(WhenTimeOff()));
-	connect(updateTimer, SIGNAL(timeout), this, SLOT(updateAttribute()));
+	connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateAttribute()));
 }
 
 AirConditionClient::~AirConditionClient(){
@@ -83,8 +83,9 @@ int AirConditionClient::GetTargetTemp() {
 	return this->TargetTemp;
 }
 
-int AirConditionClient::GetPreTemp() {
-	return this->PreTemp;
+float AirConditionClient::GetPreTemp() {
+	float t = PreTemp;
+	return t;
 }
 
 float AirConditionClient::GetFeeRate() {
@@ -92,7 +93,7 @@ float AirConditionClient::GetFeeRate() {
 }
 
 float AirConditionClient::GetFee() {
-	return this->Fee+this->Duration*this->FeeRate;
+	return this->Fee;
 }
 
 float AirConditionClient::GetTotalFee() {
@@ -196,17 +197,17 @@ void AirConditionClient::updateAttribute(){
 	switch(FanSpeed){
 	case 0:
 	{
-		deltaTemp = UPDATE_PERIOD / (3 * MINUTE);
+		deltaTemp = (float)UPDATE_PERIOD / (3 * (float)MINUTE);
 		break;
 	}
 	case 1:
 	{
-		deltaTemp = UPDATE_PERIOD / (2 * MINUTE);
+		deltaTemp = (float)UPDATE_PERIOD / (2 * (float)MINUTE);
 		break;
 	}
 	case 2:
 	{
-		deltaTemp = UPDATE_PERIOD / (1 * MINUTE);
+		deltaTemp = (float)UPDATE_PERIOD / (1 * (float)MINUTE);
 		break;
 	}
 	}
@@ -216,4 +217,5 @@ void AirConditionClient::updateAttribute(){
 		PreTemp -= deltaTemp;
 	//1元/摄氏度
 	Fee += deltaTemp * 1;
+	TotalFee += Fee;
 }

@@ -34,10 +34,10 @@ void AirConditionHost::PowerOn() {
 	InsertACCchart(Date,*db);
 
     CreatChartController();
-    CreateMonitor();
-    CreateSchduleController();
     CreateWaitList();
     CreateServiceList();
+	CreateMonitor();
+	CreateSchduleController();
     qDebug()<<"请输入ManagerClient的端口：";
     QTextStream input(stdin);
     quint16 port;
@@ -137,11 +137,14 @@ void AirConditionHost::CreatChartController() {
 
 void AirConditionHost::CreateMonitor(){
     monitor = new Monitor();
+	monitor->setServiceListRelation(serviceList);
+	monitor->setWaitListRelation(waitList);
 }
 
 void AirConditionHost::CreateSchduleController(){
     scheduleController = new ScheduleController(this);
     scheduleController->setAirConditionHost(this);
+	scheduleController->setMonitorRelation(monitor);
 }
 
 void AirConditionHost::CreateWaitList(){
@@ -367,8 +370,6 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 		tempDuration = client->GetDuration();
 		serviceList->PopACC(RoomId);
 	}
-
-
 
 	//将状态插入到数据库
 	InsertUseData(RoomId,client->Getget_server_time(),client->Getstop_server_time(),

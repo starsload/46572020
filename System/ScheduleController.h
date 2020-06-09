@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include "Monitor.h"
 
 class AirConditionHost;
 class ScheduleController: public QObject
@@ -19,13 +20,17 @@ public:
 	ScheduleController(QObject *parent = nullptr);
 	~ScheduleController();
 
+	void setAirConditionHost(AirConditionHost*);
+
+	void setMonitorRelation(Monitor *);
+
 	void RequestOn(int RoomId,double CurrentRoomTemp);
 
 	void RequestOff(int RoomId);
 
-	void RequestService(int RoomId);
+	void RequestFee(int RoomId);
 
-	void setAirConditionHost(AirConditionHost*);
+	void RequestService(int RoomId);
 
 	void addGuestSocket(QTcpSocket *s);
 
@@ -39,6 +44,7 @@ private slots:
 private:
 	QVector<GuestClientSocket*> allSockets; //socket数组
 	AirConditionHost *airConditionHost;
+	Monitor *monitor;
 
 	GuestClientSocket* curSocket;
 

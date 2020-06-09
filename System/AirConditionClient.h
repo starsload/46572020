@@ -21,7 +21,9 @@ private:
         int work_state;//工作状态,0休眠，1等待，2运行
         int mode;//工作模式
         int TargetTemp;//目标温度
-        int PreTemp;//当前温度
+
+		float PreTemp;//当前温度
+
         float FeeRate;//费率
         float Fee;//当前费用
         float TotalFee;//总费用
@@ -49,7 +51,7 @@ public:
 		int Getwork_state();
 		int Getmode();
 		int GetTargetTemp();
-		int GetPreTemp();
+		float GetPreTemp();
 		float GetFeeRate();
 		float GetFee();
 		float GetTotalFee();

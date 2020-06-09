@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 			, this, SLOT(initialHandle(InitialParameters)));
 	initialPage->show();
 	initialPage->setModal(true);
+	connect(&requestFeeTimer, SIGNAL(timeout()), this, SLOT(requestFee()));
 }
 
 MainWindow::~MainWindow()
@@ -99,9 +100,17 @@ void MainWindow::processPacket(QByteArray body){
 	{
 		qDebug()<<"请求服务成功";
 		stopTemperatureSimulation();
+		requestFeeTimer.start(requestInterval);
 		state = RUN;
 		updateWindow();
 		break;
+	}
+	case REQUEST_FEE_OK:
+	{
+		curTemp = ojson.value(CUR_TEMP).toDouble();
+		curFee = ojson.value(CUR_FEE).toDouble();
+		totalFee += curFee;
+		updateWindow();
 	}
 	}
 }
@@ -196,9 +205,9 @@ void MainWindow::on_ChangeFanSpeed_clicked()
 
 //刷新窗口
 void MainWindow::updateWindow(){
-	this->ui->DisplayPreTemp->display(curTemp);
+	this->ui->DisplayPreTemp->display(QString::number(curTemp, 'f', 1));
 	this->ui->RoomId->setText(QString("%1房间").arg(RoomId));
-	this->ui->DisplayTargetTemp->display(targetTemp);
+	this->ui->DisplayTargetTemp->display(QString::number(targetTemp, 'f', 1));
 	this->ui->TotalFee->setText(QString::number(totalFee, 'f', 2));
 	this->ui->Fee->setText(QString::number(curFee, 'f', 2));
 	if(mode)
@@ -275,6 +284,7 @@ void MainWindow::startTemperatureSimulation(){
 		connect(simulTempTimer, SIGNAL(timeout()), this, SLOT(simulTempChange()));
 		simulTempTimer->start(simulTempInterval);
 		isTempSimulRun = true;
+		requestFeeTimer.stop();
 	}
 }
 
@@ -308,4 +318,13 @@ void MainWindow::on_SwitchONOff_clicked()
 		startTemperatureSimulation();
 	}
 	updateWindow();
+}
+
+//每间隔10s查询一次
+void MainWindow::requestFee(){
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, REQUEST_FEE);
+	ojson.insert(ROOM_ID, RoomId);
+	sendJSON(ojson);
 }

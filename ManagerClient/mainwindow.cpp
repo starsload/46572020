@@ -102,6 +102,8 @@ void MainWindow::on_ptn_makeInvoice_clicked()
 //返回Room_Id之后
 void MainWindow::queryInputFinish(int Room_Id)
 {
+
+
 	invoicePage = new InvoicePage(this, Room_Id);
 	invoicePage->show();
 }
