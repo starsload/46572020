@@ -111,7 +111,7 @@
     <item>
      <widget class="QSpinBox" name="max_target_temp">
       <property name="value">
-       <number>30</number>
+       <number>28</number>
       </property>
      </widget>
     </item>
@@ -229,7 +229,7 @@
     <item>
      <widget class="QSpinBox" name="default_target_temp">
       <property name="value">
-       <number>27</number>
+       <number>25</number>
       </property>
      </widget>
     </item>
@@ -320,6 +320,9 @@
     </item>
     <item>
      <widget class="QComboBox" name="default_speed">
+      <property name="currentIndex">
+       <number>1</number>
+      </property>
       <item>
        <property name="text">
         <string>低</string>

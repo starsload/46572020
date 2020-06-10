@@ -30,13 +30,15 @@ public:
 
 	void RequestFee(int RoomId);
 
-	void RequestService(int RoomId);
+	void RequestService(int RoomId, float curTemp);
 
 	void addGuestSocket(QTcpSocket *s);
 
 	void ChangeFanSpeed(int RoomId, int Speed);
 
 	void ChangeTargetTemp(int RoomId, float targetTemp);
+
+	void SendStopMsg(int RoomId, float fee, float totalFee, float curTemp);
 
 private slots:
 	void listenToGuestClient(QTcpSocket*);

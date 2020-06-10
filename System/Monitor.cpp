@@ -39,11 +39,13 @@ ReturnCheckFeeAndTemp Monitor::CheckRoomFee(int RoomId) //住户监视用，传�
 	if(client != NULL){//在等待队列
 		temp.Fee = client->GetFee();
 		temp.PreTemp = client->GetPreTemp();
+		temp.TotalFee = client->GetTotalFee();
 	}
 	else{//在服务队列
 		client = mServiceList->FindACC(RoomId);
 		temp.Fee = client->GetFee();
 		temp.PreTemp = client->GetPreTemp();
+		temp.TotalFee = client->GetTotalFee();
 	}
 	return temp;
 }

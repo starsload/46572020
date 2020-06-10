@@ -67,11 +67,15 @@ public:
 
 	int ChangeFanSpeed(int RoomID,float Speed);//改变风速
 
-	void RequestService(int RoomId);//请求服务
+	void RequestService(int RoomId, float PreTemp);//请求服务
 
 	void TurnOff(int RoomId);
 
 	void setMonitorRelation();
+
+	void TimeOff(int RoomId);//时间片到的调度
+
+	void RearchTargetTemp(int RoomId);//到达目标温度进行的调度,参数为需要处理的分控机房间号
 
 private slots:
     void managerConnectHandle();

@@ -11,7 +11,8 @@
 #include <time.h>
 #include <QTime>
 #include <QDateTime>
-using namespace std;
+
+class AirConditionHost;
 
 class AirConditionClient: public QObject{
 		Q_OBJECT
@@ -39,6 +40,8 @@ private:
 		const int UPDATE_PERIOD = 10 * SECOND; //更新周期
 		const int MINUTE = 60 * SECOND;
 
+		AirConditionHost *airConditionHost;
+
 private slots:
         void WhenTimeOff();
 
@@ -65,17 +68,21 @@ public:
         void SetSpeed(int FanSpeed);//调节风速
         void SetTargetTemp(int TargetTemp);//调节温度
 
+		void SetPreTemp(float temp);// 修改当前温度
+
 
         int GetState();//获取分控机运行状态 run运行 sleep休眠 ready准备运行
         QVector<float> GetFinalState();//获取分控机关机时费用和运行时间
         void ReachTargetTemperature();//到达目标温度
-        QVector<int> TimeOff();//时间片到
+
         int GetPriority();//获取优先级
         bool isRunning();//是否运行
         void StopRunning();//停止运行
         void StartRunning();//开始运行
         void DestributeRunTime();//分配时间片
         void SetSleep();//设置状态为休眠
+
+		void setAirConditionHostRelation(AirConditionHost*);
 };
 
 

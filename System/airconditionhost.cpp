@@ -72,13 +72,17 @@ returnRequestOn AirConditionHost::CtreatClient(int Room_Id, double realTemp){
     AirConditionClient *client;
     client = new AirConditionClient();
     client->Initialize(Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
+	// 与主机建立关联
+	client->setAirConditionHostRelation(this);
+	//放入等待队列
 	waitList->PushACC(client);
     returnRequestOn r;
     r.RoomId = Room_Id;
     r.mode = mode;
     r.curTemp = realTemp;
     r.curFanSpeed = defaultFanSpeed;
-    r.totalFee = 0;
+
+	r.totalFee = QueryTotalFee(this->Date,this->Date,Room_Id,*db);
     r.targetTemp = defaultTargetTemp;
     return r;
 }
@@ -293,8 +297,9 @@ void AirConditionHost::TimeOff(int RoomId,float FeeRate) {
 
 }
 
-void AirConditionHost::RequestService(int RoomId) {
+void AirConditionHost::RequestService(int RoomId, float PreTemp) {
     AirConditionClient* mclient = waitList->FindACC(RoomId);    //查找房间号对应的client
+	mclient->SetPreTemp(PreTemp);
     AirConditionClient* mVictimclient;  //被牺牲的client
     if (!serviceList->isFull()) //服务队列未满
     {
@@ -377,4 +382,75 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 	UpdateChangeScheduleTime(RoomId,this->Date,*db);
 
 	delete(client);//删掉分控机
+}
+
+void AirConditionHost:: TimeOff(int RoomId)//时间片到的调度
+{
+	AirConditionClient *client,*temp ;
+	float max = this->waitList->GetMaxPriority();//找到等待队列中最高优先级的分控机的优先级
+
+	if(max<this->serviceList->FindACC(RoomId)->Getpriority())//时间片到达的分控机优先级更高
+	{
+		//重新分配时间片
+		client = this->serviceList->FindACC(RoomId);
+		InsertUseData(client->GetRoomId(),client->Getget_server_time(),client->Getstop_server_time(),client->GetTargetTemp(),
+					  client->GetFanSpeed(),client->GetFeeRate(),client->GetDuration(),client->GetFee(),*db);
+		client->DestributeRunTime();
+	}
+	else//等待队列中有优先级更高的分控机存在
+	{
+	   //将服务队列中的分控机取出
+	   client = this->serviceList->FindACC(RoomId);
+	   this->serviceList->PopACC(RoomId);
+	   this->waitList->PushACC(client);
+	   client->StopRunning();
+	   InsertUseData(client->GetRoomId(),client->Getget_server_time(),client->Getstop_server_time(),client->GetTargetTemp(),
+					 client->GetFanSpeed(),client->GetFeeRate(),client->GetDuration(),client->GetFee(),*db);
+
+
+	   //将等待队列中的分控机放入服务队列
+	   temp = this->waitList->GetAndPopFrontACC();
+	   this->serviceList->PushACC(temp);
+	   //改变分控机状态并分配时间片
+	   temp->StartRunning();
+	   temp->DestributeRunTime();
+	   InsertUseData(temp->GetRoomId(),temp->Getget_server_time(),temp->Getstop_server_time(),temp->GetTargetTemp(),
+					 temp->GetFanSpeed(),temp->GetFeeRate(),temp->GetDuration(),temp->GetFee(),*db);
+	}
+}
+
+void AirConditionHost::RearchTargetTemp(int RoomId)//到达目标温度调度
+{
+	//找出分控机对象
+	AirConditionClient *client;
+	AirConditionClient *temp;
+
+	//移出服务队列
+	client = serviceList->PopACC(RoomId);
+
+	//设置分控机对象参数
+	client->StopRunning();
+	client->SetSleep();//状态为休眠
+
+	//调度部分
+	if(!waitList->isEmpty())//等待队列不为空发生调度
+	{
+		//将等待队列最高优先级分控机取出放入服务队列
+		temp = waitList->GetAndPopFrontACC();
+		serviceList->PushACC(temp);
+
+		//改变分控机状态并分配时间片
+		temp->StartRunning();
+		temp->DestributeRunTime();
+	}
+
+	//将完成服务的分控机移入等待队列
+	waitList->PushACC(client);
+	waitList->ReadyNum();
+
+	//数据库操作
+	InsertUseData(client->GetRoomId(),client->Getget_server_time(),client->Getstop_server_time(),client->GetTargetTemp(),
+				  client->GetFanSpeed(),client->GetFeeRate(),client->GetDuration(),client->GetFee(),*db);
+
+	scheduleController->SendStopMsg(RoomId, client->GetFee(), client->GetTotalFee(), client->GetPreTemp());
 }

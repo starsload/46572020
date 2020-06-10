@@ -48,7 +48,8 @@ static const int REQUEST_SERVICE_OK = 11; //提出服务请求返回
 static const int REQUEST_OFF = 12; //关机请求
 static const int REQUEST_OFF_OK = 13; //关机请求返回
 static const int REQUEST_FEE = 14; //查询费用
-static const int REQUEST_FEE_OK = 15; //查询费用
+static const int REQUEST_FEE_OK = 15; //查询费用返回
+static const int STOP_RUNNING = 16; //达到目标温度，停止工作
 };
 
 

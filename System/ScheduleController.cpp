@@ -96,7 +96,8 @@ void ScheduleController::processPacket(QByteArray body){
 	case REQUEST_SERVICE:
 	{
 		int id = ojson.value(ROOM_ID).toInt();
-		RequestService(id);
+		double curTemp = ojson.value(CUR_TEMP).toDouble();
+		RequestService(id, curTemp);
 		break;
 	}
 	case REQUEST_FEE:
@@ -136,11 +137,12 @@ void ScheduleController::RequestFee(int RoomId){
 	ojson.insert(TYPE, REQUEST_FEE_OK);
 	ojson.insert(CUR_TEMP, result.PreTemp);
 	ojson.insert(CUR_FEE, result.Fee);
+	ojson.insert(TOTAL_FEE, result.TotalFee);
 	sendJSON(ojson);
 }
 
-void ScheduleController::RequestService(int RoomId){
-	airConditionHost->RequestService(RoomId);
+void ScheduleController::RequestService(int RoomId, float curTemp){
+	airConditionHost->RequestService(RoomId, curTemp);
 
 	using namespace SocketConstants;
 	QJsonObject ojson;
@@ -185,4 +187,20 @@ void ScheduleController::sendPacket(QByteArray body){
 	QByteArray packet;
 	packet = head + body;
 	curSocket->socket->write(packet, packet.size());
+}
+
+void ScheduleController::SendStopMsg(int RoomId, float fee, float totalFee, float curTemp){
+	for(auto sock : allSockets){
+		if(sock->Room_id == RoomId){
+			curSocket = sock;
+		}
+	}
+
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, STOP_RUNNING);
+	ojson.insert(CUR_TEMP, curTemp);
+	ojson.insert(CUR_FEE, fee);
+	ojson.insert(TOTAL_FEE, totalFee);
+	sendJSON(ojson);
 }

@@ -109,8 +109,20 @@ void MainWindow::processPacket(QByteArray body){
 	{
 		curTemp = ojson.value(CUR_TEMP).toDouble();
 		curFee = ojson.value(CUR_FEE).toDouble();
-		totalFee += curFee;
+		totalFee = ojson.value(TOTAL_FEE).toDouble();
 		updateWindow();
+		break;
+	}
+	case STOP_RUNNING:
+	{
+		qDebug()<<"达到目标温度，进入待机状态";
+		startTemperatureSimulation();
+		state = IDLE;
+		curFee = ojson.value(CUR_FEE).toDouble();
+		totalFee = ojson.value(TOTAL_FEE).toDouble();
+		curTemp = ojson.value(CUR_TEMP).toDouble();
+		updateWindow();
+		break;
 	}
 	}
 }
@@ -265,10 +277,12 @@ void MainWindow::requestService(){
 	}
 
 	if(flag){
+		qDebug()<<"提出服务请求";
 		using namespace SocketConstants;
 		QJsonObject ojson;
 		ojson.insert(TYPE, REQUEST_SERVICE);
 		ojson.insert(ROOM_ID, RoomId);
+		ojson.insert(CUR_TEMP, curTemp);
 		sendJSON(ojson);
 	}
 	else
@@ -284,6 +298,7 @@ void MainWindow::startTemperatureSimulation(){
 		connect(simulTempTimer, SIGNAL(timeout()), this, SLOT(simulTempChange()));
 		simulTempTimer->start(simulTempInterval);
 		isTempSimulRun = true;
+
 		requestFeeTimer.stop();
 	}
 }

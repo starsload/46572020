@@ -7,6 +7,7 @@
 struct ReturnCheckFeeAndTemp{//返回费用和温度
 	float Fee;
 	float PreTemp;
+	float TotalFee;
 };
 
 class Monitor
