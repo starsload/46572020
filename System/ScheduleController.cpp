@@ -1,4 +1,4 @@
-#include "ScheduleController.h"
+﻿#include "ScheduleController.h"
 #include "AirConditionHost.h"
 
 ScheduleController::ScheduleController(QObject *parent):
@@ -141,14 +141,19 @@ void ScheduleController::RequestFee(int RoomId){
 	sendJSON(ojson);
 }
 
+//TODO:补全不能提供服务部分
 void ScheduleController::RequestService(int RoomId, float curTemp){
-	airConditionHost->RequestService(RoomId, curTemp);
+    if(airConditionHost->RequestService(RoomId,curTemp)){//可以提供服务
+        using namespace SocketConstants;
+        QJsonObject ojson;
+        ojson.insert(TYPE, REQUEST_SERVICE_OK);
+        sendJSON(ojson);
+        qDebug()<<QString("%0号房间请求服务成功").arg(RoomId);
+    }
+    else {//补全不能提供服务部分
 
-	using namespace SocketConstants;
-	QJsonObject ojson;
-	ojson.insert(TYPE, REQUEST_SERVICE_OK);
-	sendJSON(ojson);
-	qDebug()<<QString("%0号房间请求服务成功").arg(RoomId);
+    }
+
 }
 
 void ScheduleController::ChangeFanSpeed(int RoomId, int Speed){

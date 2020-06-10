@@ -70,20 +70,36 @@ void AirConditionHost::managerConnectHandle() {
 
 returnRequestOn AirConditionHost::CtreatClient(int Room_Id, double realTemp){
     AirConditionClient *client;
-    client = new AirConditionClient();
-    client->Initialize(Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
-	// 与主机建立关联
-	client->setAirConditionHostRelation(this);
-	//放入等待队列
-	waitList->PushACC(client);
     returnRequestOn r;
-    r.RoomId = Room_Id;
-    r.mode = mode;
-    r.curTemp = realTemp;
-    r.curFanSpeed = defaultFanSpeed;
 
-	r.totalFee = QueryTotalFee(this->Date,this->Date,Room_Id,*db);
-    r.targetTemp = defaultTargetTemp;
+    if(this->waitList->FindACC(Room_Id)){//分控机已经存在
+        client = this->waitList->FindACC(Room_Id);
+        client->Initialize(Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
+        waitList->PushACC(client);
+
+        r.RoomId = Room_Id;
+        r.mode = mode;
+        r.curTemp = realTemp;
+        r.curFanSpeed = defaultFanSpeed;
+        r.totalFee = QueryTotalFee(this->Date,this->Date,Room_Id,*db);
+        r.targetTemp = defaultTargetTemp;
+    }
+    else {//分控机不存在
+        client = new AirConditionClient();
+        client->Initialize(Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
+        // 与主机建立关联
+        client->setAirConditionHostRelation(this);
+        //放入等待队列
+        waitList->PushACC(client);
+
+        r.RoomId = Room_Id;
+        r.mode = mode;
+        r.curTemp = realTemp;
+        r.curFanSpeed = defaultFanSpeed;
+
+        r.totalFee = QueryTotalFee(this->Date,this->Date,Room_Id,*db);
+        r.targetTemp = defaultTargetTemp;
+    }
     return r;
 }
 
@@ -297,9 +313,9 @@ void AirConditionHost::TimeOff(int RoomId,float FeeRate) {
 
 }
 
-void AirConditionHost::RequestService(int RoomId, float PreTemp) {
+bool AirConditionHost::RequestService(int RoomId, float PreTemp) {
     AirConditionClient* mclient = waitList->FindACC(RoomId);    //查找房间号对应的client
-	mclient->SetPreTemp(PreTemp);
+    mclient->SetPreTemp(PreTemp);
     AirConditionClient* mVictimclient;  //被牺牲的client
     if (!serviceList->isFull()) //服务队列未满
     {
@@ -309,6 +325,8 @@ void AirConditionHost::RequestService(int RoomId, float PreTemp) {
         mclient->DestributeRunTime();   //给mclient分配时间片
         UpdateSwitchOnOffTime(mclient->GetRoomId(),this->Date,*db);//db操作 开机
         UpdateChangeScheduleTime(mclient->GetRoomId(),this->Date,*db);//db操作 发生调度
+
+        return true;
     }
     else if(mclient->GetPriority()> serviceList->GetMinPriority()) {    //mclient的优先级大于服务队列中的最小优先级
         mVictimclient = serviceList->GetAndPopVictim();//找到牺牲者
@@ -321,19 +339,22 @@ void AirConditionHost::RequestService(int RoomId, float PreTemp) {
 
         UpdateSwitchOnOffTime(mclient->GetRoomId(),this->Date,*db);//db操作 开机
 
-		InsertUseData(mclient->GetRoomId(),mclient->Getget_server_time(),mclient->Getstop_server_time(),
-					  mclient->GetTargetTemp(),mclient->GetFanSpeed(),mclient->GetFeeRate(),
-					  mclient->GetDuration(),mclient->GetFee(),*db);
-		UpdateServiceTime(mclient->GetRoomId(),mclient->GetDuration(),this->Date,*db);
+        InsertUseData(mclient->GetRoomId(),mclient->Getget_server_time(),mclient->Getstop_server_time(),
+                      mclient->GetTargetTemp(),mclient->GetFanSpeed(),mclient->GetFeeRate(),
+                      mclient->GetDuration(),mclient->GetFee(),*db);
+        UpdateServiceTime(mclient->GetRoomId(),mclient->GetDuration(),this->Date,*db);
         UpdateTotalFee(mclient->GetRoomId(),mclient->GetFee(),this->Date,*db);
         UpdateDetailRecordNum(mclient->GetRoomId(),this->Date,*db);//记录详单
 
         UpdateChangeScheduleTime(mclient->GetRoomId(),this->Date,*db);//db操作 发生调度
         UpdateChangeScheduleTime(mVictimclient->GetRoomId(),this->Date,*db);//db操作 发生调度
 
+        return true;
+
     }
     else {
         waitList->PushACC(mclient);  //将请求客户端加入等待队列
+        return false;
     }
 }
 

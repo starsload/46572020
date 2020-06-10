@@ -67,7 +67,7 @@ public:
 
 	int ChangeFanSpeed(int RoomID,float Speed);//改变风速
 
-	void RequestService(int RoomId, float PreTemp);//请求服务
+    bool RequestService(int RoomId, float PreTemp);//请求服务
 
 	void TurnOff(int RoomId);
 
