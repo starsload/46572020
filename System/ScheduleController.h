@@ -47,9 +47,13 @@ public:
 private slots:
 	void listenToGuestClient(QTcpSocket*);
 
+	void onDisconnected(QTcpSocket*);
+
 private:
 	QVector<GuestClientSocket*> allSockets; //socket数组
+
 	AirConditionHost *airConditionHost;
+
 	Monitor *monitor;
 
 	GuestClientSocket* curSocket;

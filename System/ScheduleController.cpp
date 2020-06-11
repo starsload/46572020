@@ -24,8 +24,28 @@ void ScheduleController::addGuestSocket(QTcpSocket *s){
 	mySocket = new GuestClientSocket(s);
 	qDebug()<<"对端的地址为："<<s->peerAddress()<<"端口为"<<s->peerPort();
 	allSockets.push_back(mySocket);
+
 	connect(mySocket, SIGNAL(newPacketArrive(QTcpSocket*)),
 			this, SLOT(listenToGuestClient(QTcpSocket*)));
+
+	connect(mySocket, &GuestClientSocket::Disconnected,
+			this, &ScheduleController::onDisconnected);
+}
+
+// 如果顾客客户端掉线
+void ScheduleController::onDisconnected(QTcpSocket *s){
+	QVector<GuestClientSocket*>::iterator iter;
+	for(iter=allSockets.begin(); iter != allSockets.end(); iter++){
+		GuestClientSocket *sock = *iter;
+		if(sock->socket == s){
+
+			airConditionHost->TurnOff(sock->Room_id);
+
+			allSockets.erase(iter);
+			delete sock;
+			break;
+		}
+	}
 }
 
 void ScheduleController::listenToGuestClient(QTcpSocket *socket){
@@ -124,7 +144,8 @@ void ScheduleController::RequestOn(int RoomId,double CurrentRoomTemp){
 }
 
 void ScheduleController::RequestOff(int RoomId){
-	//TODO:
+	airConditionHost->TurnOff(RoomId);
+	qDebug()<<QString("%0号房间RequestOff成功").arg(RoomId);
 }
 
 void ScheduleController::RequestFee(int RoomId){

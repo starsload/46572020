@@ -32,8 +32,14 @@ int WaitList::GetMaxPriority()
 
 int WaitList::ReadyNum()
 {
-        return mClientList.size();
+	int num = 0;
+	for(auto client : mClientList){
+		if(client->GetState() == AirConditionClient::STATE_WAIT)
+			num++;
+	}
+	return num;
 }
+
 bool WaitList::isEmpty()
 {
         return mClientList.empty();
@@ -55,6 +61,7 @@ AirConditionClient* WaitList::GetAndPopFrontACC()//假定优先级越高数字�
 			else it++;
         }
 }
+
 AirConditionClient* WaitList::PopACC(int RoomId)
 {
         vector<AirConditionClient*>::iterator it = mClientList.begin();

@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,7 +24,9 @@ public:
 	~MainWindow();
 
 private slots:
-	void initialHandle(InitialParameters parameters);
+	void initialHandle(InitialParameters);
+
+	void onConnected();
 
 	void newServerMessage();
 
@@ -43,6 +46,10 @@ private slots:
 
 	void requestFee();
 
+	void offLine();
+
+	void failToConnectServer();
+
 private:
 	Ui::MainWindow *ui;
 	InitialPage *initialPage;
@@ -52,9 +59,14 @@ private:
 	QTimer *simulTempTimer = nullptr;
 	QTimer requestFeeTimer;
 
+	QTimer socketConnectTimer;
+
+	QMessageBox *msgBox;
+
 	int RoomId = -1; //房间号
 	int tempThreshold = -1; //阈值：目标温度与实际温度的差值
 	double curTemp = -1; //房间实际温度
+	double initTemp = -1; //房间默认的初始温度
 	double targetTemp = -1; //目标温度
 	int curFanSpeed = -1; //风速
 	int mode = -1; //工作模式 0是制冷，1是制热
@@ -69,9 +81,11 @@ private:
 	const int simulTempInterval = 60000; // 回温系统，每隔60s变化0.5度
 	const int requestInterval = 10000; // 每10秒查询一次
 	const double deltaTemp = 0.5;
+
 	const int CLOSE = 0;
 	const int IDLE = 1;
 	const int RUN = 2;
+	const int GO_BACK = 3;
 
 	void sendPacket(QByteArray body);
 	void sendJSON(QJsonObject ojson);
@@ -84,6 +98,5 @@ private:
 	void startTemperatureSimulation();
 
 	void stopTemperatureSimulation();
-
 };
 #endif // MAINWINDOW_H

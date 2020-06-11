@@ -25,18 +25,25 @@ void MainWindow::initialHandle(InitialParameters parameters) {
 	QString port = parameters.port;
 	this->RoomId = parameters.RoomId;
 	this->curTemp = parameters.realTemp;
+	this->initTemp = curTemp;
 	this->tempThreshold = parameters.tempThreshold;
+
 	socket->connectToHost(address, port.toInt());
-	if(socket->isValid()){
-		connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
-		qDebug()<<"套接字连接成功";
-		this->ui->DisplayPreTemp->display(curTemp);
-		this->ui->RoomId->setText(QString("%1房间").arg(RoomId));
-		this->ui->State->setText("关");
-	}
-	else{
-		qDebug()<<"套接字连接失败";
-	}
+
+	connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
+	connect(socket, SIGNAL(disconnected()), this, SLOT(offLine()));
+	connect(&socketConnectTimer, &QTimer::timeout, this, &MainWindow::failToConnectServer);
+	socketConnectTimer.setSingleShot(true);
+	socketConnectTimer.start(5 * 1000);
+}
+
+void MainWindow::onConnected(){
+	socketConnectTimer.stop();
+	connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
+	this->ui->DisplayPreTemp->display(curTemp);
+	this->ui->RoomId->setText(QString("%1房间").arg(RoomId));
+	this->ui->State->setText("关");
+	qDebug()<<"套接字连接成功";
 }
 
 //接收服务器消息
@@ -123,9 +130,9 @@ void MainWindow::processPacket(QByteArray body){
 	}
 	case STOP_RUNNING:
 	{
-		qDebug()<<"达到目标温度，进入待机状态";
+		qDebug()<<"达到目标温度，进入回温状态";
 		startTemperatureSimulation();
-		state = IDLE;
+		state = GO_BACK;
 		curFee = ojson.value(CUR_FEE).toDouble();
 		totalFee = ojson.value(TOTAL_FEE).toDouble();
 		curTemp = ojson.value(CUR_TEMP).toDouble();
@@ -269,6 +276,9 @@ void MainWindow::updateWindow(){
 	case 2:
 		this->ui->State->setText("送风");
 		break;
+	case 3:
+		this->ui->State->setText("回温");
+		break;
 	}
 }
 
@@ -321,6 +331,7 @@ void MainWindow::startTemperatureSimulation(){
 		}
 		connect(simulTempTimer, SIGNAL(timeout()), this, SLOT(simulTempChange()));
 		simulTempTimer->start(simulTempInterval);
+
 		isTempSimulRun = true;
 
 		requestFeeTimer.stop();
@@ -350,11 +361,13 @@ void MainWindow::on_SwitchONOff_clicked()
 	}
 	else{
 		state = CLOSE;
+		curTemp = initTemp;
+		requestFeeTimer.stop();
 		using namespace SocketConstants;
 		QJsonObject ojson;
 		ojson.insert(TYPE, REQUEST_OFF);
 		ojson.insert(ROOM_ID, RoomId);
-		startTemperatureSimulation();
+		sendJSON(ojson);
 	}
 	updateWindow();
 }
@@ -366,4 +379,42 @@ void MainWindow::requestFee(){
 	ojson.insert(TYPE, REQUEST_FEE);
 	ojson.insert(ROOM_ID, RoomId);
 	sendJSON(ojson);
+}
+
+//断线检测
+void MainWindow::offLine(){
+	QString content("与服务器断开连接，请检查您的网络");
+	msgBox = new QMessageBox(nullptr);
+	msgBox->setWindowTitle(QString("ERROR"));
+	msgBox->setText(content);
+	msgBox->setModal(true);
+	msgBox->addButton(QMessageBox::Yes);
+	msgBox->setIcon(QMessageBox::Critical);
+	connect(msgBox, &QMessageBox::destroyed, [=](){
+		this->destroy();
+	});
+	connect(msgBox, &QMessageBox::buttonClicked,
+			[=](){
+		delete msgBox;
+	});
+	msgBox->show();
+}
+
+//与服务器建立连接失败
+void MainWindow::failToConnectServer(){
+	QString content("无法与服务器建立连接，请检查您的网络");
+	msgBox = new QMessageBox(nullptr);
+	msgBox->setWindowTitle(QString("ERROR"));
+	msgBox->setText(content);
+	msgBox->setModal(true);
+	msgBox->addButton(QMessageBox::Yes);
+	msgBox->setIcon(QMessageBox::Critical);
+	connect(msgBox, &QMessageBox::destroyed, [=](){
+		this->destroy();
+	});
+	connect(msgBox, &QMessageBox::buttonClicked,
+			[=](){
+		delete msgBox;
+	});
+	msgBox->show();
 }

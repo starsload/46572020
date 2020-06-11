@@ -128,7 +128,7 @@ void AirConditionClient::ReachTargetTemperature()//到达目标温度
 	qDebug()<<QString("%1号房间，达到目标温度").arg(RoomId);
 
 	//改变自身参数
-	this->work_state=0;//进入休眠状态
+	this->work_state = 0;//进入休眠状态
 	this->TimeSliceTimer->stop();
 	this->updateTimer->stop();
 
@@ -151,7 +151,7 @@ bool AirConditionClient::isRunning()//判断分控机对象是否运行
 
 void AirConditionClient::StopRunning()//分控机停止运行
 {
-    this->work_state=1;
+	this->work_state = 1;
 	this->TimeSliceTimer->stop();
 	updateTimer->stop();
     this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
@@ -164,13 +164,13 @@ void AirConditionClient::StopRunning()//分控机停止运行
 
 void AirConditionClient::StartRunning()//开始运行
 {
-    this->work_state=2;
+	this->work_state = STATE_RUN;
     this->get_server_time = QDateTime::currentDateTime();//获取当前时间
 }
 
 void AirConditionClient::SetSleep()//设置状态为休眠
 {
-    this->work_state = 0;
+	this->work_state = STATE_SLEEP;
 }
 
 void AirConditionClient::DestributeRunTime()//分配运行时间片

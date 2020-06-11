@@ -11,6 +11,9 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QMessageBox>
+#include <QDialogButtonBox>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,13 +29,21 @@ public:
 
 private slots:
 	void queryInputFinish(int);
+
+	void onConnected();
+
 	void on_ptn_makeInvoice_clicked();
 
 	void on_ptn_makeReport_clicked();
 
 private slots:
-	void initialHandle(InitialParameters parameters);
+	void initialHandle(InitialParameters para);
+
 	void newServerMessage();
+
+	void offLine();
+
+	void failToConnectServer();
 
 private:
 	Ui::MainWindow *ui; //监视主页面
@@ -42,8 +53,16 @@ private:
 	ReportPage *reportPage; //报表页面
 	QTcpSocket *socket; //套接字
 
+	InitialParameters parameters;
+
+	QTimer socketConnectTimer;
+
+	QMessageBox *msgBox;
+
 	void sendPacket(QByteArray body);
+
 	void sendJSON(QJsonObject ojson);
+
 	void processPacket(QByteArray body);
 };
 #endif // MAINWINDOW_H

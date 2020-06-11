@@ -18,14 +18,24 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::initialHandle(InitialParameters parameters) {
-	QString address = parameters.address;
-	QString port = parameters.port;
+void MainWindow::initialHandle(InitialParameters para) {
+	parameters = para;
+	QString address = para.address;
+	QString port = para.port;
 	qDebug()<<address<<"========"<<port;
 	socket = new QTcpSocket(this);
 	socket->connectToHost(address, port.toInt());
-	if(!socket->isValid())
-		qDebug()<<"socket连接无效";
+
+	connect(socket, &QTcpSocket::connected, this, &MainWindow::onConnected);
+	connect(socket, SIGNAL(disconnected()), this, SLOT(offLine()));
+	connect(&socketConnectTimer, &QTimer::timeout, this, &MainWindow::failToConnectServer);
+	socketConnectTimer.setSingleShot(true);
+	socketConnectTimer.start(5 * 1000);
+}
+
+//连接建立成功
+void MainWindow::onConnected(){
+	socketConnectTimer.stop();
 	connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
 	//传到服务器
 	QJsonObject ojson;
@@ -132,4 +142,42 @@ void MainWindow::sendPacket(QByteArray body){
 	QByteArray packet;
 	packet = head + body;
 	socket->write(packet, packet.size());
+}
+
+//断线检测
+void MainWindow::offLine(){
+	QString content("与服务器断开连接，请检查您的网络");
+	msgBox = new QMessageBox(nullptr);
+	msgBox->setWindowTitle(QString("ERROR"));
+	msgBox->setText(content);
+	msgBox->setModal(true);
+	msgBox->addButton(QMessageBox::Yes);
+	msgBox->setIcon(QMessageBox::Critical);
+	connect(msgBox, &QMessageBox::destroyed, [=](){
+		this->destroy();
+	});
+	connect(msgBox, &QMessageBox::buttonClicked,
+			[=](){
+		delete msgBox;
+	});
+	msgBox->show();
+}
+
+//与服务器建立连接失败
+void MainWindow::failToConnectServer(){
+	QString content("无法与服务器建立连接，请检查您的网络");
+	msgBox = new QMessageBox(nullptr);
+	msgBox->setWindowTitle(QString("ERROR"));
+	msgBox->setText(content);
+	msgBox->setModal(true);
+	msgBox->addButton(QMessageBox::Yes);
+	msgBox->setIcon(QMessageBox::Critical);
+	connect(msgBox, &QMessageBox::destroyed, [=](){
+		this->destroy();
+	});
+	connect(msgBox, &QMessageBox::buttonClicked,
+			[=](){
+		delete msgBox;
+	});
+	msgBox->show();
 }

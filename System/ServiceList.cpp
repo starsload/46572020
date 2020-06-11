@@ -16,7 +16,7 @@ void ServiceList::Initial(){}
 
 int ServiceList::GetMinPriority()
 {
-        vector<AirConditionClient*>::iterator it = mClientList.begin();
+		vector<AirConditionClient*>::iterator it = mClientList.begin();
         int min = 9999;
         for (; it != mClientList.end(); it++)
         {
@@ -31,37 +31,54 @@ int ServiceList::GetMinPriority()
 
 AirConditionClient* ServiceList::GetAndPopVictim()//排除优先级最低的
 {
-        vector<AirConditionClient*>::iterator it = mClientList.begin();
-        int min = mClientList[0]->GetPriority();
-        int time = 0;
-        for (; it != mClientList.end(); it++)
-        {
-                if ((*it)->GetPriority() < min)
-                {
-                        min = (*it)->GetPriority();
-                        if ((*it)->GetDuration() > time)
-                        {
-                                time =(*it)->GetDuration();
-                        }
-                }
-        }
-        for (; it != mClientList.end(); it++)
-        {
-              if ((*it)->GetPriority() == min)
-                {
-                        if ((*it)->GetDuration() == time)
-                        {
-                                AirConditionClient* re = *it;
-                                mClientList.erase(it);
-                                return re;
-                        }
-                }
-        }
+//        vector<AirConditionClient*>::iterator it = mClientList.begin();
+//        int min = mClientList[0]->GetPriority();
+//        int time = 0;
+//        for (; it != mClientList.end(); it++)
+//        {
+//                if ((*it)->GetPriority() < min)
+//                {
+//                        min = (*it)->GetPriority();
+//                        if ((*it)->GetDuration() > time)
+//                        {
+//                                time =(*it)->GetDuration();
+//                        }
+//                }
+//        }
+//        for (; it != mClientList.end(); it++)
+//        {
+//              if ((*it)->GetPriority() == min)
+//                {
+//                        if ((*it)->GetDuration() == time)
+//                        {
+//                                AirConditionClient* re = *it;
+//                                mClientList.erase(it);
+//                                return re;
+//                        }
+//                }
+//        }
+
+		vector<AirConditionClient*>::iterator it = mClientList.begin();
+		AirConditionClient *victim = *it;
+		int min = mClientList[0]->GetPriority();
+		int time = 0;
+		for (; it != mClientList.end(); it++)
+		{
+				if ((*it)->GetPriority() < min)
+				{
+						min = (*it)->GetPriority();
+						victim = *it;
+				}
+		}
+		return victim;
 }
 
 bool ServiceList::isEmpty()
 {
-        return mClientList.empty();
+	if(mClientList.size() == 0)
+		return true;
+	else
+		return false;
 }
 
 AirConditionClient* ServiceList::PopACC(int RoomId)
