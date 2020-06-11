@@ -33,7 +33,7 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
     this->Fee = 0;
     this->TotalFee = query.value(0).toFloat();
     this->FanSpeed = FanSpeed;
-    this->priority = 0;
+	this->priority = FanSpeed + 1;
     this->Duration = 0;
     this->get_server_time = QDateTime::currentDateTime();
     this->stop_server_time = QDateTime::currentDateTime();
@@ -49,8 +49,9 @@ void AirConditionClient::SetSpeed(int FanSpeed)//设置分控机风速
     this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
     qint64 temp = this->get_server_time.secsTo(this->stop_server_time);
     this->Duration = this->Duration + float(temp)/60;
-    this->Fee=this->Fee+this->Duration*(this->FeeRate-1/FanSpeed);//这样可以保证计算Fee时算的是变更后的结果
-    this->FeeRate = 1/FanSpeed;//计费相关
+//    this->Fee=this->Fee+this->Duration*(this->FeeRate-1/FanSpeed);//这样可以保证计算Fee时算的是变更后的结果
+//    this->FeeRate = 1/FanSpeed;//计费相关
+	this->priority = FanSpeed + 1;
 }
 
 void AirConditionClient::SetTargetTemp(int TargetTemp)//设置分控机目标温度
@@ -68,10 +69,6 @@ int AirConditionClient::GetPriority(){
 
 int AirConditionClient::GetRoomId() {
 	return this->RoomId;
-}
-
-int AirConditionClient::Getwork_state() {
-	return this->work_state;
 }
 
 int AirConditionClient::Getmode() {
@@ -128,10 +125,13 @@ int AirConditionClient::GetState()//获得分控机当前状态
 
 void AirConditionClient::ReachTargetTemperature()//到达目标温度
 {
+	qDebug()<<QString("%1号房间，达到目标温度").arg(RoomId);
+
 	//改变自身参数
 	this->work_state=0;//进入休眠状态
 	this->TimeSliceTimer->stop();
 	this->updateTimer->stop();
+
 	this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
 
 	//计算时间差
@@ -176,7 +176,7 @@ void AirConditionClient::SetSleep()//设置状态为休眠
 void AirConditionClient::DestributeRunTime()//分配运行时间片
 {
 
-	this->TimeSliceTimer->start(120000);//两分钟触发一次
+	this->TimeSliceTimer->start(30 * SECOND);//两分钟触发一次
 	updateTimer->start(10 * SECOND);
 }
 
@@ -190,6 +190,11 @@ void AirConditionClient::WhenTimeOff()//当时间片到
 
 //更新温度和费用
 void AirConditionClient::updateAttribute(){
+	qDebug()<<"********************************************";
+	qDebug()<<QString("%1号房间，温度更新").arg(RoomId);
+	qDebug()<<QString("PreTemp = %1; TargetTemp = %2").arg(PreTemp).arg(TargetTemp);
+	qDebug()<<"********************************************";
+
 	//高风速1分钟变化1℃，中风速2分钟变化1℃，低风速3分钟变化1℃
 	float deltaTemp = 0;
 	switch(FanSpeed){
@@ -217,7 +222,13 @@ void AirConditionClient::updateAttribute(){
 	Fee += deltaTemp * 1;
 	TotalFee += deltaTemp * 1;
 
-	if(qAbs(PreTemp - (float)TargetTemp) < 0.1){
-		ReachTargetTemperature();
+	float target = TargetTemp;
+	if(mode) {
+		if(target - PreTemp < 0.1)
+			ReachTargetTemperature();
+	}
+	else {
+		if(PreTemp - target < 0.1)
+			ReachTargetTemperature();
 	}
 }

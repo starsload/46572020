@@ -45,32 +45,14 @@ AirConditionClient* WaitList::GetAndPopFrontACC()//假定优先级越高数字�
         int max = GetMaxPriority();
         int flag;
         int time = 0;
-//        for (; it != mClientList.end(); )
-//        {
-//                AirConditionClient air = *it;
-//                if (air.GetPriority() == max)
-//                {
-//                        if (air.WaitServiceTime > time)
-//                        {
-//                                time = air.WaitServiceTime;
-//                        }
-//                }
-//                else it++;
-//        }
-        for (; it != mClientList.end(); )
-        {
+		for (; it != mClientList.end(); ) {
+			if ((*it)->GetPriority() == max) {
+				AirConditionClient *re =*it;
+				mClientList.erase(it);
 
-            if ((*it)->GetPriority() == max)
-                {
-                        //if (air.WaitServiceTime == time)
-                       // {
-                AirConditionClient *re =*it;
-                mClientList.erase(it);
-
-                return re;
-                      //  }
-                }
-                else it++;
+				return re;
+			}
+			else it++;
         }
 }
 AirConditionClient* WaitList::PopACC(int RoomId)
@@ -106,4 +88,11 @@ AirConditionClient* WaitList::FindACC(int RoomId)
         else it++;
     }
     return NULL;
+}
+
+void WaitList::debug(){
+	qDebug()<<"WaitList的内容：";
+	for(auto q : mClientList){
+		qDebug()<<QString("分控机，%1号房间").arg(q->GetRoomId());
+	}
 }

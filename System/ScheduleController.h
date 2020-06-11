@@ -40,6 +40,10 @@ public:
 
 	void SendStopMsg(int RoomId, float fee, float totalFee, float curTemp);
 
+	void SendWorkMsg(int RoomId);
+
+	void SendIdleMsg(int RoomId);
+
 private slots:
 	void listenToGuestClient(QTcpSocket*);
 

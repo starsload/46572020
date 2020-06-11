@@ -151,7 +151,11 @@ void ScheduleController::RequestService(int RoomId, float curTemp){
         qDebug()<<QString("%0号房间请求服务成功").arg(RoomId);
     }
     else {//补全不能提供服务部分
-
+		using namespace SocketConstants;
+		QJsonObject ojson;
+		ojson.insert(TYPE, REQUEST_SERVICE_FAIL);
+		sendJSON(ojson);
+		qDebug()<<QString("%0号房间请求服务失败").arg(RoomId);
     }
 
 }
@@ -191,6 +195,8 @@ void ScheduleController::sendPacket(QByteArray body){
 	memcpy(head.data(), &length, len_int);
 	QByteArray packet;
 	packet = head + body;
+	if(!curSocket->socket->isOpen())
+		qDebug()<<"socket连接失效";
 	curSocket->socket->write(packet, packet.size());
 }
 
@@ -207,5 +213,31 @@ void ScheduleController::SendStopMsg(int RoomId, float fee, float totalFee, floa
 	ojson.insert(CUR_TEMP, curTemp);
 	ojson.insert(CUR_FEE, fee);
 	ojson.insert(TOTAL_FEE, totalFee);
+	sendJSON(ojson);
+}
+
+void ScheduleController::SendWorkMsg(int RoomId){
+	for(auto sock : allSockets){
+		if(sock->Room_id == RoomId){
+			curSocket = sock;
+		}
+	}
+
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, STATE_WORK);
+	sendJSON(ojson);
+}
+
+void ScheduleController::SendIdleMsg(int RoomId){
+	for(auto sock : allSockets){
+		if(sock->Room_id == RoomId){
+			curSocket = sock;
+		}
+	}
+
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, STATE_IDLE);
 	sendJSON(ojson);
 }

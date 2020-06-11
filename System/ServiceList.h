@@ -9,9 +9,11 @@ class ServiceList
 {
 private:
         vector<AirConditionClient*> mClientList;
+
 public:
         ServiceList();
         ~ServiceList();
+
         void Initial();
         bool isEmpty();//队列是否为空
         int GetMinPriority();//得到最小优先级的值
@@ -20,5 +22,9 @@ public:
         void PushACC(AirConditionClient* airConditionClient);//将一个client对象 push到队列中
         AirConditionClient* FindACC(int RoomId);//根据ID返回具体的client
         bool isFull();//判断是否满
+
+		int getSize();
+
+		void debug();
 };
 #endif // SERVICELIST_H

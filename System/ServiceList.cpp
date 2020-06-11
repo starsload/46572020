@@ -108,4 +108,13 @@ bool ServiceList::isFull()
     else return false;
 }
 
+int ServiceList::getSize(){
+	return mClientList.size();
+}
 
+void ServiceList::debug(){
+	qDebug()<<"ServiceList的内容：";
+	for(auto q : mClientList){
+		qDebug()<<QString("分控机，%1号房间").arg(q->GetRoomId());
+	}
+}

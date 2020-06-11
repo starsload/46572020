@@ -93,11 +93,11 @@ private:
 	QSqlDatabase tmpDB;
 	QSqlDatabase *db;
 
-    int CtreatClient(int RoomID);//创建并初始化到mClientList里,num++ 并与host建立关联
+//    int CtreatClient(int RoomID);//创建并初始化到mClientList里,num++ 并与host建立关联
 
-    void ReachTargetTemperature(int RoomID);
+//    void ReachTargetTemperature(int RoomID);
 
-    void TimeOff(int RoomId,float FeeRate);
+//    void TimeOff(int RoomId,float FeeRate);
 
     Inovice CreateRDR(int RoomID, QString data_in, QString data_out);//请求数据库 返回详单指针
 

@@ -34,22 +34,25 @@ static const QString FAN_SPEED = "fan speed"; //int 0为低，1为中，2为高
 static const int SET_PARA = 0; //主机初始化
 static const int SET_PARA_OK = 1; //主机初始化完成
 static const int START_UP = 2; //主机开机
-static const int START_UP_OK = 3; //主机开机
+//static const int START_UP_OK = 3; //主机开机
 
 //ScheduleController
-static const int REQUEST_ON = 4; //GuestClient开机
-static const int REQUEST_ON_OK = 5; //GuestClient开机返回
-static const int CHANGE_FAN_SPEED = 6; //GuestClient改变风速
-static const int CHANGE_FAN_SPEED_OK = 7; //GuestClient改变风速返回
-static const int CHANGE_TARGET_TEMP = 8; //GuestClient改变温度
-static const int CHANGE_TARGET_TEMP_OK = 9; //GuestClient改变风速
-static const int REQUEST_SERVICE = 10; //提出服务请求
-static const int REQUEST_SERVICE_OK = 11; //提出服务请求返回
-static const int REQUEST_OFF = 12; //关机请求
-static const int REQUEST_OFF_OK = 13; //关机请求返回
-static const int REQUEST_FEE = 14; //查询费用
-static const int REQUEST_FEE_OK = 15; //查询费用返回
-static const int STOP_RUNNING = 16; //达到目标温度，停止工作
+static const int REQUEST_ON = 4; // GuestClient开机
+static const int REQUEST_ON_OK = 5; // GuestClient开机返回
+static const int CHANGE_FAN_SPEED = 6; // GuestClient改变风速
+static const int CHANGE_FAN_SPEED_OK = 7; // GuestClient改变风速返回
+static const int CHANGE_TARGET_TEMP = 8; // GuestClient改变温度
+static const int CHANGE_TARGET_TEMP_OK = 9; // GuestClient改变风速
+static const int REQUEST_SERVICE = 10; // 提出服务请求
+static const int REQUEST_SERVICE_OK = 11; // 提出服务请求成功
+static const int REQUEST_SERVICE_FAIL = 12; // 提出服务请求拒绝
+static const int REQUEST_OFF = 13; // 关机请求
+static const int REQUEST_OFF_OK = 14; // 关机请求返回
+static const int REQUEST_FEE = 15; // 查询费用
+static const int REQUEST_FEE_OK = 16; // 查询费用返回
+static const int STOP_RUNNING = 17; // 达到目标温度，停止工作
+static const int STATE_IDLE = 18; // 因为调度，进入空闲状态
+static const int STATE_WORK = 19; // 因为调度，进入工作状态
 };
 
 

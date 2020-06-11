@@ -20,6 +20,7 @@ class AirConditionClient: public QObject{
 private:
         int RoomId;//房间号
         int work_state;//工作状态,0休眠，1等待，2运行
+
         int mode;//工作模式
         int TargetTemp;//目标温度
 
@@ -48,10 +49,14 @@ private slots:
 		void updateAttribute();
 
 public:
+		static const int STATE_SLEEP = 0;
+		static const int STATE_WAIT = 1;
+		static const int STATE_RUN = 2;
+
         AirConditionClient();
         ~AirConditionClient();
 		int GetRoomId();
-		int Getwork_state();
+
 		int Getmode();
 		int GetTargetTemp();
 		float GetPreTemp();
@@ -70,16 +75,22 @@ public:
 
 		void SetPreTemp(float temp);// 修改当前温度
 
+		int GetState();//获取分控机运行状态 run运行 sleep休眠 wait准备运行
 
-        int GetState();//获取分控机运行状态 run运行 sleep休眠 ready准备运行
         QVector<float> GetFinalState();//获取分控机关机时费用和运行时间
+
         void ReachTargetTemperature();//到达目标温度
 
         int GetPriority();//获取优先级
+
         bool isRunning();//是否运行
+
         void StopRunning();//停止运行
+
         void StartRunning();//开始运行
+
         void DestributeRunTime();//分配时间片
+
         void SetSleep();//设置状态为休眠
 
 		void setAirConditionHostRelation(AirConditionHost*);

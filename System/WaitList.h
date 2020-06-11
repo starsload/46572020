@@ -20,6 +20,8 @@ public:
         AirConditionClient* PopACC(int RoomId);//根据ID弹出具体的client 返回的是该对象
         void PushACC(AirConditionClient* airConditionClient); //将一个client对象 push到队列中
         AirConditionClient* FindACC(int RoomId);//根据ID返回具体的client
+
+		void debug();
 };
 
 

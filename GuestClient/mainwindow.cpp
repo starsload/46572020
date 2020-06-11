@@ -100,9 +100,17 @@ void MainWindow::processPacket(QByteArray body){
 	{
 		qDebug()<<"请求服务成功";
 		stopTemperatureSimulation();
-		requestFeeTimer.start(requestInterval);
 		state = RUN;
 		updateWindow();
+		requestFeeTimer.start(requestInterval);
+		break;
+	}
+	case REQUEST_SERVICE_FAIL:
+	{
+		qDebug()<<"请求服务失败";
+		state = IDLE;
+		updateWindow();
+		requestFeeTimer.stop();
 		break;
 	}
 	case REQUEST_FEE_OK:
@@ -122,6 +130,20 @@ void MainWindow::processPacket(QByteArray body){
 		totalFee = ojson.value(TOTAL_FEE).toDouble();
 		curTemp = ojson.value(CUR_TEMP).toDouble();
 		updateWindow();
+		break;
+	}
+	case STATE_IDLE:
+	{
+		state = IDLE;
+		updateWindow();
+		requestFeeTimer.stop();
+		break;
+	}
+	case STATE_WORK:
+	{
+		state = RUN;
+		updateWindow();
+		requestFeeTimer.start(requestInterval);
 		break;
 	}
 	}
@@ -277,7 +299,9 @@ void MainWindow::requestService(){
 	}
 
 	if(flag){
-		qDebug()<<"提出服务请求";
+		qDebug()<<"=====================================";
+		qDebug()<<QString("%1号房间，提出服务请求").arg(RoomId);
+		qDebug()<<"=====================================";
 		using namespace SocketConstants;
 		QJsonObject ojson;
 		ojson.insert(TYPE, REQUEST_SERVICE);
