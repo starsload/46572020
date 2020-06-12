@@ -431,12 +431,14 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 		}
 		else //两个队列都不在，说明之前已经关机过，可能是断连的情况
 			return;
-
 	}
 
 	//将状态插入到数据库
 	InsertUseData(RoomId,client->Getget_server_time(),client->Getstop_server_time(),
 				  client->GetTargetTemp(),client->GetFanSpeed(),client->GetFeeRate(),tempDuration,tempFee,*db);
+
+	UpdateTotalFee(RoomId, client->GetFee(), Date, *db);
+
 	UpdateChangeScheduleTime(RoomId,this->Date,*db);
 
 	delete client;//删掉分控机

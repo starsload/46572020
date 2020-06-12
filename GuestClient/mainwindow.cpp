@@ -87,9 +87,8 @@ void MainWindow::processPacket(QByteArray body){
 		targetTemp = ojson.value(TARGET_TEMP).toDouble();
 		curFanSpeed = ojson.value(CUR_SPEED).toInt();
 		totalFee = ojson.value(TOTAL_FEE).toDouble();
-		curFee = totalFee;
+		curFee = 0;
 		updateWindow();
-
 		requestService();
 		break;
 	}
