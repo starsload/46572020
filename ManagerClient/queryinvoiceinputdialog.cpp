@@ -19,11 +19,10 @@ void QueryInvoiceInputDialog::on_pushButton_2_clicked()
 	this->destroy();
 }
 
-//确定
 void QueryInvoiceInputDialog::on_pushButton_clicked()
 {
 	QString id = ui->lineEdit->text();
 	int Room_Id = id.toInt();
-	emit queryFinish(Room_Id);
 	this->destroy();
+	emit queryFinish(Room_Id);
 }

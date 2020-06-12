@@ -37,6 +37,7 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
     this->Duration = 0;
     this->get_server_time = QDateTime::currentDateTime();
     this->stop_server_time = QDateTime::currentDateTime();
+	this->work_state = STATE_WAIT;
 }
 
 void AirConditionClient::setAirConditionHostRelation(AirConditionHost *host){
@@ -171,6 +172,7 @@ void AirConditionClient::StartRunning()//开始运行
 void AirConditionClient::SetSleep()//设置状态为休眠
 {
 	this->work_state = STATE_SLEEP;
+	this->priority = -1;
 }
 
 void AirConditionClient::DestributeRunTime()//分配运行时间片

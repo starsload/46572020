@@ -14,6 +14,9 @@
 #include <QMessageBox>
 #include <QDialogButtonBox>
 #include <QTimer>
+#include "Invoice.h"
+#include "DetailRecords.h"
+#include "Report.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -47,6 +50,12 @@ private slots:
 
 	void onMonitor();
 
+	void onPrintInvoice();
+
+	void onCreateDR(int);
+
+	void onPrintReport(int, QString);
+
 private:
 	Ui::MainWindow *ui; //监视主页面
 
@@ -54,9 +63,9 @@ private:
 
 	QueryInvoiceInputDialog *queryInvoiceInputDialg; //账单查询页面
 
-	InvoicePage *invoicePage; //账单页面
+	InvoicePage *invoicePage = nullptr; //账单页面
 
-	ReportPage *reportPage; //报表页面
+	ReportPage *reportPage = nullptr; //报表页面
 
 	QTcpSocket *socket; //套接字
 
@@ -70,6 +79,8 @@ private:
 
 	QMessageBox *msgBox;
 
+	Invoice curInvoice;
+
 	void sendPacket(QByteArray body);
 
 	void sendJSON(QJsonObject ojson);
@@ -77,5 +88,9 @@ private:
 	void processPacket(QByteArray body);
 
 	QString parseRoomState(QJsonObject);
+
+	void print_DR(QJsonObject);
+
+	void printReport(QJsonObject);
 };
 #endif // MAINWINDOW_H

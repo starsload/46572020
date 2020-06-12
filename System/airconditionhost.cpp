@@ -1,7 +1,7 @@
 ﻿#include "AirConditionHost.h"
 #include "UseDatabase.h"
-#include "inovice.h"
-#include "report.h"
+#include "Invoice.h"
+#include "Report.h"
 
 AirConditionHost::AirConditionHost(QObject *parent):
     QObject(parent)
@@ -97,7 +97,6 @@ returnRequestOn AirConditionHost::CtreatClient(int Room_Id, double realTemp){
         r.mode = mode;
         r.curTemp = realTemp;
         r.curFanSpeed = defaultFanSpeed;
-
         r.totalFee = QueryTotalFee(this->Date,this->Date,Room_Id,*db);
         r.targetTemp = defaultTargetTemp;
     }
@@ -145,7 +144,7 @@ void AirConditionHost::startUp() {
     }
 }
 
-void AirConditionHost::guestConnectHndle(){
+void AirConditionHost::guestConnectHndle() {
     qDebug()<<"有顾客客户端连接";
     QTcpSocket *socket = server->nextPendingConnection();
     scheduleController->addGuestSocket(socket);
@@ -209,7 +208,7 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
             mclient->SetSpeed(Speed);
         else {
 			mclient->SetSpeed(Speed);
-			if (!serviceList->isEmpty() && mclient->GetPriority() > serviceList->GetMinPriority())//C:
+			if (mclient->GetPriority() > serviceList->GetMinPriority())//C:
             {
                 mVictimclient = serviceList->GetAndPopVictim();//返回一个拷贝对象
 				serviceList->PopACC(mVictimclient->GetRoomId());
@@ -237,7 +236,6 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 		else {
 			mclient->SetSpeed(Speed);
 			if(mclient->GetPriority() < waitList->GetMaxPriority()) {//B:
-
 				mclient = serviceList->PopACC(mclient->GetRoomId());//返回值是类的拷贝
 				waitList->PushACC(mclient);
 				mclient->SetSpeed(Speed);
@@ -251,7 +249,6 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 				scheduleController->SendWorkMsg(mFrontclient->GetRoomId());
 
 				UpdateSwitchOnOffTime(mFrontclient->GetRoomId(),this->Date,*db);//db操作 开机
-
 
 				InsertUseData(mclient->GetRoomId(),mclient->Getget_server_time(),
 							  mclient->Getstop_server_time(),mclient->GetTargetTemp(),
@@ -380,24 +377,40 @@ bool AirConditionHost::RequestService(int RoomId, float PreTemp) {
 	return flag;
 }
 
-Inovice AirConditionHost::CreateRDR(int RoomID, QString data_in, QString data_out)//请求数据库 返回详单对象
+DetailRecords AirConditionHost::MakeDR(int RoomID)//请求数据库 返回详单对象
 {
-    Inovice detail(RoomID,*db);
-    detail.detail = QueryDataInUseData(RoomID,*db);
-    return detail;
+	QDateTime dateTime(QDateTime::currentDateTime());
+	QString data_in = dateTime.toString("yyyy-MM-dd");
+	QString data_out = dateTime.toString("yyyy-MM-dd");
+
+	DetailRecords records;
+	QVector<struct DetailRecord> detail;
+	detail = QueryDataInUseData(RoomID, *db);
+	records.Initial(RoomID, detail);
+	return records;
 }
 
-Report AirConditionHost::CreateReport(vector<int> listRoomId,int typeReport,QString date)//请求数据库 返回报表对象
-{
-    Report mReport=Report(date,*db);
-    mReport.report = QueryDataInACCchart(date,*db);
+void AirConditionHost::RequestPrintReport(Report r){
+	r.CreateReportFile();
+}
 
+Report AirConditionHost::RequestReport(QString date)//请求数据库 返回报表对象
+{
+	Report mReport;
+	QVector<struct report> t = QueryDataInACCchart(date,*db);
+	mReport.MakeReport(t, date);
     return mReport;
 }
 
-float AirConditionHost::CreateInvoice(int RoomID, QString data_in, QString data_out)//请求数据库 返回总花费
+Invoice AirConditionHost::MakeAnInvoice(int RoomID)//请求数据库 返回总花费
 {
-    return QueryTotalFee(data_in,data_out,RoomID,*db);
+	QDateTime dateTime(QDateTime::currentDateTime());
+	QString data_in = dateTime.toString("yyyy-MM-dd");
+	QString data_out = dateTime.toString("yyyy-MM-dd");
+	float totalFee = QueryTotalFee(data_in, data_out, RoomID, *db);
+	Invoice res;
+	res.Initial(RoomID, totalFee);
+	return res;
 }
 
 void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
@@ -406,11 +419,12 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 	AirConditionClient* temp = NULL;
 	float tempFee,tempDuration;
 	client = waitList->FindACC(RoomId);
-	if(client!=NULL){//在等待队列
+	if(client != NULL){//在等待队列
 		client->SetSleep();
 		tempFee = client->GetFee();
 		tempDuration = client->GetDuration();
 
+		waitList->PopACC(RoomId);
 	}
 	else {//在服务队列
 		//将分控机从服务队列移出并保存参数
@@ -427,6 +441,8 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 				serviceList->PushACC(temp);
 				temp->StartRunning();
 				temp->DestributeRunTime();
+				scheduleController->SendWorkMsg(temp->GetRoomId());
+
 				InsertUseData(temp->GetRoomId(),temp->Getget_server_time(),temp->Getstop_server_time(),temp->GetTargetTemp(),
 								 temp->GetFanSpeed(),temp->GetFeeRate(),temp->GetDuration(),temp->GetFee(),*db);
 			}

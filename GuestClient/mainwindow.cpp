@@ -67,7 +67,7 @@ void MainWindow::newServerMessage(){
 }
 
 //处理收到的数据包
-void MainWindow::processPacket(QByteArray body){
+void MainWindow::processPacket(QByteArray body) {
 	using namespace SocketConstants;
 	QJsonParseError e;
 	QJsonDocument doc = QJsonDocument::fromJson(body, &e);

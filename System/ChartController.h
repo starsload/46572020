@@ -9,6 +9,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include "Monitor.h"
+#include "Invoice.h"
+#include "DetailRecords.h"
+#include "Report.h"
 
 class AirConditionHost;
 
@@ -40,6 +43,18 @@ public:
 
 	void CheckRoomState();
 
+	void CreateInvoice(int Room_Id);
+
+	void PrintInvoice(Invoice);
+
+	void CreateRDR(int RoomId);
+
+	void PrintRDR(DetailRecords);
+
+	void QueryReport(int RoomId, QString date);
+
+	void PrintReport(const Report &r);
+
 private slots:
 	void listenToManagerClient();
 
@@ -51,7 +66,9 @@ private:
 	Monitor *monitor;
 
 	void sendPacket(QByteArray body);
+
 	void sendJSON(QJsonObject ojson);
+
 	void processPacket(QByteArray body);
 };
 

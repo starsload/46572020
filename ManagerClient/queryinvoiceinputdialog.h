@@ -19,8 +19,6 @@ signals:
 	void queryFinish(int Room_Id);
 
 private slots:
-	void on_buttonBox_accepted();
-
 	void on_pushButton_2_clicked();
 
 	void on_pushButton_clicked();

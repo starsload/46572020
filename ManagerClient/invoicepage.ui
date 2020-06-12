@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>547</height>
+    <width>454</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>170</x>
      <y>60</y>
      <width>51</width>
      <height>21</height>
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="CreateDR">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>480</y>
+     <x>280</x>
+     <y>240</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -39,21 +39,11 @@
     <string>生成详单</string>
    </property>
   </widget>
-  <widget class="QTextBrowser" name="textBrowser">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>100</y>
-     <width>256</width>
-     <height>311</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="Print">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>430</y>
+     <x>80</x>
+     <y>240</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -65,9 +55,35 @@
   <widget class="QLabel" name="ID">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>220</x>
      <y>60</y>
      <width>81</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>140</y>
+     <width>111</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>您的消费总金额为：</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lab_totalFee">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>140</y>
+     <width>41</width>
      <height>21</height>
     </rect>
    </property>

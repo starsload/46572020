@@ -126,7 +126,113 @@ void MainWindow::processPacket(QByteArray body){
 		}
 		break;
 	}
+	case CREATE_INVOICE_OK:
+	{
+		Invoice invoice;
+		invoice.roomId = ojson.value(ROOM_ID).toInt();
+		invoice.totalFee = ojson.value(TOTAL_FEE).toDouble();
+		curInvoice = invoice;
+		if(invoicePage != nullptr)
+			delete invoicePage;
+		invoicePage = new InvoicePage(this, invoice);
+		connect(invoicePage, &InvoicePage::PrintInvoice,
+				this, &MainWindow::onPrintInvoice);
+		connect(invoicePage, &InvoicePage::PrintDR,
+				this, &MainWindow::onCreateDR);
+		invoicePage->show();
+		break;
 	}
+	case CREATE_DR_OK:
+	{
+		print_DR(ojson);
+		break;
+	}
+	case QUERY_REPORT_OK:
+	{
+		printReport(ojson);
+		break;
+	}
+	}
+}
+
+//打印报表
+void MainWindow::printReport(QJsonObject ojson){
+	using namespace SocketConstants;
+	Report r;
+	r.date = ojson.value(DATE).toString();
+	QJsonArray array = ojson.value(REPORT_ARRAY).toArray();
+	for(const auto &item : array){
+		QJsonObject tjson = item.toObject();
+		struct report t;
+		t.RoomId = tjson.value(ROOM_ID).toInt();
+		t.SwitchOnoffTime = tjson.value(SWITCH_ON_OFF_TIMES).toInt();
+		t.ServiceTime = tjson.value(SERVICE_TIME).toDouble();
+		t.TotalFee = tjson.value(TOTAL_FEE).toDouble();
+		t.ScheduleTime = tjson.value(SCHEDULE_TIME).toInt();
+		t.DetailRecordNum = tjson.value(NUM_DR).toInt();
+		t.ChangeTempTime = tjson.value(TIMES_CHANGE_TEMP).toInt();
+		t.ChangeFanSpeedTime = tjson.value(TIMES_CHANGE_SPEED).toInt();
+		r.report.push_back(t);
+	}
+
+	r.CreateReportFile();
+
+	ojson.insert(TYPE, PRINT_REPORT);
+
+	sendJSON(ojson);
+
+	QMessageBox::information(this, "成功", "成功生成并打印报表");
+}
+
+// 打印详单
+void MainWindow::print_DR(QJsonObject ojson){
+	using namespace SocketConstants;
+	DetailRecords records;
+	records.roomId = ojson.value(ROOM_ID).toInt();
+	records.totalFee = ojson.value(TOTAL_FEE).toDouble();
+	QJsonArray array = ojson.value(DETAIL_ARRAY).toArray();
+	QVector<struct DetailRecord> data;
+	for(const auto &tvalue : array){
+		QJsonObject tjson = tvalue.toObject();
+		struct DetailRecord t;
+		t.RoomId = tjson.value(ROOM_ID).toInt();
+		t.StartTime = tjson.value(START_TIME).toString();
+		t.EndTime = tjson.value(END_TIME).toString();
+		t.TargetTemp = tjson.value(TARGET_TEMP).toDouble();
+		t.FanSpeed = tjson.value(FAN_SPEED).toInt();
+		t.Duration = tjson.value(DURATION).toDouble();
+		t.Fee = tjson.value(CUR_FEE).toDouble();
+		data.push_back(t);
+	}
+	records.detail = data;
+
+	records.PrintAsFile();
+
+	ojson.insert(TYPE, PRINT_DR);
+
+	sendJSON(ojson);
+
+	QMessageBox::information(this, "成功", "成功生成并打印详单");
+}
+
+//打印账单
+void MainWindow::onPrintInvoice(){
+	curInvoice.PrintAsFile();
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, PRINT_INVOICE);
+	ojson.insert(ROOM_ID, curInvoice.roomId);
+	ojson.insert(TOTAL_FEE, curInvoice.totalFee);
+	sendJSON(ojson);
+}
+
+//打印详单
+void MainWindow::onCreateDR(int RoomId){
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CREATE_DR);
+	ojson.insert(ROOM_ID, RoomId);
+	sendJSON(ojson);
 }
 
 QString MainWindow::parseRoomState(QJsonObject ojson){
@@ -194,15 +300,6 @@ QString MainWindow::parseRoomState(QJsonObject ojson){
 	return result;
 }
 
-/*
-空调状态：（0关机、1等待、2运行、3回温）
-当前室温：
-目标温度：
-当前风速：
-当前费用：
-累计费用：
-*/
-
 // 提出CheckRoomState请求
 void MainWindow::onMonitor() {
 	using namespace SocketConstants;
@@ -215,8 +312,8 @@ void MainWindow::onMonitor() {
 void MainWindow::on_ptn_makeInvoice_clicked()
 {
 	queryInvoiceInputDialg = new QueryInvoiceInputDialog(this);
-	connect(queryInvoiceInputDialg, SIGNAL(queryFinish(int)),
-			this, SLOT(queryInputFinish(int)));
+	connect(queryInvoiceInputDialg, &QueryInvoiceInputDialog::queryFinish,
+			this, &MainWindow::queryInputFinish);
 	queryInvoiceInputDialg->show();
 	queryInvoiceInputDialg->setModal(true);
 }
@@ -224,15 +321,30 @@ void MainWindow::on_ptn_makeInvoice_clicked()
 //返回Room_Id之后
 void MainWindow::queryInputFinish(int Room_Id)
 {
-	invoicePage = new InvoicePage(this, Room_Id);
-	invoicePage->show();
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CREATE_INVOICE);
+	ojson.insert(ROOM_ID, Room_Id);
+	sendJSON(ojson);
 }
 
 //点击“生成报表”
 void MainWindow::on_ptn_makeReport_clicked()
 {
 	reportPage = new ReportPage(this);
+	connect(reportPage, &ReportPage::Print_Report,
+			this, &MainWindow::onPrintReport);
 	reportPage->show();
+}
+
+//选择完成，打印报表
+void MainWindow::onPrintReport(int RoomId, QString date){
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, QUERY_REPORT);
+	ojson.insert(ROOM_ID, RoomId);
+	ojson.insert(DATE, date);
+	sendJSON(ojson);
 }
 
 void MainWindow::sendJSON(QJsonObject ojson) {

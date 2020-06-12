@@ -20,17 +20,16 @@ SOURCES += \
         AirConditionClient.cpp \
         AirConditionHost.cpp \
         ChartController.cpp \
+        DetailRecords.cpp \
         GuestClientSocket.cpp \
+        Invoice.cpp \
         Monitor.cpp \
+        Report.cpp \
         ScheduleController.cpp \
         ServiceList.cpp \
         UseDatabase.cpp \
         WaitList.cpp \
-        inovice.cpp \
-        main.cpp \
-        myserver.cpp \
-        mythread.cpp \
-        report.cpp
+        main.cpp
 
 TRANSLATIONS += \
     System_zh_CN.ts
@@ -44,14 +43,13 @@ HEADERS += \
     AirConditionClient.h \
     AirConditionHost.h \
     ChartController.h \
+    DetailRecords.h \
     GuestClientSocket.h \
+    Invoice.h \
     Monitor.h \
+    Report.h \
     ScheduleController.h \
     ServiceList.h \
     SocketConstants.h \
     UseDatabase.h \
-    WaitList.h \
-    inovice.h \
-    myserver.h \
-    mythread.h \
-    report.h
+    WaitList.h

@@ -1,10 +1,21 @@
 #ifndef REPORT_H
 #define REPORT_H
 
-#include "UseDatabase.h"
+#include <QVector>
 #include <QFile>
 #include <QTextStream>
 #include <QIODevice>
+
+struct report{//记录报表的结构体
+	int RoomId;
+	int SwitchOnoffTime;
+	float ServiceTime;
+	float TotalFee;
+	int ScheduleTime;
+	int DetailRecordNum;
+	int ChangeTempTime;
+	int ChangeFanSpeedTime;
+};
 
 class Report
 {

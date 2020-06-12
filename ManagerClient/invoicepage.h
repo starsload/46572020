@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <QMessageBox>
+#include "Invoice.h"
+#include <QString>
+#include "DetailRecords.h"
 
 namespace Ui {
 class InvoicePage;
@@ -13,8 +16,13 @@ class InvoicePage : public QDialog
 	Q_OBJECT
 
 public:
-	explicit InvoicePage(QWidget *parent = nullptr, int Room_Id = 0);
+	explicit InvoicePage(QWidget *parent, const Invoice &v);
 	~InvoicePage();
+
+signals:
+	void PrintInvoice();
+
+	void PrintDR(int);
 
 private slots:
 	void on_Print_clicked();
@@ -23,6 +31,10 @@ private slots:
 
 private:
 	Ui::InvoicePage *ui;
+
+	Invoice invoice;
+
+	int room_id;
 };
 
 #endif // INVOICEPAGE_H

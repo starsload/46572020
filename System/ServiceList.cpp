@@ -31,35 +31,9 @@ int ServiceList::GetMinPriority()
 
 AirConditionClient* ServiceList::GetAndPopVictim()//排除优先级最低的
 {
-//        vector<AirConditionClient*>::iterator it = mClientList.begin();
-//        int min = mClientList[0]->GetPriority();
-//        int time = 0;
-//        for (; it != mClientList.end(); it++)
-//        {
-//                if ((*it)->GetPriority() < min)
-//                {
-//                        min = (*it)->GetPriority();
-//                        if ((*it)->GetDuration() > time)
-//                        {
-//                                time =(*it)->GetDuration();
-//                        }
-//                }
-//        }
-//        for (; it != mClientList.end(); it++)
-//        {
-//              if ((*it)->GetPriority() == min)
-//                {
-//                        if ((*it)->GetDuration() == time)
-//                        {
-//                                AirConditionClient* re = *it;
-//                                mClientList.erase(it);
-//                                return re;
-//                        }
-//                }
-//        }
-
 		vector<AirConditionClient*>::iterator it = mClientList.begin();
 		AirConditionClient *victim = *it;
+		vector<AirConditionClient*>::iterator p = it;
 		int min = mClientList[0]->GetPriority();
 		int time = 0;
 		for (; it != mClientList.end(); it++)
@@ -68,8 +42,10 @@ AirConditionClient* ServiceList::GetAndPopVictim()//排除优先级最低的
 				{
 						min = (*it)->GetPriority();
 						victim = *it;
+						p = it;
 				}
 		}
+		mClientList.erase(p);
 		return victim;
 }
 

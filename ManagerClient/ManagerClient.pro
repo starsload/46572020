@@ -17,6 +17,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    DetailRecords.cpp \
+    Invoice.cpp \
+    Report.cpp \
     initialpage.cpp \
     invoicepage.cpp \
     main.cpp \
@@ -25,6 +28,9 @@ SOURCES += \
     reportpage.cpp
 
 HEADERS += \
+    DetailRecords.h \
+    Invoice.h \
+    Report.h \
     SocketConstants.h \
     initialpage.h \
     invoicepage.h \

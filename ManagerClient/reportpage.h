@@ -15,6 +15,12 @@ public:
 	explicit ReportPage(QWidget *parent = nullptr);
 	~ReportPage();
 
+signals:
+	void Print_Report(int RoomId, QString date);
+
+private slots:
+	void on_PrintButton_clicked();
+
 private:
 	Ui::ReportPage *ui;
 };

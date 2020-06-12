@@ -11,8 +11,10 @@
 #include <QObject>
 #include <QVector>
 #include <ServiceList.h>
-#include <report.h>
-#include <inovice.h>
+#include <Report.h>
+#include <Invoice.h>
+#include "Invoice.h"
+#include "DetailRecords.h"
 
 class returnRequestOn{
 public:
@@ -77,6 +79,14 @@ public:
 
 	void RearchTargetTemp(int RoomId);//到达目标温度进行的调度,参数为需要处理的分控机房间号
 
+	Invoice MakeAnInvoice(int RoomID);//请求数据库，返回账单
+
+	DetailRecords MakeDR(int RoomID);//请求数据库 返回详单
+
+	Report RequestReport(QString  date);//请求数据库 返回报表
+
+	void RequestPrintReport(Report); //打印报表
+
 private slots:
     void managerConnectHandle();
 
@@ -98,12 +108,6 @@ private:
 //    void ReachTargetTemperature(int RoomID);
 
 //    void TimeOff(int RoomId,float FeeRate);
-
-    Inovice CreateRDR(int RoomID, QString data_in, QString data_out);//请求数据库 返回详单指针
-
-    Report CreateReport(vector<int> listRoomId,int typeReport,QString  date);//请求数据库 返回报表指针
-
-    float CreateInvoice(int RoomID, QString data_in, QString data_out);//请求数据库 返回总花费
 
     double defaultTargetTemp; //默认目标温度
     double maxTargetTemp; //最高目标温度

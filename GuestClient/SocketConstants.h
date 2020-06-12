@@ -30,7 +30,19 @@ static const QString TOTAL_FEE = "total fee"; //double
 static const QString FAN_SPEED = "fan speed"; //int 0为低，1为中，2为高
 static const QString LIST_STATE = "list state"; //管理员监控返回的房间状态列表
 static const QString ROOM_STATE = "room state"; //房间状态（0关机、1等待、2运行、3回温）
-
+static const QString DETAIL_ARRAY = "detail array"; //QJsonArray，元素为QJsonObject
+static const QString START_TIME = "start time"; //起始时间QString
+static const QString END_TIME = "end time"; //终止时间QString
+static const QString FEE_RATE = "fee rate"; //费率 double
+static const QString DURATION = "duration"; //服务时长 double
+static const QString DATE = "date"; //报表日期 QString
+static const QString REPORT_ARRAY = "report array"; //QJsonArray，元素为QJsonObject
+static const QString SWITCH_ON_OFF_TIMES = "switch on off times"; //int
+static const QString SERVICE_TIME = "service time"; //double
+static const QString SCHEDULE_TIME = "schedule time"; //int
+static const QString NUM_DR = "num of DR"; //int
+static const QString TIMES_CHANGE_TEMP = "times CT"; //int
+static const QString TIMES_CHANGE_SPEED = "times CS"; //int
 
 //操作TYPE的种类
 //ChartController
@@ -58,6 +70,15 @@ static const int STATE_IDLE = 18; // 因为调度，进入空闲状态
 static const int STATE_WORK = 19; // 因为调度，进入工作状态
 static const int CHECK_ROOM_STATE = 20; // 管理员启动监视各房间空调状态
 static const int CHECK_ROOM_STATE_OK = 21; // 返回
+static const int CREATE_INVOICE = 22; // 创建账单
+static const int CREATE_INVOICE_OK = 23; // 返回
+static const int PRINT_INVOICE = 24; // 打印账单
+static const int CREATE_DR = 25; // 创建详单
+static const int CREATE_DR_OK = 26; // 返回
+static const int PRINT_DR = 27; // 打印详单
+static const int QUERY_REPORT = 28; // 创建报表
+static const int QUERY_REPORT_OK = 29; // 返回
+static const int PRINT_REPORT = 30; // 打印报表
 };
 
 #endif // GUSTSOCKTCONSTANTS_H

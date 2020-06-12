@@ -34,9 +34,9 @@ private:
 
         float TotalFee;//总费用
 
-        int FanSpeed;//风速
+		int FanSpeed; //风速
 
-        int priority;//优先级
+		int priority; //优先级
 
         int Duration;//使用时长
 
