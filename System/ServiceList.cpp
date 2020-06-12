@@ -29,6 +29,8 @@ int ServiceList::GetMinPriority()
         return min;
 }
 
+
+//修改了下面的整个函数
 AirConditionClient* ServiceList::GetAndPopVictim()//排除优先级最低的
 {
 	vector<AirConditionClient*>::iterator it = mClientList.begin();
