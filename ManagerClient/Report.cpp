@@ -1,8 +1,4 @@
 #include "Report.h"
-#include "UseDatabase.h"
-#include <QFile>
-#include <QTextStream>
-#include <QIODevice>
 
 Report::Report(){}
 

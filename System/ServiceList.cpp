@@ -31,22 +31,22 @@ int ServiceList::GetMinPriority()
 
 AirConditionClient* ServiceList::GetAndPopVictim()//排除优先级最低的
 {
-		vector<AirConditionClient*>::iterator it = mClientList.begin();
-		AirConditionClient *victim = *it;
-		vector<AirConditionClient*>::iterator p = it;
-		int min = mClientList[0]->GetPriority();
+	vector<AirConditionClient*>::iterator it = mClientList.begin();
+
+        AirConditionClient *victim = NULL;
+        int min = GetMinPriority();
 		int time = 0;
 		for (; it != mClientList.end(); it++)
 		{
-				if ((*it)->GetPriority() < min)
-				{
-						min = (*it)->GetPriority();
+                if ((*it)->GetPriority() == min)
+			{
+
 						victim = *it;
-						p = it;
-				}
+                        mClientList.erase(it);
+                        return victim;
+
+			}
 		}
-		mClientList.erase(p);
-		return victim;
 }
 
 bool ServiceList::isEmpty()
@@ -106,8 +106,8 @@ int ServiceList::getSize(){
 }
 
 void ServiceList::debug(){
-	qDebug()<<"ServiceList的内容：";
+    qDebug()<<"ServiceList：";
 	for(auto q : mClientList){
-		qDebug()<<QString("分控机，%1号房间").arg(q->GetRoomId());
+        qDebug()<<QString("client，%1 room").arg(q->GetRoomId());
 	}
 }

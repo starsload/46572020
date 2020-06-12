@@ -12,7 +12,6 @@ int DetailRecords:: PrintAsFile()
 {
     QString fileName = "房间" + QString(roomId) + "-详单.scv";  //文件名：房间号-详单.scv
 
-
     QFile out(fileName);
     if (!out.open(QIODevice::WriteOnly | QIODevice::Text))
         return 0;

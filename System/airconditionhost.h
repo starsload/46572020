@@ -103,12 +103,6 @@ private:
 	QSqlDatabase tmpDB;
 	QSqlDatabase *db;
 
-//    int CtreatClient(int RoomID);//创建并初始化到mClientList里,num++ 并与host建立关联
-
-//    void ReachTargetTemperature(int RoomID);
-
-//    void TimeOff(int RoomId,float FeeRate);
-
     double defaultTargetTemp; //默认目标温度
     double maxTargetTemp; //最高目标温度
     double minTargetTemp; //最低目标温度

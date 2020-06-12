@@ -4,6 +4,7 @@
 #include "UseDatabase.h"
 #include <QFile>
 
+
 class DetailRecords {
 public:
     int roomId;     //房间号
@@ -15,6 +16,7 @@ public:
 	void Initial(int RoomId, QVector<struct DetailRecord>&);
 
 	int PrintAsFile();//打印详单
+
 };
 
 

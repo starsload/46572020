@@ -153,7 +153,7 @@ void ChartController::processPacket(QByteArray body){
 }
 
 void ChartController::PrintReport(const Report &r){
-	airConditionHost->PrintReport(r);
+	airConditionHost->RequestPrintReport(r);
 }
 
 void ChartController::QueryReport(int RoomId, QString date){
