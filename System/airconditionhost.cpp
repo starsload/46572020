@@ -33,10 +33,11 @@ void AirConditionHost::PowerOn() {
 	qDebug() << Date;
 	InsertACCchart(Date,*db);
 
-    CreatChartController();
+
     CreateWaitList();
     CreateServiceList();
 	CreateMonitor();
+	CreatChartController();
 	CreateSchduleController();
 	//qDebug()<<"请输入ManagerClient的端口：";
     QTextStream input(stdin);
@@ -152,7 +153,8 @@ void AirConditionHost::guestConnectHndle(){
 
 void AirConditionHost::CreatChartController() {
     chartConstroller = new ChartController(this);
-    chartConstroller->setAirConditionHost(this);
+	chartConstroller->setAirConditionHostRelation(this);
+	chartConstroller->setMonitorRelation(monitor);
 }
 
 void AirConditionHost::CreateMonitor(){

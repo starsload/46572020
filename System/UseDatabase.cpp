@@ -54,7 +54,7 @@ void InsertACCchart(QString Date,QSqlDatabase db)//ACCchart表插入语句，参
 
     int count = query.value(0).toInt();
     if(count==0){
-        for(int i=0;i<5;i++){
+		for(int i=1;i<6;i++){
             //定义SQL语句
            QString str1=QString("use ACCMS "
                                 "insert into ACC_chart(ROOM_ID,SWITCH_ONOFF_TIME,SERVICE_TIME,"

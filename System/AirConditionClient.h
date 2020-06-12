@@ -19,21 +19,31 @@ class AirConditionClient: public QObject{
 
 private:
         int RoomId;//房间号
+
         int work_state;//工作状态,0休眠，1等待，2运行
 
         int mode;//工作模式
+
         int TargetTemp;//目标温度
 
 		float PreTemp;//当前温度
 
         float FeeRate;//费率
+
         float Fee;//当前费用
+
         float TotalFee;//总费用
+
         int FanSpeed;//风速
+
         int priority;//优先级
+
         int Duration;//使用时长
+
         QDateTime get_server_time;//获得服务时间戳
+
         QDateTime stop_server_time;//停止服务时间戳
+
 		QTimer *TimeSliceTimer;//用于时间片的计时器
 
 		QTimer *updateTimer; //被服务时，更新温度、费用的计时器
@@ -70,8 +80,10 @@ public:
 		QString Getstop_server_time();
 		void Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,
 						float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
-        void SetSpeed(int FanSpeed);//调节风速
-        void SetTargetTemp(int TargetTemp);//调节温度
+
+		void SetSpeed(int FanSpeed);//调节风速
+
+		void SetTargetTemp(int TargetTemp);//调节温度
 
 		void SetPreTemp(float temp);// 修改当前温度
 

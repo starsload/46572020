@@ -45,17 +45,28 @@ private slots:
 
 	void failToConnectServer();
 
+	void onMonitor();
+
 private:
 	Ui::MainWindow *ui; //监视主页面
+
 	InitialPage *initialPage; //初始化页面
+
 	QueryInvoiceInputDialog *queryInvoiceInputDialg; //账单查询页面
+
 	InvoicePage *invoicePage; //账单页面
+
 	ReportPage *reportPage; //报表页面
+
 	QTcpSocket *socket; //套接字
 
 	InitialParameters parameters;
 
 	QTimer socketConnectTimer;
+
+	const int monitorInterval = 10 * 1000;
+
+	QTimer monitorTimer;
 
 	QMessageBox *msgBox;
 
@@ -64,5 +75,7 @@ private:
 	void sendJSON(QJsonObject ojson);
 
 	void processPacket(QByteArray body);
+
+	QString parseRoomState(QJsonObject);
 };
 #endif // MAINWINDOW_H

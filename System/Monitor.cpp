@@ -21,14 +21,16 @@ AirConditionClient* Monitor::SetupMonitor(int RoomId)//管理员监视用，传�
 {
 	AirConditionClient* client = NULL;
 	client = mWaitList->FindACC(RoomId);
-	if(client == NULL){//在等待队列
+	if(client != NULL){//在等待队列
 		return client;
 	}
 	else{//在服务队列
 		client = mServiceList->FindACC(RoomId);
-		return client;
+		if(client != NULL)
+			return client;
+		else
+			return nullptr;
 	}
-
 }
 
 ReturnCheckFeeAndTemp Monitor::CheckRoomFee(int RoomId) //住户监视用，传入房间号，返回费用和当前温度

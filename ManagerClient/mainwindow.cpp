@@ -34,7 +34,7 @@ void MainWindow::initialHandle(InitialParameters para) {
 }
 
 //连接建立成功
-void MainWindow::onConnected(){
+void MainWindow::onConnected() {
 	socketConnectTimer.stop();
 	connect(socket, SIGNAL(readyRead()), this, SLOT(newServerMessage()));
 	//传到服务器
@@ -53,7 +53,7 @@ void MainWindow::onConnected(){
 }
 
 //接收服务器消息
-void MainWindow::newServerMessage(){
+void MainWindow::newServerMessage() {
 	using namespace SocketConstants;
 	while(socket->bytesAvailable() > 0) {
 		QByteArray head;
@@ -62,7 +62,6 @@ void MainWindow::newServerMessage(){
 		if(head.size() == 0){
 			continue;
 		}
-//		qDebug()<<"收到服务器的信息为："<<head;
 		int length;
 		memcpy(&length, head.data(), sizeof (length));
 		for(int i = 0; i < length; i++)
@@ -94,9 +93,122 @@ void MainWindow::processPacket(QByteArray body){
 		break;
 	}
 	case START_UP_OK:
+	{
 		qDebug()<<"start up ok!";
+		connect(&monitorTimer, &QTimer::timeout, this, &MainWindow::onMonitor);
+		monitorTimer.start(monitorInterval);
 		break;
 	}
+	case CHECK_ROOM_STATE_OK:
+	{
+		for(int i=1; i < 6; i++){
+			QJsonObject t;
+			t = ojson.value(QString(i)).toObject();
+			QString display;
+			display = parseRoomState(t);
+			switch(i) {
+			case 1:
+				this->ui->textEdit_1->setText(display);
+				break;
+			case 2:
+				this->ui->textEdit_2->setText(display);
+				break;
+			case 3:
+				this->ui->textEdit_3->setText(display);
+				break;
+			case 4:
+				this->ui->textEdit_4->setText(display);
+				break;
+			case 5:
+				this->ui->textEdit_5->setText(display);
+				break;
+			}
+		}
+		break;
+	}
+	}
+}
+
+QString MainWindow::parseRoomState(QJsonObject ojson){
+	using namespace SocketConstants;
+	QString result;
+
+	QString t;
+	int state = ojson.value(ROOM_STATE).toInt();
+	switch(state) {
+	case 0:
+		t = QString("空调状态：%1\n").arg("关机");
+		break;
+	case 1:
+		t = QString("空调状态：%1\n").arg("等待");
+		break;
+	case 2:
+		t = QString("空调状态：%1\n").arg("运行");
+		break;
+	case 3:
+		t = QString("空调状态：%1\n").arg("回温");
+		break;
+	}
+	result.append(t);
+
+	double curTemp = ojson.value(CUR_TEMP).toDouble();
+	t = QString("当前室温：%1\n").arg(QString::number(curTemp, 'f', 1));
+	if(curTemp < 0)
+		t = QString("当前室温：%1\n").arg("未知");
+	result.append(t);
+
+	double targetTemp = ojson.value(TARGET_TEMP).toDouble();
+	t = QString("目标温度：%1\n").arg(QString::number(targetTemp, 'f', 1));
+	if(targetTemp < 0)
+		t = QString("目标温度：%1\n").arg("未知");
+	result.append(t);
+
+	int speed = ojson.value(CUR_SPEED).toInt();
+	switch(speed){
+	case 0:
+		t = QString("当前风速：%1\n").arg("低");
+		break;
+	case 1:
+		t = QString("当前风速：%1\n").arg("中");
+		break;
+	case 2:
+		t = QString("当前风速：%1\n").arg("高");
+		break;
+	}
+	if(speed < 0)
+		t = QString("当前风速：%1\n").arg("未知");
+	result.append(t);
+
+	double fee = ojson.value(CUR_FEE).toDouble();
+	t = QString("当前费用：%1\n").arg(QString::number(fee, 'f', 2));
+	if(fee < 0)
+		t = QString("当前费用：%1\n").arg("未知");
+	result.append(t);
+
+	double totalFee = ojson.value(TOTAL_FEE).toDouble();
+	t = QString("累计费用：%1\n").arg(QString::number(totalFee, 'f', 2));
+	if(totalFee < 0)
+		t = QString("累计费用：%1\n").arg("未知");
+	result.append(t);
+
+	return result;
+}
+
+/*
+空调状态：（0关机、1等待、2运行、3回温）
+当前室温：
+目标温度：
+当前风速：
+当前费用：
+累计费用：
+*/
+
+// 提出CheckRoomState请求
+void MainWindow::onMonitor() {
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CHECK_ROOM_STATE);
+	sendJSON(ojson);
 }
 
 //点击“生成账单”
@@ -112,8 +224,6 @@ void MainWindow::on_ptn_makeInvoice_clicked()
 //返回Room_Id之后
 void MainWindow::queryInputFinish(int Room_Id)
 {
-
-
 	invoicePage = new InvoicePage(this, Room_Id);
 	invoicePage->show();
 }
@@ -125,14 +235,14 @@ void MainWindow::on_ptn_makeReport_clicked()
 	reportPage->show();
 }
 
-void MainWindow::sendJSON(QJsonObject ojson){
+void MainWindow::sendJSON(QJsonObject ojson) {
 	QJsonDocument doc;
 	doc.setObject(ojson);
 	QByteArray msg = doc.toJson(QJsonDocument::Compact);
 	sendPacket(msg);
 }
 
-void MainWindow::sendPacket(QByteArray body){
+void MainWindow::sendPacket(QByteArray body) {
 	QByteArray head;
 	// 构造头部
 	int  length = body.size();

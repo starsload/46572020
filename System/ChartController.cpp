@@ -6,8 +6,12 @@ ChartController::ChartController(QObject *parent):
 {
 }
 
-void ChartController::setAirConditionHost(AirConditionHost *host){
+void ChartController::setAirConditionHostRelation(AirConditionHost *host){
 	airConditionHost = host;
+}
+
+void ChartController::setMonitorRelation(Monitor *m){
+	monitor = m;
 }
 
 void ChartController::setSocket(QTcpSocket *s) {
@@ -58,23 +62,84 @@ void ChartController::processPacket(QByteArray body){
 		double lowFeeRate = ojson.value(LOW_FEE_RATE).toDouble();
 		int mode = ojson.value(WORK_MODE).toInt();
 		int speed = ojson.value(DEFAULT_SPEED).toInt();
-		airConditionHost->setPara(defaultTargetTemp, maxTargetTemp, minTargetTemp,
-								  highFeeRate, middleFeeRate, lowFeeRate, mode, speed);
-		QJsonObject ojson;
-		ojson.insert(TYPE, SET_PARA_OK);
-		sendJSON(ojson);
+		setPara(defaultTargetTemp, maxTargetTemp, minTargetTemp,
+				highFeeRate, middleFeeRate, lowFeeRate, mode, speed);
 		break;
 	}
 	case START_UP:
 	{
-		airConditionHost->startUp();
-		QJsonObject ojson;
-		ojson.insert(TYPE, START_UP_OK);
-		sendJSON(ojson);
+		startUp();
+		break;
+	}
+	case CHECK_ROOM_STATE:
+	{
+		CheckRoomState();
 		break;
 	}
 	}
 
+}
+
+void ChartController::setPara(int defaultTargetTemp, int maxTargetTemp, int minTargetTemp,
+double highFeeRate, double middleFeeRate, double lowFeeRate, int mode, int speed){
+	airConditionHost->setPara(defaultTargetTemp, maxTargetTemp, minTargetTemp,
+							  highFeeRate, middleFeeRate, lowFeeRate, mode, speed);
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, SET_PARA_OK);
+	sendJSON(ojson);
+}
+
+void ChartController::startUp(){
+	airConditionHost->startUp();
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, START_UP_OK);
+	sendJSON(ojson);
+}
+
+void ChartController::CheckRoomState(){
+	using namespace SocketConstants;
+	QJsonObject ojson;
+	ojson.insert(TYPE, CHECK_ROOM_STATE_OK);
+	for(int i=1;i<6;i++){
+		AirConditionClient *client;
+		QJsonObject tjson;
+		client = monitor->SetupMonitor(i);
+		if (client == nullptr){
+			tjson.insert(ROOM_STATE, 0);
+			tjson.insert(CUR_TEMP, -1);
+			tjson.insert(TARGET_TEMP, -1);
+			tjson.insert(CUR_SPEED, -1);
+			tjson.insert(CUR_FEE, -1);
+			tjson.insert(TOTAL_FEE, -1);
+		}
+		else{
+			int state;
+			state = client->GetState();
+			if(state == 0)
+				state = 3;
+			double curTemp;
+			curTemp = client->GetPreTemp();
+			double targetTemp;
+			targetTemp = client->GetTargetTemp();
+			int speed;
+			speed = client->GetFanSpeed();
+			double fee;
+			fee = client->GetFee();
+			double totalFee;
+			totalFee = client->GetTotalFee();
+
+			tjson.insert(ROOM_STATE, state);
+			tjson.insert(CUR_TEMP, curTemp);
+			tjson.insert(TARGET_TEMP, targetTemp);
+			tjson.insert(CUR_SPEED, speed);
+			tjson.insert(CUR_FEE, fee);
+			tjson.insert(TOTAL_FEE, totalFee);
+		}
+		ojson.insert(QString(i), tjson);
+	}
+	sendJSON(ojson);
 }
 
 void ChartController::sendJSON(QJsonObject ojson){

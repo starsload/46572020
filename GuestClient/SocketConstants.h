@@ -28,13 +28,16 @@ static const QString TARGET_TEMP = "target temp"; //double
 static const QString CUR_SPEED = "cur speed"; //int 0为低，1为中，2为高
 static const QString TOTAL_FEE = "total fee"; //double
 static const QString FAN_SPEED = "fan speed"; //int 0为低，1为中，2为高
+static const QString LIST_STATE = "list state"; //管理员监控返回的房间状态列表
+static const QString ROOM_STATE = "room state"; //房间状态（0关机、1等待、2运行、3回温）
+
 
 //操作TYPE的种类
 //ChartController
 static const int SET_PARA = 0; //主机初始化
 static const int SET_PARA_OK = 1; //主机初始化完成
 static const int START_UP = 2; //主机开机
-//static const int START_UP_OK = 3; //主机开机
+static const int START_UP_OK = 3; //主机开机
 
 //ScheduleController
 static const int REQUEST_ON = 4; // GuestClient开机
@@ -53,8 +56,8 @@ static const int REQUEST_FEE_OK = 16; // 查询费用返回
 static const int STOP_RUNNING = 17; // 达到目标温度，停止工作
 static const int STATE_IDLE = 18; // 因为调度，进入空闲状态
 static const int STATE_WORK = 19; // 因为调度，进入工作状态
+static const int CHECK_ROOM_STATE = 20; // 管理员启动监视各房间空调状态
+static const int CHECK_ROOM_STATE_OK = 21; // 返回
 };
-
-
 
 #endif // GUSTSOCKTCONSTANTS_H

@@ -8,23 +8,47 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include "Monitor.h"
 
 class AirConditionHost;
+
 class ChartController:public QObject
 {
 	Q_OBJECT
 
 public:
 	explicit ChartController(QObject *parent = nullptr);
+
 	void setSocket(QTcpSocket* s);
-	void setAirConditionHost(AirConditionHost *host);
+
+	void setAirConditionHostRelation(AirConditionHost *host);
+
+	void setMonitorRelation(Monitor *m);
+
 	void RequestOff(int RoomId);
+
+	void setPara(int defaultTargetTemp,
+				 int maxTargetTemp,
+				 int minTargetTemp,
+				 double highFeeRate,
+				 double middleFeeRate,
+				 double lowFeeRate,
+				 int mode,
+				 int speed);
+
+	void startUp();
+
+	void CheckRoomState();
+
 private slots:
 	void listenToManagerClient();
 
 private:
 	QTcpSocket *socket;
+
 	AirConditionHost *airConditionHost;
+
+	Monitor *monitor;
 
 	void sendPacket(QByteArray body);
 	void sendJSON(QJsonObject ojson);
