@@ -29,48 +29,28 @@ int ServiceList::GetMinPriority()
         return min;
 }
 
+
+//修改了下面的整个函数
 AirConditionClient* ServiceList::GetAndPopVictim()//排除优先级最低的
 {
-//        vector<AirConditionClient*>::iterator it = mClientList.begin();
-//        int min = mClientList[0]->GetPriority();
-//        int time = 0;
-//        for (; it != mClientList.end(); it++)
-//        {
-//                if ((*it)->GetPriority() < min)
-//                {
-//                        min = (*it)->GetPriority();
-//                        if ((*it)->GetDuration() > time)
-//                        {
-//                                time =(*it)->GetDuration();
-//                        }
-//                }
-//        }
-//        for (; it != mClientList.end(); it++)
-//        {
-//              if ((*it)->GetPriority() == min)
-//                {
-//                        if ((*it)->GetDuration() == time)
-//                        {
-//                                AirConditionClient* re = *it;
-//                                mClientList.erase(it);
-//                                return re;
-//                        }
-//                }
-//        }
-
 		vector<AirConditionClient*>::iterator it = mClientList.begin();
-		AirConditionClient *victim = *it;
-		int min = mClientList[0]->GetPriority();
+
+
+        AirConditionClient *victim = NULL;
+        int min = GetMinPriority();
 		int time = 0;
 		for (; it != mClientList.end(); it++)
 		{
-				if ((*it)->GetPriority() < min)
+                if ((*it)->GetPriority() == min)
 				{
-						min = (*it)->GetPriority();
+
 						victim = *it;
+                        mClientList.erase(it);
+                        return victim;
+
 				}
 		}
-		return victim;
+
 }
 
 bool ServiceList::isEmpty()
@@ -130,8 +110,8 @@ int ServiceList::getSize(){
 }
 
 void ServiceList::debug(){
-	qDebug()<<"ServiceList的内容：";
+    qDebug()<<"ServiceList：";
 	for(auto q : mClientList){
-		qDebug()<<QString("分控机，%1号房间").arg(q->GetRoomId());
+        qDebug()<<QString("client，%1 room").arg(q->GetRoomId());
 	}
 }

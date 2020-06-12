@@ -67,7 +67,7 @@ void ScheduleController::listenToGuestClient(QTcpSocket *socket){
 		for(int i = 0; i < length; i++)
 			body.append(socket->read(1));
 		QString out = body;
-		qDebug()<<"收到的数据包信息为：\n"<<out;
+        qDebug()<<"databag：\n"<<out;
 		//对body进行处理
 		processPacket(body);
 	}
@@ -78,7 +78,7 @@ void ScheduleController::processPacket(QByteArray body){
 	QJsonParseError e;
 	QJsonDocument doc = QJsonDocument::fromJson(body, &e);
 	if(e.error != QJsonParseError::NoError) {
-		qDebug() << "JSON格式错误";
+        qDebug() << "JSON error";
 		return;
 	}
 
@@ -145,13 +145,13 @@ void ScheduleController::RequestOn(int RoomId,double CurrentRoomTemp){
 
 void ScheduleController::RequestOff(int RoomId){
 	airConditionHost->TurnOff(RoomId);
-	qDebug()<<QString("%0号房间RequestOff成功").arg(RoomId);
+    qDebug()<<QString("%0 room RequestOff complete").arg(RoomId);
 }
 
 void ScheduleController::RequestFee(int RoomId){
 	ReturnCheckFeeAndTemp result;
 	result = monitor->CheckRoomFee(RoomId);
-	qDebug()<<QString("%0号房间RequestFee成功").arg(RoomId);
+    qDebug()<<QString("%0 room RequestFee complete").arg(RoomId);
 
 	using namespace SocketConstants;
 	QJsonObject ojson;
@@ -169,14 +169,14 @@ void ScheduleController::RequestService(int RoomId, float curTemp){
         QJsonObject ojson;
         ojson.insert(TYPE, REQUEST_SERVICE_OK);
         sendJSON(ojson);
-        qDebug()<<QString("%0号房间请求服务成功").arg(RoomId);
+        qDebug()<<QString("%0 room served").arg(RoomId);
     }
     else {//补全不能提供服务部分
 		using namespace SocketConstants;
 		QJsonObject ojson;
 		ojson.insert(TYPE, REQUEST_SERVICE_FAIL);
 		sendJSON(ojson);
-		qDebug()<<QString("%0号房间请求服务失败").arg(RoomId);
+        qDebug()<<QString("%0 room wait").arg(RoomId);
     }
 
 }
@@ -187,7 +187,7 @@ void ScheduleController::ChangeFanSpeed(int RoomId, int Speed){
 	QJsonObject ojson;
 	ojson.insert(TYPE, CHANGE_FAN_SPEED_OK);
 	sendJSON(ojson);
-	qDebug()<<QString("%0号房间修改风速成功,风速等级为%1").arg(RoomId).arg(Speed);
+    qDebug()<<QString("%0 room change FanSpeed,FanSpeed:%1").arg(RoomId).arg(Speed);
 }
 
 void ScheduleController::ChangeTargetTemp(int RoomId, float targetTemp){
@@ -196,7 +196,7 @@ void ScheduleController::ChangeTargetTemp(int RoomId, float targetTemp){
 	QJsonObject ojson;
 	ojson.insert(TYPE, CHANGE_TARGET_TEMP_OK);
 	sendJSON(ojson);
-	qDebug()<<QString("%0号房间修改目标温度成功,目标温度为%1").arg(RoomId).arg(targetTemp);
+    qDebug()<<QString("%0 room change temp,temp:%1").arg(RoomId).arg(targetTemp);
 }
 
 void ScheduleController::sendJSON(QJsonObject ojson){

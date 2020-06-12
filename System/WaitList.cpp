@@ -98,8 +98,8 @@ AirConditionClient* WaitList::FindACC(int RoomId)
 }
 
 void WaitList::debug(){
-	qDebug()<<"WaitList的内容：";
+    qDebug()<<"WaitList：";
 	for(auto q : mClientList){
-		qDebug()<<QString("分控机，%1号房间").arg(q->GetRoomId());
+        qDebug()<<QString("client，%1 room").arg(q->GetRoomId());
 	}
 }

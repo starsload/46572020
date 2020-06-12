@@ -1,4 +1,4 @@
-#include"mythread.h"
+﻿#include"mythread.h"
 
 MyThread::MyThread(qintptr socketDescriptor, QThread *parent)
 	: QThread(parent)
@@ -18,6 +18,6 @@ void MyThread::run()
 void MyThread::ReadData()
 {
 	socket->read(buffer, MAX_SIZE);
-	qDebug()<<"收到的数据为：";
+    qDebug()<<"收到的数据为：";
 	qDebug()<<buffer;
 }

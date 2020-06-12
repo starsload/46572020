@@ -20,6 +20,7 @@ SOURCES += \
         AirConditionClient.cpp \
         AirConditionHost.cpp \
         ChartController.cpp \
+        DetailRecords.cpp \
         GuestClientSocket.cpp \
         Monitor.cpp \
         ScheduleController.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     AirConditionClient.h \
     AirConditionHost.h \
     ChartController.h \
+    DetailRecords.h \
     GuestClientSocket.h \
     Monitor.h \
     ScheduleController.h \

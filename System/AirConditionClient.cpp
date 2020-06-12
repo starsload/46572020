@@ -1,4 +1,4 @@
-#include "AirConditionClient.h"
+﻿#include "AirConditionClient.h"
 #include "AirConditionHost.h"
 
 AirConditionClient::AirConditionClient(){
@@ -35,6 +35,10 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
     this->FanSpeed = FanSpeed;
 	this->priority = FanSpeed + 1;
     this->Duration = 0;
+
+    //修改
+    this->work_state = STATE_WAIT;
+
     this->get_server_time = QDateTime::currentDateTime();
     this->stop_server_time = QDateTime::currentDateTime();
 }

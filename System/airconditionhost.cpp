@@ -18,11 +18,11 @@ void AirConditionHost::PowerOn() {
 	tmpDB = QSqlDatabase::addDatabase("QODBC");
 	db = &tmpDB;
 	qDebug()<<"ODBC driver is valid? "<<db->isValid();
-	QString dsn = QString::fromLocal8Bit("ACCMS_R");     //数据源名称
-	db->setHostName("112.74.57.177");
+    QString dsn = QString::fromLocal8Bit("ACCMS");     //数据源名称
+    db->setHostName("LAPTOP-3H84DA7S");
 	db->setDatabaseName(dsn);                            //设置数据源名称
-	db->setUserName("sa");                               //登录用户
-	db->setPassword("308eWORK");                         //密码
+    db->setUserName("acc_manager");                               //登录用户
+    db->setPassword("123456");                         //密码
 	if (!db->open()){
 		qDebug()<<"数据库打开失败";
 		qDebug()<<db->lastError().text();
@@ -47,21 +47,21 @@ void AirConditionHost::PowerOn() {
             this, SLOT(managerConnectHandle()));
     if(!server->listen(QHostAddress::Any, port))
     {
-        qDebug()<<"服务器监听失败";
+        qDebug()<<"Server listener failed!";
         return;
     }
     else
     {
-        qDebug()<<"开始等待管理员";
+        qDebug()<<"Wait for the manager:";
     }
 }
 
 void AirConditionHost::managerConnectHandle() {
     QTcpSocket *managerSocket = server->nextPendingConnection();
     if(!managerSocket->isOpen())
-        qDebug()<<"连接建立失败";
+        qDebug()<<"connect failed";
     else
-        qDebug()<<"管理员已连接";
+        qDebug()<<"manager connected";
     chartConstroller->setSocket(managerSocket);
     disconnect(server, SIGNAL(newConnection()),
             this, SLOT(managerConnectHandle()));
@@ -129,7 +129,7 @@ double highFeeRate, double middleFeeRate, double lowFeeRate, int mode, int speed
 
 void AirConditionHost::startUp() {
 	system("cls");
-	//qDebug()<<"请输入GuestClientClient的端口：";
+    //qDebug()<<"please GuestClientClient的端口：";
     QTextStream input(stdin);
 	quint16 port = 6666;
 	//input >> port;
@@ -137,16 +137,16 @@ void AirConditionHost::startUp() {
             this, SLOT(guestConnectHndle()));
     if(!server->listen(QHostAddress::Any, port))
     {
-        qDebug()<<"服务器监听失败";
+        qDebug()<<"server listen failed";
         return;
     }
     else{
-        qDebug()<<"开始等待顾客";
+        qDebug()<<"wait for guest";
     }
 }
 
 void AirConditionHost::guestConnectHndle(){
-    qDebug()<<"有顾客客户端连接";
+    qDebug()<<"guest connect";
     QTcpSocket *socket = server->nextPendingConnection();
     scheduleController->addGuestSocket(socket);
 }
@@ -189,13 +189,14 @@ int AirConditionHost::ChangeTargetTemp(int RoomID,float Temp)//设置温度 先�
         mclient->SetTargetTemp(Temp);
     }
     UpdateChangeTempTime(RoomID,this->Date,*db);//db操作
+    return 0;
 }
 
 int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 {
 	qDebug()<<"=======================================================";
-	qDebug()<<QString("%1号房间改变风速，触发调度").arg(RoomID);
-	qDebug()<<QString("改变后的风速为：%1").arg(Speed);
+    qDebug()<<QString("%1 room change FanSpeed,schedule").arg(RoomID);
+    qDebug()<<QString("FanSpeed:%1").arg(Speed);
 	waitList->debug();
 	serviceList->debug();
 	qDebug()<<"=======================================================";
@@ -203,23 +204,24 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
     AirConditionClient* mclient;
     AirConditionClient* mVictimclient;
     AirConditionClient* mFrontclient;
-    if (mclient = waitList->FindACC(RoomID))
+    if (mclient = waitList->FindACC(RoomID))//在等待队列
     {
 		if(mclient->GetState() == AirConditionClient::STATE_SLEEP)//休眠
             mclient->SetSpeed(Speed);
-        else {
+        else {//等待状态
 			mclient->SetSpeed(Speed);
-			if (!serviceList->isEmpty() && mclient->GetPriority() > serviceList->GetMinPriority())//C:
+            if (/*!serviceList->isEmpty() &&*/ mclient->GetPriority() > serviceList->GetMinPriority())//C:调风后优先级大于服务队列最小的
             {
+                //选择并取出牺牲者
                 mVictimclient = serviceList->GetAndPopVictim();//返回一个拷贝对象
 				serviceList->PopACC(mVictimclient->GetRoomId());
 				waitList->PushACC(mVictimclient);
                 mVictimclient->StopRunning();
 				scheduleController->SendIdleMsg(mVictimclient->GetRoomId());
 
+                //将该分控机移入
                 mclient=waitList->PopACC(mclient->GetRoomId());//返回一个拷贝对象
                 serviceList->PushACC(mclient);
-
                 mclient->SetSpeed(Speed);
                 mclient->StartRunning();
 				mclient->DestributeRunTime();
@@ -230,20 +232,22 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
             }
         }
     }
-	else if (mclient = serviceList->FindACC(RoomID))
+    else if (mclient = serviceList->FindACC(RoomID))//在服务队列
     {
-		if(waitList->ReadyNum() == 0)//E:
+        if(waitList->ReadyNum() == 0)//E:等待队列没有等待运行的分控机
 			mclient->SetSpeed(Speed);
 		else {
-			mclient->SetSpeed(Speed);
-			if(mclient->GetPriority() < waitList->GetMaxPriority()) {//B:
+            mclient->SetSpeed(Speed);//设置风速改变优先级
+            if(mclient->GetPriority() < waitList->GetMaxPriority()) {//B:等待队列有等待运行的分控机且优先级高
 
-				mclient = serviceList->PopACC(mclient->GetRoomId());//返回值是类的拷贝
+                //将牺牲者移出
+                serviceList->PopACC(RoomID);//返回值是类的拷贝
 				waitList->PushACC(mclient);
-				mclient->SetSpeed(Speed);
+                //mclient->SetSpeed(Speed);
 				mclient->StopRunning();
 				scheduleController->SendIdleMsg(mclient->GetRoomId());
 
+                //将优先级高的分控机移入
 				mFrontclient = waitList->GetAndPopFrontACC();
 				serviceList->PushACC(mFrontclient);
 				mFrontclient->StartRunning();
@@ -267,6 +271,7 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 		}
     }
     UpdateChangeFanSpeedTime(RoomID,this->Date,*db);//db操作
+    return 0;
 }
 
 //void AirConditionHost::ReachTargetTemperature(int RoomID)//达到目标后提出服务队列到等待队列 并给调度controller发消息
@@ -335,7 +340,7 @@ bool AirConditionHost::RequestService(int RoomId, float PreTemp) {
 	bool flag;
     if (!serviceList->isFull()) //服务队列未满
     {
-        mclient = waitList->PopACC(RoomId);     //从等待队列弹出client
+        waitList->PopACC(RoomId);     //从等待队列弹出client
         serviceList->PushACC(mclient);  //服务队列加入mclient
         mclient->StartRunning();    //mclient开始运行
         mclient->DestributeRunTime();   //给mclient分配时间片
@@ -344,11 +349,15 @@ bool AirConditionHost::RequestService(int RoomId, float PreTemp) {
 
 		flag = true;
     }
-    else if(mclient->GetPriority()> serviceList->GetMinPriority()) {    //mclient的优先级大于服务队列中的最小优先级
+    else if(mclient->GetPriority()> serviceList->GetMinPriority()) { //mclient的优先级大于服务队列中的最小优先级
         mVictimclient = serviceList->GetAndPopVictim();//找到牺牲者
         waitList->PushACC(mVictimclient);   //将牺牲者加入等待队列
         mVictimclient->StopRunning();   //牺牲者停止服务
-        mclient = waitList->PopACC(mclient->GetRoomId());   //从等待队列移出mclient
+
+        //修改
+        scheduleController->SendIdleMsg(mVictimclient->GetRoomId());
+
+        waitList->PopACC(mclient->GetRoomId());   //从等待队列移出mclient
         serviceList->PushACC(mclient);  //mclient加入服务队列
         mclient->StartRunning();    //mclient开始服务
         mclient->DestributeRunTime();   //mclient分配时间片
@@ -373,8 +382,8 @@ bool AirConditionHost::RequestService(int RoomId, float PreTemp) {
     }
 
 	qDebug()<<"=======================================================";
-	qDebug()<<QString("%1号房间提出RequestService请求，触发调度").arg(RoomId);
-	qDebug()<<QString("服务队列中有%1个分控机").arg(serviceList->getSize());
+    qDebug()<<QString("%1 room pull RequestService,schedule").arg(RoomId);
+    qDebug()<<QString("serviecList have %1 client").arg(serviceList->getSize());
 	qDebug()<<"=======================================================";
 
 	return flag;
@@ -411,6 +420,8 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 		tempFee = client->GetFee();
 		tempDuration = client->GetDuration();
 
+        waitList->PopACC(RoomId);
+
 	}
 	else {//在服务队列
 		//将分控机从服务队列移出并保存参数
@@ -427,8 +438,12 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 				serviceList->PushACC(temp);
 				temp->StartRunning();
 				temp->DestributeRunTime();
+
+                scheduleController->SendWorkMsg(temp->GetRoomId());
+
 				InsertUseData(temp->GetRoomId(),temp->Getget_server_time(),temp->Getstop_server_time(),temp->GetTargetTemp(),
 								 temp->GetFanSpeed(),temp->GetFeeRate(),temp->GetDuration(),temp->GetFee(),*db);
+
 			}
 		}
 		else //两个队列都不在，说明之前已经关机过，可能是断连的情况
@@ -444,12 +459,13 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 	UpdateChangeScheduleTime(RoomId,this->Date,*db);
 
 	delete client;//删掉分控机
+    client = NULL;
 }
 
 void AirConditionHost:: TimeOff(int RoomId)//时间片到的调度
 {
 	qDebug()<<"=======================================================";
-	qDebug()<<QString("%1号房间时间片到，触发时间片调度").arg(RoomId);
+    qDebug()<<QString("%1 room time off，schedule").arg(RoomId);
 	waitList->debug();
 	serviceList->debug();
 	qDebug()<<"=======================================================";
@@ -503,7 +519,7 @@ void AirConditionHost:: TimeOff(int RoomId)//时间片到的调度
 void AirConditionHost::RearchTargetTemp(int RoomId)//到达目标温度调度
 {
 	qDebug()<<"=======================================================";
-	qDebug()<<QString("%1号房间达到目标温度，触发调度").arg(RoomId);
+    qDebug()<<QString("%1 room reach temp,schedule").arg(RoomId);
 
 	//找出分控机对象
 	AirConditionClient *client;
@@ -532,7 +548,6 @@ void AirConditionHost::RearchTargetTemp(int RoomId)//到达目标温度调度
 
 	//将完成服务的分控机移入等待队列
 	waitList->PushACC(client);
-//	waitList->ReadyNum();
 
 	//数据库操作
 	InsertUseData(client->GetRoomId(),client->Getget_server_time(),client->Getstop_server_time(),client->GetTargetTemp(),
