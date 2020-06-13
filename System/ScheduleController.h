@@ -59,8 +59,12 @@ private:
 	GuestClientSocket* curSocket;
 
 	void sendPacket(QByteArray body);
+
 	void sendJSON(QJsonObject ojson);
+
 	void processPacket(QByteArray body);
+
+	void resetSocketByRoomId(int RoomId);
 };
 
 #endif // SCHEDULECONTROLLER_H

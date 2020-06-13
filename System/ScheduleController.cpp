@@ -164,16 +164,11 @@ void ScheduleController::RequestFee(int RoomId){
 
 //TODO:补全不能提供服务部分
 void ScheduleController::RequestService(int RoomId, float curTemp){
-	for(auto sock : allSockets){
-		if(sock->Room_id == RoomId){
-			curSocket = sock;
-		}
-	}
-
     if(airConditionHost->RequestService(RoomId,curTemp)){//可以提供服务
         using namespace SocketConstants;
         QJsonObject ojson;
         ojson.insert(TYPE, REQUEST_SERVICE_OK);
+		resetSocketByRoomId(RoomId);
         sendJSON(ojson);
         qDebug()<<QString("%0 room served").arg(RoomId);
     }
@@ -181,6 +176,7 @@ void ScheduleController::RequestService(int RoomId, float curTemp){
 		using namespace SocketConstants;
 		QJsonObject ojson;
 		ojson.insert(TYPE, REQUEST_SERVICE_FAIL);
+		resetSocketByRoomId(RoomId);
 		sendJSON(ojson);
         qDebug()<<QString("%0 room wait").arg(RoomId);
     }
@@ -192,6 +188,7 @@ void ScheduleController::ChangeFanSpeed(int RoomId, int Speed){
 	using namespace SocketConstants;
 	QJsonObject ojson;
 	ojson.insert(TYPE, CHANGE_FAN_SPEED_OK);
+	resetSocketByRoomId(RoomId);
 	sendJSON(ojson);
     qDebug()<<QString("%0 room change FanSpeed,FanSpeed:%1").arg(RoomId).arg(Speed);
 }
@@ -201,6 +198,7 @@ void ScheduleController::ChangeTargetTemp(int RoomId, float targetTemp){
 	using namespace SocketConstants;
 	QJsonObject ojson;
 	ojson.insert(TYPE, CHANGE_TARGET_TEMP_OK);
+	resetSocketByRoomId(RoomId);
 	sendJSON(ojson);
     qDebug()<<QString("%0 room change temp,temp:%1").arg(RoomId).arg(targetTemp);
 }
@@ -209,7 +207,7 @@ void ScheduleController::sendJSON(QJsonObject ojson){
 	QJsonDocument doc;
 	doc.setObject(ojson);
 	QByteArray msg = doc.toJson(QJsonDocument::Compact);
-	qDebug()<<"向"<<curSocket->Room_id<<"发送\n"<<msg;
+	qDebug() << "向" << curSocket->Room_id << "发送\n" << msg;
 	sendPacket(msg);
 }
 
@@ -267,4 +265,12 @@ void ScheduleController::SendIdleMsg(int RoomId){
 	QJsonObject ojson;
 	ojson.insert(TYPE, STATE_IDLE);
 	sendJSON(ojson);
+}
+
+void ScheduleController::resetSocketByRoomId(int RoomId){
+	for(auto sock : allSockets){
+		if(sock->Room_id == RoomId){
+			curSocket = sock;
+		}
+	}
 }
