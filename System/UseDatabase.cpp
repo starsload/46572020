@@ -150,20 +150,15 @@ void UpdateServiceTime(int RoomId,float ServiceTime,QString Date,QSqlDatabase db
 	query.exec(str);
 }
 
-void UpdateTotalFee(int RoomId,float Fee,QString Date,QSqlDatabase db)//更新总费用，将每天的费用进行累加
+void UpdateTotalFee(int RoomId,float TotalFee,QString Date,QSqlDatabase db)//更新总费用，将每天的费用进行累加
 {
 	//定义并执行SQL语句
-	QString str=QString("use ACCMS "
-						"select TOTAL_FEE from ACC_chart where ROOM_ID = %1 and Date = '%2'").arg(RoomId).arg(Date);
-	QSqlQuery query(db);
-	query.exec(str);
-	query.first();
-	//暂存
-	float temp=query.value(0).toFloat();
-	temp=temp+Fee;
-	str=QString("use ACCMS "
-				"update ACC_chart set TOTAL_FEE = %1 where ROOM_ID = %2 and Date = '%3'").arg(temp).arg(RoomId).arg(Date);
-	query.exec(str);
+
+
+    QString str=QString("use ACCMS "
+                "update ACC_chart set TOTAL_FEE = %1 where ROOM_ID = %2 and Date = '%3'").arg(TotalFee).arg(RoomId).arg(Date);
+    QSqlQuery query(db);
+    query.exec(str);
 }
 
 void UpdateDetailRecordNum(int RoomId,QString Date,QSqlDatabase db)//更新详单数，产生详单时添加即可

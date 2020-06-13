@@ -52,8 +52,12 @@ void AirConditionClient::SetSpeed(int FanSpeed)//设置分控机风速
 {
     this->FanSpeed = FanSpeed;
     this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
-    qint64 temp = this->get_server_time.secsTo(this->stop_server_time);
-    this->Duration = this->Duration + float(temp)/60;
+    //计算时间差
+    uint stime = this->get_server_time.toTime_t();
+    uint etime = this->stop_server_time.toTime_t();
+
+    //添加到运行时间，以分钟计算
+    this->Duration = float(etime-stime);
 	this->priority = FanSpeed + 1;
 }
 
@@ -142,7 +146,7 @@ void AirConditionClient::ReachTargetTemperature()//到达目标温度
     uint etime = this->stop_server_time.toTime_t();
 
 	//添加到运行时间，以分钟计算
-	this->Duration = this->Duration + float(etime-stime);
+    this->Duration = float(etime-stime);
 	airConditionHost->RearchTargetTemp(this->RoomId);
 }
 
@@ -165,7 +169,7 @@ void AirConditionClient::StopRunning()//分控机停止运行
     uint etime = this->stop_server_time.toTime_t();
 
     //添加到运行时间，以分钟计算
-	this->Duration = this->Duration + float(etime-stime);
+    this->Duration = float(etime-stime);
 }
 
 void AirConditionClient::StartRunning()//开始运行
