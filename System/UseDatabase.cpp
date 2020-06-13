@@ -176,7 +176,7 @@ void UpdateDetailRecordNum(int RoomId,QString Date,QSqlDatabase db)//更新详�
 	query.first();
 	//暂存
 	int temp=query.value(0).toInt();
-	temp=temp+1;
+    temp += 1;
 	str=QString("use ACCMS "
 				"update ACC_chart set DETAILRECORD_NUM = %1 where ROOM_ID = %2 and Date = '%3'").arg(temp).arg(RoomId).arg(Date);
 	query.exec(str);

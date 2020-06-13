@@ -75,7 +75,7 @@ public:
 		float GetTotalFee();
 		int GetFanSpeed();
 		int Getpriority();
-		int GetDuration();
+        float GetDuration();
 		QString Getget_server_time();
 		QString Getstop_server_time();
         void Initialize(float totalFee, int RoomId,int mode,int TargetTemp,int PreTemp,

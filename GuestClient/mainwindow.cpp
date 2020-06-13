@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -297,12 +297,12 @@ void MainWindow::simulTempChange(){
 void MainWindow::requestService(){
 	bool flag = false;
 	if(mode){// 制热
-		if(targetTemp - curTemp > (double) tempThreshold){
+        if(targetTemp - curTemp +0.05 > (double) tempThreshold){
 			flag = true;
 		}
 	}
 	else{// 制冷
-		if(curTemp - targetTemp > (double) tempThreshold){
+        if(curTemp - targetTemp +0.05 > (double) tempThreshold){
 			flag = true;
 		}
 	}

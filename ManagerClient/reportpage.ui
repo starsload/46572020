@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">border-image: url(:/back.jpg);</string>
+  </property>
   <widget class="QPushButton" name="PrintButton">
    <property name="geometry">
     <rect>

@@ -14,7 +14,7 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">border-image: url(:/back.jpg);</string>
   </property>
   <widget class="QPushButton" name="ptn_yes">
    <property name="geometry">

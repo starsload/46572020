@@ -103,7 +103,7 @@ int AirConditionClient::GetFanSpeed() { return this->FanSpeed; }
 
 int AirConditionClient::Getpriority() { return this->priority; }
 
-int AirConditionClient::GetDuration() { return this->Duration; }
+float AirConditionClient::GetDuration() { return this->Duration; }
 
 QString AirConditionClient::Getget_server_time() {
     return this->get_server_time.toString("yyyy-MM-dd-hh:mm:ss");
@@ -161,9 +161,11 @@ void AirConditionClient::StopRunning()//分控机停止运行
     this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
 
     //计算时间差
-    qint64 temp = this->get_server_time.secsTo(this->stop_server_time);
+    uint stime = this->get_server_time.toTime_t();
+    uint etime = this->stop_server_time.toTime_t();
+
     //添加到运行时间，以分钟计算
-    this->Duration = this->Duration + float(temp)/60;
+    this->Duration = this->Duration + float(etime-stime)/60.0;
 }
 
 void AirConditionClient::StartRunning()//开始运行

@@ -402,6 +402,7 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 			tempFee = client->GetFee();
 			tempDuration = client->GetDuration();
 			serviceList->PopACC(RoomId);
+            UpdateServiceTime(client->GetRoomId(),client->GetDuration(),this->Date,*db);
 
 			//将等待队列中优先级最高的取出
 			if(waitList->ReadyNum() > 0){
@@ -414,6 +415,9 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 
 				InsertUseData(temp->GetRoomId(),temp->Getget_server_time(),temp->Getstop_server_time(),temp->GetTargetTemp(),
 								 temp->GetFanSpeed(),temp->GetFeeRate(),temp->GetDuration(),temp->GetFee(),*db);
+                UpdateDetailRecordNum(temp->GetRoomId(),this->Date,*db);
+                UpdateServiceTime(temp->GetRoomId(),temp->GetDuration(),this->Date,*db);
+                UpdateTotalFee(client->GetRoomId(),client->GetFee(),this->Date,*db);
 
 			}
 		}
@@ -425,8 +429,8 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 	InsertUseData(RoomId,client->Getget_server_time(),client->Getstop_server_time(),
 				  client->GetTargetTemp(),client->GetFanSpeed(),client->GetFeeRate(),tempDuration,tempFee,*db);
 
+    UpdateDetailRecordNum(client->GetRoomId(),this->Date,*db);
 	UpdateTotalFee(RoomId, client->GetFee(), Date, *db);
-
 	UpdateChangeScheduleTime(RoomId,this->Date,*db);
 
 	delete client;//删掉分控机
