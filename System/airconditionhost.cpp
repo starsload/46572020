@@ -18,7 +18,7 @@ void AirConditionHost::PowerOn() {
 	tmpDB = QSqlDatabase::addDatabase("QODBC");
 	db = &tmpDB;
 	qDebug()<<"ODBC driver is valid? "<<db->isValid();
-	QString dsn = QString::fromLocal8Bit("ACCMS_R");     //数据源名称
+	QString dsn = QString::fromLocal8Bit("mssql");       //数据源名称
 	db->setHostName("112.74.57.177");
 	db->setDatabaseName(dsn);                            //设置数据源名称
 	db->setUserName("sa");                               //登录用户
@@ -41,7 +41,7 @@ void AirConditionHost::PowerOn() {
 	CreateSchduleController();
 	//qDebug()<<"请输入ManagerClient的端口：";
     QTextStream input(stdin);
-	quint16 port = 6666;
+	quint16 port = 12000;
 	//input >> port;
     connect(server, SIGNAL(newConnection()),
             this, SLOT(managerConnectHandle()));
@@ -131,7 +131,7 @@ void AirConditionHost::startUp() {
 	system("cls");
     //qDebug()<<"please GuestClientClient的端口：";
     QTextStream input(stdin);
-	quint16 port = 6666;
+	quint16 port = 12000;
 	//input >> port;
     connect(server, SIGNAL(newConnection()),
             this, SLOT(guestConnectHndle()));

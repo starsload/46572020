@@ -59,7 +59,7 @@
     <item>
      <widget class="QLineEdit" name="le_ip_address">
       <property name="text">
-       <string>127.0.0.1</string>
+       <string>112.74.57.177</string>
       </property>
      </widget>
     </item>
@@ -85,7 +85,7 @@
     <item>
      <widget class="QLineEdit" name="le_port">
       <property name="text">
-       <string>6666</string>
+       <string>12000</string>
       </property>
      </widget>
     </item>
