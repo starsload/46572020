@@ -72,22 +72,23 @@ void AirConditionHost::managerConnectHandle() {
 returnRequestOn AirConditionHost::CtreatClient(int Room_Id, double realTemp){
     AirConditionClient *client;
     returnRequestOn r;
+    float totalFee = QueryTotalFee(this->Date,this->Date,Room_Id,*db);
 
     if(this->waitList->FindACC(Room_Id)){//分控机已经存在
         client = this->waitList->FindACC(Room_Id);
-        client->Initialize(Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
+        client->Initialize(totalFee,Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
         waitList->PushACC(client);
 
         r.RoomId = Room_Id;
         r.mode = mode;
         r.curTemp = realTemp;
         r.curFanSpeed = defaultFanSpeed;
-        r.totalFee = QueryTotalFee(this->Date,this->Date,Room_Id,*db);
+        r.totalFee = totalFee;
         r.targetTemp = defaultTargetTemp;
     }
     else {//分控机不存在
         client = new AirConditionClient();
-        client->Initialize(Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
+        client->Initialize(totalFee,Room_Id, mode, defaultTargetTemp, realTemp, defaultFeeRate, defaultFanSpeed, *db);
         // 与主机建立关联
         client->setAirConditionHostRelation(this);
         //放入等待队列

@@ -13,7 +13,7 @@ AirConditionClient::~AirConditionClient(){
 	delete updateTimer;
 }
 
-void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
+void AirConditionClient::Initialize(float totalFee,int RoomId,int mode,int TargetTemp,int PreTemp,float FeeRate,int FanSpeed,QSqlDatabase db)//初始化函数,对分控机实例的属性进行初始化
 {
     //向服务器发送初始化请求
 
@@ -31,7 +31,7 @@ void AirConditionClient::Initialize(int RoomId,int mode,int TargetTemp,int PreTe
     this->TargetTemp = TargetTemp;
     this->FeeRate = FeeRate;
     this->Fee = 0;
-    this->TotalFee = query.value(0).toFloat();
+    this->TotalFee = totalFee;
     this->FanSpeed = FanSpeed;
 	this->priority = FanSpeed + 1;
     this->Duration = 0;
@@ -227,6 +227,10 @@ void AirConditionClient::updateAttribute(){
 	//1元/摄氏度
 	Fee += deltaTemp * 1;
 	TotalFee += deltaTemp * 1;
+
+    qDebug()<<"++++++++++++++++++++++++++++++++";
+    qDebug()<<QString("%1 room,total fee is %2").arg(this->RoomId).arg(this->TotalFee);
+    qDebug()<<"++++++++++++++++++++++++++++++++";
 
 	float target = TargetTemp;
 	if(mode) {

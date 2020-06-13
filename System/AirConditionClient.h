@@ -1,4 +1,4 @@
-#ifndef AIRCONDITIONCLIENT_H
+﻿#ifndef AIRCONDITIONCLIENT_H
 #define AIRCONDITIONCLIENT_H
 
 #include<vector>
@@ -78,7 +78,7 @@ public:
 		int GetDuration();
 		QString Getget_server_time();
 		QString Getstop_server_time();
-		void Initialize(int RoomId,int mode,int TargetTemp,int PreTemp,
+        void Initialize(float totalFee, int RoomId,int mode,int TargetTemp,int PreTemp,
 						float FeeRate,int FanSpeed,QSqlDatabase db);//初始化
 
 		void SetSpeed(int FanSpeed);//调节风速
