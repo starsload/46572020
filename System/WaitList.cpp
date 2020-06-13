@@ -1,7 +1,7 @@
-﻿#include "waitlist.h"
-#include<vector>
-#include<iostream>
-#include"AirConditionClient.h"
+﻿#include "WaitList.h"
+#include <vector>
+#include <iostream>
+#include "AirConditionClient.h"
 using namespace std;
 WaitList::WaitList()
 {
