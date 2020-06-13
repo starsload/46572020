@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QIODevice>
+#include <QTextCodec>
 
 class Report
 {

@@ -18,11 +18,11 @@ void AirConditionHost::PowerOn() {
 	tmpDB = QSqlDatabase::addDatabase("QODBC");
 	db = &tmpDB;
 	qDebug()<<"ODBC driver is valid? "<<db->isValid();
-    QString dsn = QString::fromLocal8Bit("ACCMS");     //数据源名称
-    db->setHostName("LAPTOP-3H84DA7S");
+	QString dsn = QString::fromLocal8Bit("ACCMS_R");     //数据源名称
+	db->setHostName("112.74.57.177");
 	db->setDatabaseName(dsn);                            //设置数据源名称
-    db->setUserName("acc_manager");                               //登录用户
-    db->setPassword("123456");                         //密码
+	db->setUserName("sa");                               //登录用户
+	db->setPassword("308eWORK");                         //密码
 	if (!db->open()){
 		qDebug()<<"数据库打开失败";
 		qDebug()<<db->lastError().text();

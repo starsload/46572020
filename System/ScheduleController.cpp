@@ -164,6 +164,12 @@ void ScheduleController::RequestFee(int RoomId){
 
 //TODO:补全不能提供服务部分
 void ScheduleController::RequestService(int RoomId, float curTemp){
+	for(auto sock : allSockets){
+		if(sock->Room_id == RoomId){
+			curSocket = sock;
+		}
+	}
+
     if(airConditionHost->RequestService(RoomId,curTemp)){//可以提供服务
         using namespace SocketConstants;
         QJsonObject ojson;

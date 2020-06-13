@@ -2,9 +2,11 @@
 #define INOVICE_H
 
 #include "UseDatabase.h"
-#include <vector>
-#include <string>
-#include <fstream>
+#include <QString>
+#include <QFile>
+#include <QTextStream>
+#include <QIODevice>
+#include <QTextCodec>
 
 using namespace std;
 

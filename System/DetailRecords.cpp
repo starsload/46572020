@@ -10,22 +10,25 @@ void DetailRecords::Initial(int RoomId, QVector<struct DetailRecord> &list){//�
 
 int DetailRecords:: PrintAsFile()
 {
-    QString fileName = "房间" + QString(roomId) + "-详单.scv";  //文件名：房间号-详单.scv
+	QString fileName;
+	fileName = QString("房间%1-详单.txt").arg(roomId);
 
+	QFile out(fileName);
+	if (!out.open(QIODevice::WriteOnly | QIODevice::Text))
+		return 0;
 
-    QFile out(fileName);
-    if (!out.open(QIODevice::WriteOnly | QIODevice::Text))
-        return 0;
-    QTextStream file(&out);
+	QTextStream file(&out);
 
-    file << "开始时间,停止时间,温度,风速,单价,运行时间,费用" << endl;
+	file.setCodec(QTextCodec::codecForName("utf-8"));
 
-    for(int i=0;i<this->detail.size();i++)
-    {
-        file << detail[i].StartTime << "," << detail[i].EndTime << ","
-             << detail[i].TargetTemp << "," <<detail[i].FanSpeed << ","
-             << detail[i].FeeRate << "," <<detail[i].Duration << ","
+	file << QString("开始时间,停止时间,温度,风速,单价,运行时间,费用") << endl;
+
+	for(int i=0;i<this->detail.size();i++)
+	{
+		file << detail[i].StartTime << "," << detail[i].EndTime << ","
+			 << detail[i].TargetTemp << "," <<detail[i].FanSpeed << ","
+			 << detail[i].FeeRate << "," <<detail[i].Duration << ","
 			 << detail[i].Fee << endl;
-    }
-    return 0;
+	}
+	return 0;
 }

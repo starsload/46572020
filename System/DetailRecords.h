@@ -3,7 +3,7 @@
 
 #include "UseDatabase.h"
 #include <QFile>
-
+#include <QTextCodec>
 
 class DetailRecords {
 public:
