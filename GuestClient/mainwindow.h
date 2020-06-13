@@ -78,7 +78,7 @@ private:
 	bool isTempSimulRun = false;//回温程序是否启动
 
 	const int changeInterval = 2000; // 修改参数的时间间隔
-    const int simulTempInterval = 20000; // 回温系统，每隔60s变化0.5度
+    const int simulTempInterval = 60000; // 回温系统，每隔60s变化0.5度
 	const int requestInterval = 10000; // 每10秒查询一次
 	const double deltaTemp = 0.5;
 

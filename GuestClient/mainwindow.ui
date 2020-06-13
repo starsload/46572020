@@ -13,7 +13,13 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">border-image: url(:/back.jpg);</string>
+   </property>
    <widget class="QLabel" name="RoomId">
     <property name="geometry">
      <rect>
@@ -27,6 +33,11 @@
      <font>
       <pointsize>12</pointsize>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+	border:10px solid red;
+}</string>
     </property>
     <property name="text">
      <string>XXX房间</string>
@@ -58,6 +69,12 @@
       <pointsize>12</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton 
+{
+	border:10px solid red;
+}</string>
+    </property>
     <property name="text">
      <string>▲</string>
     </property>
@@ -67,8 +84,8 @@
      <rect>
       <x>340</x>
       <y>440</y>
-      <width>71</width>
-      <height>61</height>
+      <width>81</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -80,11 +97,11 @@
      <string notr="true">QPushButton 
 {
    background-color: gainsboro;
-   border-image:url(:/on_off.jpg)
+   border-image:url(:/on.png)
 }</string>
     </property>
     <property name="text">
-     <string>开关</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="ChangeFanSpeed">
@@ -92,8 +109,8 @@
      <rect>
       <x>580</x>
       <y>440</y>
-      <width>71</width>
-      <height>61</height>
+      <width>81</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="font">
@@ -105,11 +122,11 @@
      <string notr="true">QPushButton 
 {
    background-color: gainsboro;
-   border-image:url(:/风速.jpg)
+   border-image:url(:/fan.png)
 }</string>
     </property>
     <property name="text">
-     <string>调风</string>
+     <string/>
     </property>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
@@ -369,6 +386,12 @@
       <pointsize>12</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton 
+{
+	border:10px solid red;
+}</string>
+    </property>
     <property name="text">
      <string>▼</string>
     </property>
@@ -428,7 +451,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

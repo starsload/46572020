@@ -54,8 +54,6 @@ void AirConditionClient::SetSpeed(int FanSpeed)//设置分控机风速
     this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
     qint64 temp = this->get_server_time.secsTo(this->stop_server_time);
     this->Duration = this->Duration + float(temp)/60;
-//    this->Fee=this->Fee+this->Duration*(this->FeeRate-1/FanSpeed);//这样可以保证计算Fee时算的是变更后的结果
-//    this->FeeRate = 1/FanSpeed;//计费相关
 	this->priority = FanSpeed + 1;
 }
 
@@ -108,11 +106,11 @@ int AirConditionClient::Getpriority() { return this->priority; }
 int AirConditionClient::GetDuration() { return this->Duration; }
 
 QString AirConditionClient::Getget_server_time() {
-	return this->get_server_time.toString("yyyy-MM-dd");
+    return this->get_server_time.toString("yyyy-MM-dd-hh:mm:ss");
 };
 
 QString AirConditionClient::Getstop_server_time() {
-	return this->stop_server_time.toString("yyyy-MM-dd");
+    return this->stop_server_time.toString("yyyy-MM-dd-hh:mm:ss");
 };
 
 QVector<float> AirConditionClient::GetFinalState()//获得关机时分控机状态
@@ -140,10 +138,11 @@ void AirConditionClient::ReachTargetTemperature()//到达目标温度
 	this->stop_server_time = QDateTime::currentDateTime();//获取结束时间
 
 	//计算时间差
-	qint64 temp = this->get_server_time.secsTo(this->stop_server_time);
-	//添加到运行时间，以分钟计算
-	this->Duration = this->Duration + float(temp)/60;
+    uint stime = this->get_server_time.toTime_t();
+    uint etime = this->stop_server_time.toTime_t();
 
+	//添加到运行时间，以分钟计算
+    this->Duration = this->Duration + float(etime-stime)/60.0;
 	airConditionHost->RearchTargetTemp(this->RoomId);
 }
 

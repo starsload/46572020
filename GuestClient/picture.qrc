@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>on.png</file>
+        <file>fan.png</file>
+        <file>back.jpg</file>
+    </qresource>
+</RCC>

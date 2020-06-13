@@ -13,12 +13,15 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">border-image: url(:/back.jpg);</string>
+  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
      <x>230</x>
      <y>60</y>
-     <width>71</width>
+     <width>81</width>
      <height>21</height>
     </rect>
    </property>
@@ -32,8 +35,14 @@
      <x>220</x>
      <y>310</y>
      <width>75</width>
-     <height>23</height>
+     <height>41</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton 
+{
+	border:10px solid red;
+}</string>
    </property>
    <property name="text">
     <string>确定</string>
@@ -44,7 +53,7 @@
     <rect>
      <x>120</x>
      <y>230</y>
-     <width>121</width>
+     <width>137</width>
      <height>31</height>
     </rect>
    </property>
@@ -80,8 +89,8 @@
     <rect>
      <x>340</x>
      <y>130</y>
-     <width>91</width>
-     <height>22</height>
+     <width>99</width>
+     <height>23</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -110,7 +119,7 @@
      <x>120</x>
      <y>130</y>
      <width>221</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -135,7 +144,7 @@
     <rect>
      <x>290</x>
      <y>230</y>
-     <width>146</width>
+     <width>175</width>
      <height>31</height>
     </rect>
    </property>
