@@ -238,3 +238,8 @@ void AirConditionClient::updateAttribute(){
 			ReachTargetTemperature();
 	}
 }
+
+void AirConditionClient::SetPriority()//改变优先级
+{
+	this->priority = this->FanSpeed + 1;
+}

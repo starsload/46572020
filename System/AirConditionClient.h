@@ -106,6 +106,8 @@ public:
         void SetSleep();//设置状态为休眠
 
 		void setAirConditionHostRelation(AirConditionHost*);
+
+		void SetPriority();
 };
 
 

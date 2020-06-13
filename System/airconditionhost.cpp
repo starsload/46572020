@@ -274,6 +274,10 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 bool AirConditionHost::RequestService(int RoomId, float PreTemp) {
     AirConditionClient* mclient = waitList->FindACC(RoomId);    //查找房间号对应的client
     mclient->SetPreTemp(PreTemp);
+
+	//将优先级改回
+	mclient->SetPriority();
+
     AirConditionClient* mVictimclient;  //被牺牲的client
 	bool flag;
     if (!serviceList->isFull()) //服务队列未满
