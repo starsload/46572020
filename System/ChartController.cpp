@@ -110,6 +110,7 @@ void ChartController::processPacket(QByteArray body){
 			t.StartTime = tjson.value(START_TIME).toString();
 			t.EndTime = tjson.value(END_TIME).toString();
 			t.TargetTemp = tjson.value(TARGET_TEMP).toDouble();
+			t.FeeRate = tjson.value(FEE_RATE).toDouble();
 			t.FanSpeed = tjson.value(FAN_SPEED).toInt();
 			t.Duration = tjson.value(DURATION).toDouble();
 			t.Fee = tjson.value(CUR_FEE).toDouble();
@@ -205,6 +206,7 @@ void ChartController::CreateRDR(int RoomId){
 		t.insert(FEE_RATE, item.FeeRate);
 		t.insert(DURATION, item.Duration);
 		t.insert(CUR_FEE, item.Fee);
+		array.push_back(t);
 	}
 	ojson.insert(DETAIL_ARRAY, array);
 	sendJSON(ojson);

@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>空调管理系统</string>
   </property>
   <property name="styleSheet">
    <string notr="true">border-image: url(:/back.jpg);</string>
@@ -205,7 +205,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>777</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

@@ -142,7 +142,7 @@ void AirConditionClient::ReachTargetTemperature()//到达目标温度
     uint etime = this->stop_server_time.toTime_t();
 
 	//添加到运行时间，以分钟计算
-    this->Duration = this->Duration + float(etime-stime)/60.0;
+	this->Duration = this->Duration + float(etime-stime);
 	airConditionHost->RearchTargetTemp(this->RoomId);
 }
 
@@ -165,7 +165,7 @@ void AirConditionClient::StopRunning()//分控机停止运行
     uint etime = this->stop_server_time.toTime_t();
 
     //添加到运行时间，以分钟计算
-    this->Duration = this->Duration + float(etime-stime)/60.0;
+	this->Duration = this->Duration + float(etime-stime);
 }
 
 void AirConditionClient::StartRunning()//开始运行

@@ -4,16 +4,11 @@
 
 int main(int argc, char *argv[])
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();
-//    MainWindow b;
-//    b.show();
-//    MainWindow c;
-//    c.show();
-//	MainWindow d;
-//	d.show();
-//    MainWindow e;
-//    e.show();
 	return a.exec();
 }

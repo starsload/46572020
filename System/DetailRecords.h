@@ -13,7 +13,7 @@ public:
 
 	DetailRecords();
 
-	void Initial(int RoomId, QVector<struct DetailRecord>&);
+	void Initial(int RoomId, QVector<struct DetailRecord>);
 
 	int PrintAsFile();//打印详单
 

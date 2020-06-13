@@ -6,12 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>765</width>
+    <height>596</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>765</width>
+    <height>596</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>765</width>
+    <height>596</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>空调遥控器</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -450,8 +468,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>26</height>
+     <width>765</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>

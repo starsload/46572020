@@ -33,7 +33,7 @@ QVector<struct DetailRecord> QueryDataInUseData(int RoomId,QSqlDatabase db)//从
 		temp.EndTime=query.value(2).toString();
 		temp.TargetTemp=query.value(3).toFloat();
 		temp.FanSpeed=query.value(4).toInt();
-		temp.FeeRate=query.value(5).toFloat();
+		temp.FeeRate = 1.0;
 		temp.Duration=query.value(6).toFloat();
 		temp.Fee=query.value(7).toFloat();
 		RecordList.append(temp);

@@ -199,6 +199,7 @@ void MainWindow::print_DR(QJsonObject ojson){
 		t.StartTime = tjson.value(START_TIME).toString();
 		t.EndTime = tjson.value(END_TIME).toString();
 		t.TargetTemp = tjson.value(TARGET_TEMP).toDouble();
+		t.FeeRate = tjson.value(FEE_RATE).toDouble();
 		t.FanSpeed = tjson.value(FAN_SPEED).toInt();
 		t.Duration = tjson.value(DURATION).toDouble();
 		t.Fee = tjson.value(CUR_FEE).toDouble();

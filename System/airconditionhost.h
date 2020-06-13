@@ -102,6 +102,7 @@ private:
 
 	QSqlDatabase tmpDB;
 	QSqlDatabase *db;
+	quint16 port;
 
     double defaultTargetTemp; //默认目标温度
     double maxTargetTemp; //最高目标温度
