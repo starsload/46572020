@@ -442,6 +442,8 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
     UpdateTotalFee(RoomId, client->GetTotalFee(), Date, *db);
 	UpdateChangeScheduleTime(RoomId,this->Date,*db);
 
+	UpdateSwitchOnOffTime(RoomId,Date,*db);
+
 	delete client;//删掉分控机
 	client = NULL;
 }

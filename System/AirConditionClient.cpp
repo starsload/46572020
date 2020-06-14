@@ -36,12 +36,9 @@ void AirConditionClient::Initialize(float totalFee,int RoomId,int mode,int Targe
 	this->priority = FanSpeed + 1;
     this->Duration = 0;
 
-    //修改
-    this->work_state = STATE_WAIT;
-
     this->get_server_time = QDateTime::currentDateTime();
     this->stop_server_time = QDateTime::currentDateTime();
-	this->work_state = STATE_WAIT;
+	this->work_state = STATE_SLEEP;
 }
 
 void AirConditionClient::setAirConditionHostRelation(AirConditionHost *host){
@@ -251,4 +248,5 @@ void AirConditionClient::updateAttribute(){
 void AirConditionClient::SetPriority()//改变优先级
 {
 	this->priority = this->FanSpeed + 1;
+	this->work_state = STATE_WAIT;
 }
