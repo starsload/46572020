@@ -73,7 +73,7 @@ private:
 
 	QTimer socketConnectTimer;
 
-	const int monitorInterval = 10 * 1000;
+	const int monitorInterval = 2 * 1000;
 
 	QTimer monitorTimer;
 

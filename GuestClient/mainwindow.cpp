@@ -361,6 +361,7 @@ void MainWindow::on_SwitchONOff_clicked()
 	else{
 		state = CLOSE;
 		curTemp = initTemp;
+		stopTemperatureSimulation();
 		requestFeeTimer.stop();
 		using namespace SocketConstants;
 		QJsonObject ojson;

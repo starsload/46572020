@@ -21,7 +21,7 @@ int DetailRecords:: PrintAsFile()
 
 	file.setCodec(QTextCodec::codecForName("utf-8"));
 
-	file << QString("开始时间,停止时间,目标温度,风速,单价(元/℃),运行时间,费用") << endl;
+	file << QString("开始时间,停止时间,目标温度,风速,单价(元/℃),运行时间(s),费用(元)") << endl;
 
 	for(int i=0;i<this->detail.size();i++)
 	{

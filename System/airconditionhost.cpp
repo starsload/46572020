@@ -18,7 +18,7 @@ void AirConditionHost::PowerOn() {
 	tmpDB = QSqlDatabase::addDatabase("QODBC");
 	db = &tmpDB;
 	qDebug()<<"ODBC driver is valid? "<<db->isValid();
-    QString dsn = QString::fromLocal8Bit("ACCMS_R");       //数据源名称
+	QString dsn = QString::fromLocal8Bit("ACCMS_R");       //数据源名称
 	db->setHostName("112.74.57.177");
 	db->setDatabaseName(dsn);                            //设置数据源名称
 	db->setUserName("sa");                               //登录用户
@@ -189,13 +189,6 @@ int AirConditionHost::ChangeTargetTemp(int RoomID,float Temp)//设置温度 先�
 
 int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 {
-	qDebug()<<"=======================================================";
-	qDebug()<<QString("%1 room change FanSpeed,schedule").arg(RoomID);
-	qDebug()<<QString("FanSpeed:%1").arg(Speed);
-	waitList->debug();
-	serviceList->debug();
-	qDebug()<<"=======================================================";
-
 	AirConditionClient* mclient;
 	AirConditionClient* mVictimclient;
 	AirConditionClient* mFrontclient;
@@ -250,7 +243,7 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 			InsertUseData(mclient->GetRoomId(),mclient->Getget_server_time(),
 						  mclient->Getstop_server_time(),mclient->GetTargetTemp(),
 						  mclient->GetFanSpeed(),mclient->GetFeeRate(),
-                          mclient->GetDuration(),mclient->GetDuration(),*db);
+						  mclient->GetDuration(),mclient->GetFee(),*db);
 			UpdateServiceTime(mclient->GetRoomId(),mclient->GetDuration(),this->Date,*db);
             UpdateTotalFee(mclient->GetRoomId(),mclient->GetTotalFee(),this->Date,*db);
 			UpdateDetailRecordNum(mclient->GetRoomId(),this->Date,*db);//一次详单 四件套
@@ -290,6 +283,14 @@ int AirConditionHost:: ChangeFanSpeed(int RoomID,float Speed)//改变风速
 		}
 	}
 	UpdateChangeFanSpeedTime(RoomID,this->Date,*db);//db操作
+
+	qDebug()<<"=======================================================";
+	qDebug()<<QString("%1 room change FanSpeed,schedule").arg(RoomID);
+	qDebug()<<QString("FanSpeed:%1").arg(Speed);
+	waitList->debug();
+	serviceList->debug();
+	qDebug()<<"=======================================================";
+
 	return 0;
 }
 
@@ -345,7 +346,8 @@ bool AirConditionHost::RequestService(int RoomId, float PreTemp) {
 
 	qDebug()<<"=======================================================";
 	qDebug()<<QString("%1 room pull RequestService,schedule").arg(RoomId);
-	qDebug()<<QString("serviecList have %1 client").arg(serviceList->getSize());
+	waitList->debug();
+	serviceList->debug();
 	qDebug()<<"=======================================================";
 
 	return flag;
@@ -446,12 +448,6 @@ void AirConditionHost::TurnOff(int RoomId)//关闭指定分控机
 
 void AirConditionHost:: TimeOff(int RoomId)//时间片到的调度
 {
-	qDebug()<<"=======================================================";
-	qDebug()<<QString("%1 room time off，schedule").arg(RoomId);
-	waitList->debug();
-	serviceList->debug();
-	qDebug()<<"=======================================================";
-
 	AirConditionClient *client,*temp ;
 	if(waitList->ReadyNum() > 0) {//等待队列不为空
 		float max = this->waitList->GetMaxPriority();//找到等待队列中最高优先级的分控机的优先级
@@ -509,6 +505,12 @@ void AirConditionHost:: TimeOff(int RoomId)//时间片到的调度
 
 		client->StartRunning();
 	}
+
+	qDebug()<<"=======================================================";
+	qDebug()<<QString("%1 room time off，schedule").arg(RoomId);
+	waitList->debug();
+	serviceList->debug();
+	qDebug()<<"=======================================================";
 }
 
 void AirConditionHost::RearchTargetTemp(int RoomId)//到达目标温度调度
