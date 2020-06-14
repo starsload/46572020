@@ -21,13 +21,10 @@ void ChartController::setSocket(QTcpSocket *s) {
 }
 
 void ChartController::listenToManagerClient(){
-	qDebug()<<"收到新消息ManagerClient，地址为："<<socket->peerAddress()
-		  <<"端口为："<<socket->peerPort();
 	using namespace SocketConstants;
 	while(socket->bytesAvailable() > 0) {
 		QByteArray head;
 		QByteArray body;
-		socket->waitForReadyRead();
 		head = socket->read(HEAD_LEANGTH);
 		if(head.size() == 0){
 			continue;
@@ -36,7 +33,6 @@ void ChartController::listenToManagerClient(){
 		memcpy(&length, head.data(), sizeof (length));
 		for(int i = 0; i < length; i++)
 			body.append(socket->read(1));
-		qDebug()<<"收到的消息为：\n"<<body;
 		processPacket(body);
 	}
 }

@@ -33,7 +33,6 @@ void AirConditionHost::PowerOn() {
 	qDebug() << Date;
 	InsertACCchart(Date,*db);
 
-
 	CreateWaitList();
 	CreateServiceList();
 	CreateMonitor();
@@ -127,7 +126,6 @@ double highFeeRate, double middleFeeRate, double lowFeeRate, int mode, int speed
 }
 
 void AirConditionHost::startUp() {
-	//qDebug()<<"please GuestClientClient的端口：";
 	connect(server, SIGNAL(newConnection()),
 			this, SLOT(guestConnectHndle()));
 	if(!server->listen(QHostAddress::Any, port))
